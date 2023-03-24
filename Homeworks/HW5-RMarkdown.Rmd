@@ -1,0 +1,432 @@
+---
+title: "MATH 3382: Homework 5 - Not Collected (but is on Exam 1)"
+author: "Enter your name"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions: This Work is Not Being Collected
+
+------------------------------------------------------------------------
+
+-   Though your work is not being collected, the concepts on this homework assignment will be covered on Exam 1.
+
+-   It is very important to get practice and feedback on this material before the exam.
+
+    -   Solutions will be posted.
+    -   Compare your work to the solutions.
+    -   If you have any questions, feel free to let me know!
+
+# Question 1:
+
+------------------------------------------------------------------------
+
+The body temperature for a healthy adult is normally distributed with a mean of $98.6^{\circ}$F and standard deviation of $0.8^{\circ}$F.
+
+## Question 1a:
+
+------------------------------------------------------------------------
+
+How likely is that a randomly selected healthy adult has a body temperature that is less than $98.4$ degrees F?
+Enter an R command to compute this probability in the code cell below.
+
+### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+```{r}
+pnorm(98.4, 98.6, 0.8)
+```
+
+## Question 1b:
+
+------------------------------------------------------------------------
+
+How likely is that a random sample of $n=20$ healthy adults have a mean a body temperature that is less than $98.4$ degrees F?
+Enter an R command to compute this probability in the code cell below.
+
+### Solution to Question 1b:
+
+------------------------------------------------------------------------
+
+```{r}
+samplestd <- 0.8 / sqrt(20)
+samplestd
+pnorm(98.4, 98.6, samplestd)
+```
+
+## Question 1c:
+
+------------------------------------------------------------------------
+
+How likely is that a random sample of $n=50$ healthy adults have a mean a body temperature that is less than $98.4$ degrees F?
+Enter an R command to compute this probability in the code cell below.
+
+### Solution to Question 1c:
+
+------------------------------------------------------------------------
+
+```{r}
+samplestd50 <- 0.8 / sqrt(50)
+pnorm(98.4, 98.6, samplestd50)
+```
+
+# Question 2
+
+------------------------------------------------------------------------
+
+A health clinic screens every patient they see for influenza as part of their routine exam.
+In order to do a quality control check on the accuracy of the influenza test kits a health clinic recently received, they randomly select $120$ patients and look at whether each had a positive influenza test when they visited the clinic.
+Let $X$ denote the number of positive tests in the sample of $120$ randomly selected tests.
+
+Suppose the health clinic knows that 12% of the general population in the area is infected with influenza, and assume the results of individual tests are independent from each other, so each person has a 12% chance of getting a positive test.
+
+## Question 2a:
+
+------------------------------------------------------------------------
+
+Comment on whether or not the assumptions are satisfied for the Central Limit Theorem (CLT) to be applied to describe the sampling distribution for the proportion of tests that are positive when samples size $n=120$ are randomly selected.
+
+### Solution to Question 2a:
+
+------------------------------------------------------------------------
+
+Explain why the CLT can or cannot be used below.
+
+np = (120)(0.12)
+
+nq = (120)(0.88)
+
+```{r}
+np <- (120)*(0.12)
+nq <- (120)*(0.88)
+np
+nq
+```
+
+It can be used.
+np \> 9 and nq \> 9
+
+## Question 2b:
+
+------------------------------------------------------------------------
+
+Regardless of your answer in [Question 2a:], we will use the CLT to approximate the sampling distribution for the proportion of tests that are positive when samples size $n=120$ are randomly selected.
+
+Using the Central Limit theorem, what are the mean $\mu_{\widehat{P}}$ and standard error $\sigma_{\widehat{P}}$ of the sampling distribution for the proportion if $n=120$?
+Show your work by either showing what formulas you applied to find these values and/or using command(s) in R.
+
+### Solution to Question 2b:
+
+------------------------------------------------------------------------
+
+\
+P \~ N (0.12, 0.02966479)
+
+```{r}
+m <- 0.12
+std <- sqrt((0.12)*(0.88)/120)
+m
+std
+```
+
+## Question 2c:
+
+------------------------------------------------------------------------
+
+Using the CLT to approximate the sampling distribution for the proportion of positive tests, **without using a continuity correction** approximate the probability that between 15% and 20% of the tests out of a sample of $n=120$ are positive.
+Show your work by either showing what formulas you applied to find these values and/or using command(s) in R.
+
+### Solution to Question 2c:
+
+------------------------------------------------------------------------
+
+```{r}
+pnorm(0.2, 0.12, 0.02966479) - pnorm(0.15, 0.12, 0.02966479) #(P(X < 0.2) - P(X < 0.15))
+```
+
+## Question 2d:
+
+------------------------------------------------------------------------
+
+Using the CLT to approximate the sampling distribution for the proportion of positive tests, **using a continuity correction** approximate the probability that between 15% and 20% of the tests out of a sample of $n=120$ are positive.
+Show your work by either showing what formulas you applied to find these values and/or using command(s) in R.
+
+continuity correction:
+
+use the cutoff formula
+
+```{r}
+std <- sqrt((0.12)*(0.88)/120)
+a <- 0.15 * 120
+b <- 0.2 * 120
+newp1 <- (a - 0.5) / 120
+newp2 <- (b + 0.5) / 120
+
+pnorm(newp2, 0.12, std) - pnorm(newp1, 0.12, std)
+```
+
+### Solution to Question 2d:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 2e:
+
+------------------------------------------------------------------------
+
+Using a binomial distribution, calculate the probability that the percentage of positive tests out of a sample of $n=120$ is greater than or equal to 15% and less than or equal to 20%.
+Show your work by either showing what formulas you applied to find these values and/or using command(s) in R.
+
+### Solution to Question 2e:
+
+------------------------------------------------------------------------
+
+```{r}
+#newa = 0.15 * 120
+newa <- (0.15 * 120) 
+newb <- (0.2 * 120)
+pbinom(newb, 120, 0.12) - pbinom(newa-1, 120, 0.12) #want to include newa, so exclude everything before newa
+```
+
+# Question 3:
+
+------------------------------------------------------------------------
+
+Let sample $X_1, X_2, \ldots , X_n$ be independently chosen at random from a population $$X \sim \mbox{Exp} \left( \frac{1}{2} \right)$$ with corresponding pdf $\displaystyle f(x) = \frac{1}{2} e^{-\frac{x}{2}}$ for $x \geq 0$ and 0 otherwise.
+
+## Question 3a:
+
+------------------------------------------------------------------------
+
+Find a formula for the $F(x)=P(X < x)$, the cdf of the population.
+Be sure to provide supporting work showing the steps (algebra and/or calculus) involved, and be sure to specify the domain.
+
+### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 3b:
+
+------------------------------------------------------------------------
+
+Find a formula for $F_{X_{\rm{min}}}(a) = P(X_{\rm{min}} < a)$, the cdf of $X_{\rm{min}}$.
+Be sure to specify the domain.
+Be sure to provide supporting work to justify your answer.
+
+\
+
+*Hint: Note the following:*
+
+$$F_{X_{\rm{min}}}(a) = P(X_{\rm{min}} <  a) = 1 - P(X_{\rm{min}} \geq  a) = 1 - P( X_1 \geq a, X_2 \geq a, \ldots , X_n \geq a) .$$
+
+### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 3c:
+
+------------------------------------------------------------------------
+
+Find a formula for $f_{X_{\rm{min}}}$, the pdf of $X_{\rm{min}}$.
+Be sure to provide supporting work to justify your answer and specify the domain.
+
+### Solution to Question 3c:
+
+------------------------------------------------------------------------
+
+## Question 3d:
+
+------------------------------------------------------------------------
+
+If $n=10$, use the result from [part [Question 3b:] to compute $F_{X_{\rm min}} (1) = P(X_{\rm min} <1)$, the probability that the smallest value in the sample is less than $1$.
+
+### Solution to Question 3d:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 3e:
+
+------------------------------------------------------------------------
+
+Complete the partially completed R code block below that does the following:
+
+-   Simulation to construct an approximation for the sampling distribution for the minimum value when $n=10$.
+-   Plots the sampling distribution as a histogram.
+
+**There are three `??` in the code below that need to be replaced with appropriate code. Then run the code.**
+
+### Solution to Question 3e:
+
+------------------------------------------------------------------------
+
+```{r, eval=FALSE}
+# number of random samples of size n=10 that will be chosen
+N <- 10^5 
+
+# Creates a numeric vector where the minimum sample values are stored
+sample.dist <- numeric(N)
+
+for (i in 1:N)
+{
+  temp <- ?? #enter formula to pick 10 random values from Exp Dist
+  sample.dist[i] <- ?? # enter formula to calculate minimum value each sample 
+}
+
+# Enter data and options to plot the sampling distribution
+hist(??)  
+abline(v = 1, col = "red", lwd = 2, lty = 2)
+```
+
+## Question 3f:
+
+------------------------------------------------------------------------
+
+Run the code cell below to use your simulation from [Question 3e:] to estimate the value of $P(X_{\rm min}) < 1)$.
+**There is nothing to do besides run the code cell below.**
+
+### Solution to Question 3f:
+
+------------------------------------------------------------------------
+
+```{r}
+mean(sample.dist < 1)
+```
+
+# Question 4
+
+------------------------------------------------------------------------
+
+Let $X$ denote the morning commute time for a randomly selected person who commutes by car to work in downtown Denver.
+Let $Y$ denote the morning commute time for a randomly selected person who commutes by public transportation to work in downtown Denver.
+Let $Z$ denote the morning commute time for a randomly selected person who commute to work by other means (such as walking, riding a bike).
+
+The morning commute time (in minutes) for people that commute by:
+
+-   Car, $X$, is normally distributed with $\mu_X=45$ minutes and $\sigma_X = 12$ minutes.
+-   Public transportation, $Y$, is normally distributed with $\mu_Y=40$ minutes and $\sigma_Y = 10$ minutes.
+-   Other means, $Z$, is exponentially distributed with the average commute time $\mu_Z=20$ minutes. *Recall: The rate parameter* $\lambda = \frac{1}{20}$.
+
+Let $X_1, X_2, \ldots , X_{12}$ denote a sample of 12 car commute times that are randomly and independently selected from $X$.
+Let $Y_1, Y_2, \ldots , Y_{10}$ denote a sample of 10 public transportation commute times that are randomly and independently selected from $Y$.
+Let $Z_1, Z_2, \ldots , Z_{8}$ denote a sample of 8 "by other means" commute times that are randomly and independently selected from $Z$.
+
+## Question 4a:
+
+------------------------------------------------------------------------
+
+Interpret the practical significance (in terms commute times) of the random variable $W$.
+
+### Solution to Question 4a:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 4b:
+
+------------------------------------------------------------------------
+
+Compute the values of $E(W)=\mu_W$, $\mbox{Var}(W)=\sigma^2_W$ and $\mbox{SE}(W)=\sigma_W$ by **replacing each `??` in the code cell below with appropriate code**.
+Assume that the $X_i$'s, $Y_i$'s, and $Z_i$'s are all independent.
+
+### Solution to Question 4b:
+
+------------------------------------------------------------------------
+
+```{r}
+mu.w <- (12/30) *(??) + (10/30)*(??) + (8/30)*(??)
+var.w <- (12/30)^2*(??) + (10/30)^2*(??) + (8/30)^2*(??)
+mu.w
+var.w
+se.w <- sqrt(var.w)
+se.w
+```
+
+## Question 4c:
+
+------------------------------------------------------------------------
+
+Suppose the distribution for $W$ is normally distributed.
+Replacing each `??` in the code cell below with appropriate code to compute $P(W < 30)$.
+
+### Solution to Question 4c:
+
+------------------------------------------------------------------------
+
+```{r}
+pnorm(??, ??, ??)
+```
+
+## Question 4d:
+
+------------------------------------------------------------------------
+
+Simulate the sampling distribution of $W$ by completing the R code block below, and plot your results.
+**You should replace each ?? with an appropriate R command or value.**
+
+### Solution to Question 4d:
+
+------------------------------------------------------------------------
+
+```{r}
+W <- numeric(1000)
+for (i in 1:1000)
+{
+  x <- ??  #Randomly select 10 values from N(40,14)
+  y <- ??  #Randomly select 12 values from N(45,10)
+  z <- ??  #Randomly select 8 values from Exp(1/25)
+  W[i] <- ?? #Enter formula for weighted mean, W in terms of x,y,z
+}
+hist(??)
+abline(v = 30, col = "red", lwd = 2, lty = 2)
+```
+
+## Question 4e:
+
+------------------------------------------------------------------------
+
+Run the code cell below to use your simulation to estimate the value of $P(W < 30)$.
+**There is nothing to do besides running the code cell below.**
+
+### Solution to 4e:
+
+------------------------------------------------------------------------
+
+```{r}
+mean(W < 30)
+```
+
+## Question 4f:
+
+------------------------------------------------------------------------
+
+Why do you suspect your approximations in [Question 4c:] and [Question 4e:] vary so drastically?
+
+### Solution to 4f:
+
+------------------------------------------------------------------------
+
+\
+\
+\

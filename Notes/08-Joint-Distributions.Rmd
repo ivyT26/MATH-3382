@@ -1,0 +1,327 @@
+---
+title: '08: Joint Probability Distributions'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Situations with Multiple Random Variables
+
+------------------------------------------------------------------------
+
+Thus far we have been studying probability distributions for a single random variable.
+In many situations, we would like to incorporate multiple random variables in our analysis.
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+A large insurance agency services a number of customers who have purchased both a homeowner's policy and an automobile policy from the agency.
+For each type of policy, a deductible amount must be specified.
+For an automobile policy, the choices are $\$100$ and $\$250$, whereas for a homeowner's policy, the choices are $\$0$, $\$100$, and $\$200$.
+
+Suppose an individual with both types of policy is selected at random from the agency's files.
+Let $A$ be the deductible amount on the auto policy and $H$ the deductible amount on the homeowner's policy.
+The [**joint probability mass function**]{style="color: blue;"} for $A$ and $H$ is denoted $\color{blue}{p(a,h)=P(A=a \mbox{ and } H=h)}$ and can be summarized in two-way tables.
+
+| $p(a,h)$ | $H=0$  | $H=100$ | $H=200$ | Total |
+|----------|--------|---------|---------|-------|
+| $a=100$  | $0.20$ | $0.10$  | $0.20$  | ??    |
+| $a=250$  | $0.05$ | $0.15$  | $0.30$  | ??    |
+| Total    | ??     | ??      | ??      | $1$   |
+
+### Question 1a:
+
+------------------------------------------------------------------------
+
+Interpret the meaning of the value $p(100,0)=0.2$ in this context.
+
+#### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 1b:
+
+------------------------------------------------------------------------
+
+Compute $P(A=250)$ and interpret the meaning in this context.
+
+#### Solution to Question 1b:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 1c:
+
+------------------------------------------------------------------------
+
+Compute $P(H=100)$ and interpret the meaning in this context.
+
+#### Solution to Question 1c:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+# Marginal Probability Mass Functions
+
+------------------------------------------------------------------------
+
+-   The [**marginal probability mass function of X**]{style="color: blue;"} is given by $$ p_X(x) = P(X=x) = \sum_y p(x,y). $$
+-   The [**marginal probability mass function of Y**]{style="color: blue;"} is given by $$ p_Y(y) = P(Y=y) = \sum_x p(x,y). $$
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+Using the pmf from the insurance example [Question 1:], write a piecewise formula for $p_A(a)$ and $p_H(h)$.
+
+### Solution to Question 2:
+
+------------------------------------------------------------------------
+
+$$p_A(a) = \left\{ \begin{array}{ll}
+?? & a=100 \\
+?? & a=250 \\
+0 & \mbox{otherwise}
+\end{array} \right.$$
+
+$$p_H(h) = \left\{ \begin{array}{ll}
+?? & h=0 \\
+?? & h=100 \\
+?? & h=200 \\
+0 & \mbox{otherwise}
+\end{array} \right.$$
+
+# Joint and Marginal Probability Density Functions
+
+------------------------------------------------------------------------
+
+Let $X$ and $Y$ be continuous random variables with [**joint probability density function**]{style="color: blue;"} $\color{blue}{f(x,y)}$.
+
+-   The [**marginal probability density function of X**]{style="color: blue;"} is given by $$\color{blue}{f_X(x) = \int_{-\infty}^{\infty} f(x,y) \, dy}. $$
+
+-   The [**marginal probability density function of Y**]{style="color: blue;"} is given by $$\color{blue}{f_Y(y) = \int_{-\infty}^{\infty} f(x,y) \, dx}. $$
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+A pharmacy operates both a drive-up facility and a walk-up window.
+On a randomly selected day, let $X$ be the proportion of time that the drive-up window is in use, and let $Y$ be the proportion of time that the walk-up window is in use.
+Then the set of possible values for the pair $(X, Y)$ is the rectangle $A= \left\{ (x, y): 0 \leq x \leq 1, 0 \leq y \leq 1 \right\}$ in $\mathbb{R}^2$.
+Suppose the joint pdf of $(X,Y)$ is given by
+
+$$ f(x,y) = \left\{ \begin{array}{ll}
+\frac{6}{5}(x+y^2), & 0 \leq x \leq 1, 0 \leq y \leq 1\\
+0 , & \mbox{otherwise}
+\end{array} \right. $$
+
+### Question 3a:
+
+------------------------------------------------------------------------
+
+Give a formula for $f_X(x)$ (using integrals).
+
+#### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+Complete the LaTeX code below to express your answer.\
+
+\
+
+$$\int_{??}^{??} \frac{6}{5}(x+y^2) \, d??$$
+
+### Question 3b:
+
+------------------------------------------------------------------------
+
+Use the formula in the previous part to calculate and interpret $P( 0 \leq X \leq \frac{1}{4})$.
+
+#### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 3c:
+
+------------------------------------------------------------------------
+
+Give a formula for $f_Y(y)$.
+
+#### Solution to Question 3c:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 3d:
+
+------------------------------------------------------------------------
+
+Set up (but do not evaluate) a double integral to represent $\displaystyle P \left( 0 \leq X \leq \frac{1}{4} , \ 0 \leq Y \leq \frac{1}{2} \right)$.
+
+#### Solution to Question 3d:
+
+------------------------------------------------------------------------
+
+$$P \left( 0 \leq X \leq \frac{1}{4} , \ 0 \leq Y \leq \frac{1}{2} \right) =
+\int_{??}^{??} \int_{??}^{??} \frac{6}{5}(x+y^2) \, d?? \, d??$$
+
+# Computing Probabilities with Continuous Joint PDFs
+
+------------------------------------------------------------------------
+
+Let $X$ and $Y$ be continuous random variables with joint pdf $f(x,y)$.
+Then for any two dimensional subset $A \subseteq \mathbb{R}^2$,
+
+$$ P \big( (X,Y) \in A \big) = \int \int_A f(x,y) \, dx \, dy .$$
+
+-   In particular if $A$ is a rectangular region $A= \left\{ (x, y): a \leq x \leq b, c \leq y \leq d \right\}$, then $$ P( a \leq X \leq b, \ c \leq Y \leq d )= \int_c^d \int_a^b f(x,y) \, dx \, dy .$$
+
+# Independent Random Variables
+
+------------------------------------------------------------------------
+
+Two random variables $X$ and $Y$ are said to be [**independent**]{style="color: blue;"} if for every part of $x$ and $y$ values,
+
+$$\begin{aligned}
+\color{blue}{f(x,y) = f_X(x) \cdot f_Y(y)} & \qquad \mbox{when } X \mbox{ and } Y \mbox{ are continuous, or}\\
+\color{blue}{p(x,y) = p_X(x) \cdot p_Y(y)} & \qquad \mbox{when } X \mbox{ and } Y \mbox{ are discrete.}
+\end{aligned}$$
+
+Notice this definition applies when $A$ and $B$ are [independent events]{style="color: blue;"}, then $\color{blue}{P(A \cap B) = P(A)P(B)}$.
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+In the insurance example in [Question 1:], are random variables $X$ and $Y$ independent?
+Explain how you determined your answer, and then interpret the practical significance of your answer.
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+In the pharmacy example in [Question 3:], are random variables $X$ and $Y$ independent?
+Explain how you determined your answer, and then interpret the practical significance of your answer.
+
+### Solution to Question 5:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+# Expected Values with Joint Distributions
+
+------------------------------------------------------------------------
+
+Let $X$ and $Y$ be two random variables with joint pdf $f(x,y)$.
+If $\color{blue}{Z=h(X,Y)}$, then
+
+$$E(\color{blue}{Z}) = E(\color{blue}{h(X,Y)}) = \left\{ \begin{array}{ll}
+\displaystyle \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \color{blue}{h(x,y)}\cdot f(x,y) \, dx \, dy , & \mbox{if X and Y are continuous} \\
+ & \\
+\displaystyle \sum_y \sum_x \color{blue}{h(x,y)} \cdot f(x,y) , &  \mbox{if X and Y are discrete} \end{array} \right. .$$
+
+This is often referred to as the [*Law of the Unconscious Statistician*]{style="color: blue;"} since we do not need to know the distribution $f_Z(z)$ in order to compute $E(Z)$.
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+Let $X$ and $Y$ be the values ($1, 2, \ldots ,6$) rolled by each of two die.
+Assume that $X$ and $Y$ are independent, and define the random variable $Z=h(x,y)=xy$ which is the product of the two rolls.
+Calculate $E(Z)$, the expected value of $Z$, the product of the two rolls.
+
+### Solution to Question 6:
+
+------------------------------------------------------------------------
+
+# Linear Combinations of Random Variables
+
+------------------------------------------------------------------------
+
+Let $X$ and $Y$ be two random variables and consider a linear combination $aX+bY$ for $a$ and $b$ two constants.
+Then
+
+$$\color{blue}{E(aX+bY)=aE(X)+bE(Y)}.$$
+
+-   This property is true regardless of whether $X$ and $Y$ are independent or dependent.
+
+## Question 7:
+
+------------------------------------------------------------------------
+
+Prove that expected value and property above.
+
+### Solution to Question 7:
+
+------------------------------------------------------------------------
+
+Let $X$ and $Y$ be two continuous random variables and let $a$ and $b$ denote two constants.
+Then we have
+
+$$\begin{aligned}
+E(aX+bY) &= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (ax+by)f(x,y) \, dx \, dy  & \mbox{Law of the Unconscious Statistician} \\
+&= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \color{blue}{axf(x,y)} \, dx \, dy  + \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \color{blue}{byf(x,y)} \, dx \, dy & \mbox{Explain step 1} \\
+&= \color{blue}{a} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} xf(x,y) \, dx \, dy  + \color{blue}{b} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} yf(x,y) \, dx \, dy & \mbox{Explain step 2} \\
+&= a \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} xf(x,y) \, \color{blue}{dy \, dx}  + b \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} yf(x,y) \, dx \, dy & \mbox{Explain step 3} \\
+&= a \int_{-\infty}^{\infty} \color{blue}{x} \left( \int_{-\infty}^{\infty} f(x,y) \, dy \right) \, dx  + b \int_{-\infty}^{\infty} \color{blue}{y} \left( \int_{-\infty}^{\infty} f(x,y) \, dx \right) \, dy & \mbox{Explain step 4} \\
+&= a \int_{-\infty}^{\infty} x \color{blue}{f_X(x)} \, dx  + b \int_{-\infty}^{\infty} y\color{blue}{f_Y(y)} \, dy & \mbox{Explain step 5} \\
+&= a \color{blue}{E(X)}  + b \color{blue}{E(Y)} & \mbox{Explain step 6} \\
+\end{aligned}$$
+
+#### Explanation of Steps of Proof:
+
+Step 1:
+
+Step 2:
+
+Step 3:
+
+Step 4:
+
+Step 5:
+
+Step 6:
+
+# Products of Independent Random Variables.
+
+------------------------------------------------------------------------
+
+**A special case for products:** Let $X$ and $Y$ be two [**independent random variables**]{style="color: blue;"}.
+Then additionally we have the following properties.
+
+-   Expected value: $\color{blue}{E(XY) = E(X) \cdot E(Y)}$
+-   Variance of linear combination: $\color{blue}{\mbox{Var}(aX+bY)=a^2\mbox{Var}(X)+b^2\mbox{Var}(Y)}$
+-   Variance of product: $\color{blue}{\mbox{Var}(XY) = E(X^2Y^2) - \big( E(X)E(Y) \big)^2}$.
+-   [**In general these properties do NOT hold if X and Y are dependent.**]{style="color: red;"}

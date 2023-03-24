@@ -1,0 +1,933 @@
+---
+title: "MATH 3382: Homework 3 - Due Sep. 20 at 2PM"
+author: "Ivy Truong"
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions:
+
+------------------------------------------------------------------------
+
+**Submit your work electronically as an R Markdown file extension `.Rmd`.**
+
+Upload your file into the Homework 3 assignment in Canvas before **2 PM on Tues, September 20**.
+
+**You must provide supporting work for your all of your answers.**
+
+-   [That work might be inserting some R code cells.]{style="color: blue;"}
+
+    -   **Feel free to insert as much R code as you like.**
+    -   You must interpret or explain how the output of a code cell is being utilized to solve the problem.
+    -   **Code with incomplete or missing explanations of why the output is useful may not receive full credit.**
+
+-   [It might involve doing some algebra and/or calculus (integrating, differentiating, etc).]{style="color: blue;"}
+
+    -   **Be sure to type/write out the steps of your work so I can see how you arrived at your answer.**
+    -   **If typing takes too long no problem.** You can write out the support work on paper and hand that in before class.
+
+-   [Probably it a little bit of both on most problems, but you decide how you want to solve the problems!]{style="color: blue;"}
+
+## Important Academic Policies:
+
+------------------------------------------------------------------------
+
+-   **Be your own work.** Though you may collaborate with others, everyone is responsible for writing up the work in their own way using their own methods. Plagiarism of any form is not tolerated.
+-   **Be complete.** You must provide all work and/or explanations needed to find the solution. Answers with insufficient or incomplete supporting work may lose credit.
+-   **Adhere to the Code of Academic Honesty.**
+-   **Be clearly written (and legible if written).** Your solution to a problem must be clear, written in complete sentences. You may lose credit for work that is unclear or hard to follow.
+
+### [Let me know if you need help, and **GOOD LUCK!!!**]{style="color: blue;"}
+
+------------------------------------------------------------------------
+
+# Question 1:
+
+------------------------------------------------------------------------
+
+A total of $n$ people have applied for a job opening.
+The $n$ candidates for a job have been ranked $1, 2, 3, \ldots , n$.
+Let $X$ equal the rank of a randomly selected candidate, so that $X$ has pdf
+
+$$f_X(x) = \left\{ \begin{array}{ll} \frac{1}{n} \hspace{10pt} & x=1,2,3, \ldots n \\
+  0 & \mbox{otherwise} \end{array} \right. .$$
+
+## Question 1a:
+
+------------------------------------------------------------------------
+
+What type of distribution does this random variable have?
+(i.e. Binomial, Uniform, Geometric, Poisson) Support your answer with an explanation of why.
+
+### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+This random variable has a uniform distribution.
+According to the given piece wise function, there are n choices and each choice has an equal likelihood of occurring.
+Out of n candidates total, they each have a 1/n chance of being chosen.
+For example, if there were 3 candidates, then each candidate would have a 1/3 chance of being chosen.\
+
+\
+\
+
+## Question 1b:
+
+------------------------------------------------------------------------
+
+Compute $E(X)$.
+*Hint: You may using a "shortcut formula"*.
+
+### Solution to Question 1b:
+
+------------------------------------------------------------------------
+
+$$
+E(X) = (1 * \frac{1}{n}) + (2 * \frac{1}{n}) + (3 * \frac{1}{n}) + ... + (n * \frac{1}{n}) =>
+$$
+
+$$
+E(X) = \frac{1}{n}(1 + 2 + 3 + ... + n) => 
+$$
+
+$$
+E(X) = \frac{n+1}{2}
+$$
+
+## Question 1c:
+
+------------------------------------------------------------------------
+
+Compute $\mbox{Var(X)}$.
+*Hint: You may using a "shortcut formula"*.
+
+### Solution to Question 1c:
+
+------------------------------------------------------------------------
+
+$$
+Var(X) = E(X^2) - E(X)^2 => 
+$$\
+
+$$
+Var(X) = [\frac{1}{n}(1^2 + 2^2 + 3^2 + ... + n^2)] - (\frac{n+1}{2})^2 =>
+$$\
+
+$$
+Var(X) = (\frac{2n^2+3n+1}{6}) - (\frac{n^2+2n+1}{4}) =>
+$$
+
+$$
+Var(X) = \frac{n^2-1}{12}
+$$
+
+# Question 2:
+
+------------------------------------------------------------------------
+
+Suppose that 35% of all students who want to buy a text for a particular course want a new copy (the successes for the bookstore), whereas the other 65% want a used copy.
+Consider randomly selecting 25 purchasers.
+
+## Question 2a:
+
+------------------------------------------------------------------------
+
+What are the expected value and variance for the number of students (out of 25) who want a new copy of the book?
+
+### Solution to Question 2a:
+
+------------------------------------------------------------------------
+
+Provide your supporting work below.
+
+This study is a binomial distribution.
+There are only two options presented: some students want to purchase a new copy while others want a used copy.
+
+$E(X) = np$
+
+$Var(X) = npq$
+
+```{r}
+ex <- 25 * 0.35
+var <- 25 * 0.35 * 0.65
+ex
+var
+```
+
+The expected value for the number of students who want a new copy of the book is 8.75.
+
+The variance for the number of students who want a new copy of the book is 5.6875.
+
+## Question 2b:
+
+------------------------------------------------------------------------
+
+The bookstore has 15 new copies and 15 used copies in stock.
+If 25 people come in one by one to purchase this text, what is the probability that all 25 will get the type of book they want from current stock?
+*Hint: Let* $X$ be the number who want a new copy.
+For what values of $X$ will all 25 get what they want?
+
+### Solution to Question 2b:
+
+------------------------------------------------------------------------
+
+Provide your supporting work below.
+
+The possibilities where all 25 students may get the books they want are when X = 10, 11, 12, 13, 14, 15.
+
+X cannot be between 0 and 9.
+For example, if 9 people wanted new copies, then 25-9 =16 people would want used copies and there would not be enough used copies in stock to satisfy this group of 25 students.
+X cannot be between 16 and 25 because for a similar scenario above.
+For example, if 16 people wanted new copies, then there would not be enough copies to satisfy the students who want new books in that group of 25 students.
+
+The probability of all 25 students getting the book they want is adding up all the possibilities that in each scenario they will get what they want.
+
+We can use the probability mass function formula to get the probability of each scenario:
+
+$$f(x) = \left\{ \begin{array}{ll}
+\left( \begin{array}{c} n\\ x \end{array} \right) p^x(1-p)^{n-x} & \mbox{for } x =0,1,2, \ldots , n \\
+0 & \mbox{otherwise} 
+\end{array} \right. $$
+
+```{r}
+prob_satisfy <- 0
+for (x in 10:15){
+  # print(dbinom(x, 25, 0.35))
+  prob_satisfy <- prob_satisfy + dbinom(x, 25, 0.35)
+}
+prob_satisfy
+pbinom(15, 25, 0.35) - pbinom(9, 25, 0.35) #another way to get the probability that X >= 10 and X <=15 is P(X <= 15) - P(X <= 9)
+```
+
+The probability that all 25 students will get the book they want with the current stock is 0.3667529.
+
+## Question 2c:
+
+------------------------------------------------------------------------
+
+Suppose that new copies cost $\$100$ and used copies cost $\$70$.
+Assume the bookstore has $50$ new copies and $50$ used copies.
+What is the expected value of total revenue from the sale of the next $25$ copies purchased?
+*Hint: Let* $h(X) =$ the revenue when $X$ of the $25$ purchasers want new copies.
+Express this as a linear function.
+
+### Solution to Question 2c:
+
+------------------------------------------------------------------------
+
+Provide your supporting work below.
+
+The bookstore has enough in stock to satisfy all possibilities (if 25 students wanted new copies then the bookstore can provide for the demand).
+
+total revenue = 100 \* (number of new copies sold) + 70 \* (number of old copies sold)
+
+h(x) = 100x+ 70(25-x), where x is the number of new copies sold
+
+E(h(x)) = E(30x + 1750)
+
+E(h(x)) = (30 \* E(X)) + 1750
+
+```{r}
+ex <- 25 * 0.35 #expected number of people who would want new copies about of 25 students
+(30 * ex) + 1750
+```
+
+The expected value of the total revenue from the sale of the next 25 copies purchased is 2012.5.
+
+# Question 3:
+
+------------------------------------------------------------------------
+
+Suppose small aircraft arrive at an airport according to a Poisson distribution with rate $\lambda = 7$ air craft per hour, so that the number of arrivals during a time period of $t$ hours is a Poisson random variable with parameter $\mu(t) =7t$.
+
+## Question 3a:
+
+------------------------------------------------------------------------
+
+What is the probability that:
+
+i.  Exactly 5 small aircraft arrive during a **1 hour period**?
+ii. At most 5 small aircraft arrive during a **2 hour period**?
+iii. At least 7 small aircraft arrive during a **1 hour period**?
+iv. What is the probability that at least 25 small aircraft arrive during a **3 hour period**?
+
+### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+Answer each question by entering an appropriate line of R code in the code cell below.
+No need to interpret your output further.
+
+```{r}
+# Probability that exactly 5 small aircraft arrive during a 1 hour period?
+# Enter code for 3a part i below
+dpois(5, 7)
+
+# Probability that at most 5 small aircraft arrive during a 2 hour period?
+# Enter code for 3a part ii below
+ppois(5, 14) #if want during a 2 hour period, double lambda
+
+# Probability that at least 7 small aircraft arrive during a 1 hour period?
+# Enter code for 3a part iii below
+1 - ppois(6, 7) #1 - at most 6 aircrafts per hour
+
+# Probability that at least 25 small aircraft arrive during a 3 hour period?
+# Enter code for 3a part iv below
+1 - ppois(24, 21) #1 - at most 24 aircrafts per 3 hours
+```
+
+## Question 3b
+
+------------------------------------------------------------------------
+
+What are the expected value and standard deviation of the number of small aircraft that arrive during a 90 min period?
+
+### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+Provide your supporting work below.
+
+$$
+E(X) = \lambda
+$$\
+E(X) = 7 \* 1.5
+
+```{r}
+expected_value <- 7 * 1.5
+expected_value
+std <- sqrt(expected_value) #the value for expected value and variance are the same for poisson distribution, and standard deviation is the square root of variance
+std
+```
+
+The expected value of the number of aircraft that arrive in a 90 minute period is 10.5.
+
+Variance = standard deviation \^ 2, and variance is the same as E(X).
+
+The standard deviation of the number of aircraft that arrive during a 90 minute period is 3.24037.\
+
+# Question 4:
+
+------------------------------------------------------------------------
+
+A carnival game consists of spinning a wheel with $10$ slots, eight red and two blue.
+If you land on the blue slot, you win a prize.
+Suppose your younger brother really wants the prize, so you will play until you win.
+
+## Question 4a:
+
+------------------------------------------------------------------------
+
+What is the probability you'll win on the first spin (i.e. no failures before first success)?
+
+### Solution to Question 4a:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below to compute the probability.\
+
+```{r}
+# Enter code answer question 4a
+dgeom(0, 2/10) #2/10 is the probability of landing on a blue slot to win
+```
+
+The probability of winning on the first spin is 0.2.
+
+## Question 4b:
+
+------------------------------------------------------------------------
+
+What is the probability you'll require exactly 4 spins to win?
+
+### Solution to Question 4b:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below to compute the probability.\
+
+```{r}
+# Enter code answer question 4b
+dgeom(3, 2/10) #exactly 3 failures before 1st success
+```
+
+The probability of winning on the 4th spin is 0.1024.
+
+## Question 4c:
+
+------------------------------------------------------------------------
+
+What is the probability you'll require at most 4 spins?
+
+### Solution to Question 4c:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below to compute the probability.\
+
+```{r}
+# Enter code answer question 4c
+pgeom(3, 2/10) #at most 3 spins before first success
+```
+
+The probability of winning with at most 4 spins is 0.5904.
+
+## Question 4d:
+
+------------------------------------------------------------------------
+
+What is the expected number of spins required for you to win the prize, and what is the corresponding variance?
+
+### Solution to Question 4d:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below to compute the probability.\
+
+$$
+E(X) = \frac{q}{p}, \ Var(X) = \frac{q}{p^2}
+$$
+
+```{r}
+# Enter code answer question 4d
+q <- 8/10
+p <- 2/10
+ex <- q / p
+variance <- q / (p^2)
+ex
+variance
+```
+
+The expected number of spins required to win the prize is 4.
+The variance is 20.
+
+# Question 5:
+
+------------------------------------------------------------------------
+
+The current in a certain circuit as measured by an ammeter is a continuous random variable $X$ with the following probability distribution function:
+
+$$f(x) = \left\{ \begin{array}{ll} 0.01x+0.21  \ \ \ \ & 2 \leq x \leq 6\\
+  0 & \mbox{otherwise} \end{array} \right. .$$
+
+## Question 5a: (not collected) {#question-5a-not-collected}
+
+------------------------------------------------------------------------
+
+On a separate piece of paper that should not submit, sketch a graph of the pdf $f(x)$.
+This is for your practice, not collected.
+
+### Solution to Question 5a:
+
+------------------------------------------------------------------------
+
+Do not submit your work.
+
+```{r}
+x <- 2:6
+plot(x, (0.01*x)+0.21, xlab = "x", ylab = "f(x)", type = "l", col="red")
+```
+
+![](images/paste-73698A41.png){width="591"}
+
+## Question 5b:
+
+------------------------------------------------------------------------
+
+Calculate $P(X \leq 3)$.
+Be sure to provide supporting work.
+
+-   For practice mark this value on the graph you sketched in [Question 5a: (not collected)](#question-5a-not-collected) .
+
+### Solution to Question 5b:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work for how you calculate $P(X \leq 3)$.
+
+![](images/paste-9054C91E.png){width="342"}\
+pdf function: f(x) = 0.01x + 0.21
+
+pdf is the derivative of cdf.
+
+\
+$P(X \leq 3) = P(2 \leq X \leq 3)$\
+
+$P(2 \leq X \leq 3) = \int_{2}^3 0.01t+0.21 \, dt = \frac{0.01t^2}{2} + 0.21t \ |_2^3$
+
+$P(2 \leq X \leq 3) = {0.005(3^2)} + 0.21(3) - ({0.005(3^2)} + 0.21(2))$
+
+```{r}
+lessthan3 <- (((0.005 * 3^2)) + (0.21 * 3)) - (((0.005*2^2))  + (0.21*2))
+lessthan3
+```
+
+The probability that X is less than or equal to 3 is 0.235.
+
+## Question 5c:
+
+------------------------------------------------------------------------
+
+Set up and evaluate an integral to compute the expected value, $E(X)$.
+Be sure to provide supporting work.
+
+### Solution to Question 5c:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+$$E(X) = \mu = \int_{-\infty}^{\infty} x \cdot f(x) \, dx.$$
+
+$$E(X) = \int_{2}^{6} x \cdot (0.01x+0.21) \, dx.$$
+
+$$E(X) = \int_{2}^{6} (0.01x^2+0.21x) \, dx.$$\
+$$E(X) = \frac{0.01x^3}{3} + \frac{0.21x^2}{2}|_2^6$$
+
+$$E(X) = (\frac{0.01(6)^3}{3} + \frac{0.21(6)^2}{2}) - (\frac{0.01(2)^3}{3} + \frac{0.21(2)^2}{2})$$
+
+```{r}
+x6 <- ((0.01 * 6**3) / 3) +  ((0.21 * 6**2) / 2)
+x2 <- ((0.01 * 2**3) / 3) +  ((0.21 * 2**2) / 2)
+ex <- x6 - x2
+ex
+```
+
+The expected value is 4.053333.
+
+## Question 5d:
+
+------------------------------------------------------------------------
+
+Find a formula for the cumulative distribution function (cdf), $F(x)$.
+Be sure to provide supporting work.
+
+### Solution to Question 5d:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+pdf is the derivative of cdf.
+The range of valid values of x was also given at the beginning of the problem, which was between 2 and 6.
+If values are over 1, they will be automatically changed to 1.
+When calculating the function with X = 5 and X = 6, the values were over 1, whereas the highest valid X value that was not over 1 was X = 4, hence the range for the function is between 2 and 5(exclusive) instead of 2 and 6 (see work in 5e).
+The range of F(x) should be between 0 and 1.
+
+$F(x) = \int_{0}^x 0.01t+0.21 \, dt = \frac{0.01t^2}{2} + 0.21t|_0^x$
+
+$$
+F(X) = \left\{ \begin{array}{ll} 0 & \mbox{x < 2}\\
+{0.005x^2}+0.21x  \ \ \ \ & 2 \leq x < 5\\
+  1 & x \geq 5 \end{array} \right.
+$$\
+\
+
+```{r}
+for (x in 2:6) {
+  print((0.005 * x**2) + 0.21*x)
+}
+```
+
+## Question 5e: (not collected) {#question-5e-not-collected}
+
+------------------------------------------------------------------------
+
+On a separate piece of paper that should not submitted, sketch a graph of the cdf $F(x)$ you found in [Question 5d:].
+This is for your practice, not collected.
+
+### Solution to Question 5e:
+
+------------------------------------------------------------------------
+
+Do not submit your work.
+
+```{r}
+x <- 2:6
+plot(x, (0.005*x**2)+(0.21*x), xlab = "x", ylab = "f(x)", type = "l", col="red")
+```
+
+![](images/paste-86FEF3B2.png)
+
+## Question 5f:
+
+------------------------------------------------------------------------
+
+Calculate the median value of $X$.
+Be sure to provide supporting work.
+
+-   For practice mark this value on the graph you sketched in [Question 5e: (not collected)](#question-5e-not-collected) .
+
+### Solution to Question 5f:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work for how you calculate the median.
+
+![](images/paste-8E5826CD.png){width="375"}
+
+\
+$Median => F(X) = 0.5$
+
+$F(X) = 0.005x^2 + 0.21x = 0.5$
+
+$0.005x^2 + 0.21x - 0.5 = 0$
+
+$x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$\
+\
+$x = \frac{-0.21 \pm \sqrt{0.21^2-4*0.005*(-0.5)}}{2*0.005}$
+
+```{r}
+denominatorf <- 2 * 0.005
+numerator2f <- sqrt(0.21**2-(4*0.005*(-0.5)))
+numerator1f <- -0.21
+x1f <- (numerator1f - numerator2f) / denominatorf
+x2f <- (numerator1f + numerator2f) / denominatorf
+x1f
+x2f
+```
+
+x2f is positive and within the range of x, so the median value of X is 2.259407.
+
+## Question 5g:
+
+------------------------------------------------------------------------
+
+Calculate the 75th percentile of $X$.
+Be sure to provide supporting work.
+
+### Solution to Question 5g:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work for how you calculate the the 75th percentile of $X$.
+
+\
+The 75th percentile of X is when F(X) = 0.75
+
+$F(X) = 0.005x^2 + 0.21x - 0.75 = 0$
+
+$x = \frac{-0.21 \pm \sqrt{0.21^2-4*0.005*(-0.75)}}{2*0.005}$\
+
+```{r}
+denominatorg <- 2 * 0.005
+numerator2g <- sqrt(0.21**2-(4*0.005*(-0.75)))
+numerator1g <- -0.21
+x1g <- (numerator1g - numerator2g) / denominatorg
+x2g <- (numerator1g + numerator2g) / denominatorg
+x1g
+x2g
+```
+
+x2g is positive and is within the range of x, so the 75th percentile value of X is 3.310492.
+
+# Question 6:
+
+------------------------------------------------------------------------
+
+The variance of a continuous random variable $X$, with pdf $f(x)$ , is defined as
+
+$$\mbox{Var} (X) = \int_{-\infty}^{\infty} \bigg( (x-\mu)^2 \cdot f(x) \bigg) \, dx ,$$ where $\mu=E(X) = \int_{-\infty}^{\infty} x \cdot f(x) \, dx$ is the expected value of $X$.
+
+Prove that $$ \int_{-\infty}^{\infty} \bigg( (x-\mu)^2 \cdot f(x) \bigg) \, dx = E(X^2) - (E(X))^2.$$
+
+## Solution to Question 6:
+
+------------------------------------------------------------------------
+
+| Explanation                             | Step                                                                                                                                                                            |
+|-------------------------|-----------------------------------------------|
+| Distributing the product $(x-\mu)^2$    | $$ \int_{-\infty}^{\infty} \bigg( (x-\mu)^2 \cdot f(x) \bigg) \, dx = \int_{-\infty}^{\infty} \bigg( (x^2-2\mu x + \mu^2) \cdot f(x) \bigg) \, dx$$                             |
+| **Justify this step in Explanation 1.** | $$= \int_{-\infty}^{\infty} \left( x^2f(x) - 2\mu x f(x) + \mu^2 f(x) \right) \, dx$$                                                                                           |
+| **Justify this step in Explanation 2.** | $$= \int_{-\infty}^{\infty} x^2f(x) \, dx - \int_{-\infty}^{\infty} 2\mu x f(x) \, dx + \int_{-\infty}^{\infty} \mu^2 f(x) \, dx$$                                              |
+| **Justify this step in Explanation 3.** | $$= \left( \int_{-\infty}^{\infty} x^2f(x) \, dx \right) - \left( 2\mu \int_{-\infty}^{\infty} x f(x) \, dx \right) + \left( \mu^2 \int_{-\infty}^{\infty} f(x) \, dx \right)$$ |
+| **Justify this step in Explanation 4.** | $$= \left( \int_{-\infty}^{\infty} x^2f(x) \, dx \right) - \left( 2\mu \int_{-\infty}^{\infty} x f(x) \, dx \right) + \mu^2$$                                                   |
+| **Justify this step in Explanation 5.** | $$= \left( \int_{-\infty}^{\infty} x^2f(x) \, dx \right) - 2\mu^2 + \mu^2 $$                                                                                                    |
+| **Justify this step in Explanation 6.** | $$= E(X^2) - 2\mu^2 + \mu^2 $$                                                                                                                                                  |
+| **Justify this step in Explanation 7.** | $$= E(X^2) - \big( E(X) \big)^2 $$                                                                                                                                              |
+
+\
+\
+
+### Explanations for Solution to Question 6:
+
+------------------------------------------------------------------------
+
+**Explanation 1:**
+
+$Distributing \ the \ product \ f(x) \ into \ (x^2 - 2\mu x +\mu^2)$\
+\
+**Explanation 2:**
+
+$Breaking \ up \ sum \ in \ integral \ into \ separate \ components/sum \ of \ multiple \ integrals$\
+\
+**Explanation 3:**
+
+$Taking \ out \ constants \ in \ each \ integral$\
+\
+**Explanation 4:**
+
+$Performing \ integral \ of \ last \ component \ in \ sum \ of \ integrals$\
+\
+**Explanation 5:**
+
+$Performing \ integral \ of \ second \ component \ in \ sum \ of \ integrals$\
+\
+**Explanation 6:**
+
+$Definition \ of \ E(X^2) \ used \ to \ solve \ first \ integral \ in \ sum \ of \ integrals$
+
+$E(X) = \int_{-\infty}^{\infty} xf(x) \, dx, so \ E(X^2) = \int_{-\infty}^{\infty} x^2f(x) \, dx$
+
+**Explanation 7:**
+
+$Combine \ like \ terms \ and \ used \ definition \ of \ E(X) = \mu \ for \ substitution$\
+\
+
+# Question 7:
+
+------------------------------------------------------------------------
+
+Let $X$ be the current in a certain circuit with pdf given in [Question 5:].
+Answer the questions below.
+
+## Question 7a:
+
+------------------------------------------------------------------------
+
+Calculate the value of $E(X^2)$.
+Show your work.
+
+### Solution to Question 7a:
+
+------------------------------------------------------------------------
+
+Answer with insufficient or missing supporting work may not earn full credit.
+
+$E(X^2) = \int_{-\infty}^{\infty} x^2f(x) \, dx$
+
+$f(x) = (0.01x+0.21), \ 2 \ \leq x \leq \ 6$\
+
+$E(X^2) = \int_{2}^{6} x^2 \cdot (0.01x+0.21) \, dx$\
+
+$E(X^2) = \int_{2}^{6} \ (0.01x^3+0.21x^2) \, dx$
+
+$E(X^2) =\frac{0.01x^4}{4} + \frac{0.21x^3}{3} \ |_2^6$
+
+$E(X^2) = 0.0025x^4 + 0.07x^3 \ |_2^6$
+
+```{r}
+x6a <- (0.0025 * 6**4) + (0.07 * 6**3)
+x2a <- (0.0025 * 2**4) + (0.07 * 2**3)
+ex2 <- x6a - x2a
+ex2
+```
+
+The value of E(X^2^) is 17.76.
+
+## Question 7b:
+
+------------------------------------------------------------------------
+
+Using the formula you derived in [Question 5:] for $E(X)$, the shortcut for $\mbox{Var}(X)$ in [Question 6:], and your answer to [Question 7a:], calculate the value of $\mbox{Var}(X)$.
+
+### Solution to Question 7b:
+
+------------------------------------------------------------------------
+
+Answer with insufficient or missing supporting work may not earn full credit.
+You should connect solutions from previous questions.
+
+from question 5c, value of E(X) = 4.053333:
+
+```{r}
+x6 <- ((0.01 * 6**3) / 3) +  ((0.21 * 6**2) / 2)
+x2 <- ((0.01 * 2**3) / 3) +  ((0.21 * 2**2) / 2)
+ex <- x6 - x2
+ex
+```
+
+from question 7a, value of E(X^2^) = 17.76:
+
+```{r}
+x6a <- (0.0025 * 6**4) + (0.07 * 6**3)
+x2a <- (0.0025 * 2**4) + (0.07 * 2**3)
+ex2 <- x6a - x2a
+ex2
+```
+
+$Var(X) = E(X^2) - \big( E(X) \big)^2$
+
+```{r}
+var7b <- ex2 - (ex**2)
+var7b
+```
+
+The variance of X is 1.330489.
+
+# Question 8:
+
+------------------------------------------------------------------------
+
+Let $X$ denote the amount of time (in hours) that a car remains parked after paying a parking meter for a maximum of 2 hours.
+For example $x=0.5$ means a car was parked for a half-hour and then left.
+$x=2$ means a car uses the spot for the full 2 hours.
+The cumulative distribution function (cdf) for $X$ is:
+
+$$ F(x) = \left\{ \begin{array}{ll} 0  \ \ & x < 0 \\ \frac{x^2}{4} & 0 \leq x < 2 \\ 1 & x \geq 2 \end{array} \right. .$$
+
+## Question 8a:
+
+------------------------------------------------------------------------
+
+Compute $P(X<0)$.
+Show your supporting work below.
+
+### Solution to Question 8a:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+$P(X < 0) = F(0)$
+
+$F(0) = \frac{0^2}{4} = 0$\
+
+The probability that random variable X \< 0 is 0.\
+
+\
+
+## Question 8b:
+
+------------------------------------------------------------------------
+
+Compute $P(.5 \leq X \leq 1)$.
+Show your supporting work below.
+
+### Solution to Question 8b:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+$P(0.5 \leq X \leq 1) = F(1) - F(0.5)$
+
+$F(1) = \frac{1^2}{4} = \frac{1}{4}$
+
+$F(0.5) = \frac{0.5^2}{4} = \frac{\frac{1}{4}}{4} = \frac{1}{4} \cdot \frac{1}{4} = \frac{1}{16}$
+
+$P(0.5 \leq X \leq 1) = \frac{1}{4} - \frac{1}{16} = \frac{4}{16} - \frac{1}{16} = \frac{3}{16}$\
+
+```{r}
+3/16
+```
+
+The probability that random variable X is between 0.5 and 1 is $\frac{3}{16}$ or 0.1875.\
+
+## Question 8c:
+
+------------------------------------------------------------------------
+
+Compute $P(X > 1.5)$.
+Show your supporting work below.
+
+### Solution to Question 8c:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+$P(X > 1.5) = 1 - P(X \leq 1.5)$
+
+$P(X \leq 1.5) = F(1.5) = \frac{1.5^2}{4} = \frac{2.25}{4} = 0.5625$\
+
+```{r}
+lessthan1_5 <-(1.5**2)/4
+greaterthan1_5 <- 1 - lessthan1_5
+greaterthan1_5
+```
+
+$P(X > 1.5) = 1 - 0.5625 = 0.4375$
+
+The probability that random variable X is greater than 1.5 is 0.4375.
+
+## Question 8d:
+
+------------------------------------------------------------------------
+
+Find the median value of $X$.
+Show your supporting work below.
+
+### Solution to Question 8d:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+$Median => F(X) = 0.5$
+
+$\frac{x^2}{4} = 0.5$
+
+$x^2 = 2$
+
+$x = \pm \sqrt{2}$\
+
+```{r}
+0.5 * 4
+sqrt(2)
+```
+
+Median must be positive.
+The median value of X is 1.414214 or $\sqrt{2}$.
+
+## Question 8e:
+
+------------------------------------------------------------------------
+
+Give a formula for $f(x)$, the probability distribution function (pdf) of $X$.
+Show your supporting work below.
+
+### Solution to Question 8e:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+\
+pdf is the derivative of cdf, so to get pdf from cdf, take the derivative of the cdf formula.
+
+$pdf = \frac{d}{dx} \frac{x^2}{4}$
+
+$pdf = \frac{2x}{4} = \frac{x}{2}$
+
+$f(x) = \left\{ \begin{array}{ll} \frac{x}{2} & 0 \leq x \leq 2 \\ 0 & otherwise \end{array} \right.$
+
+## Question 8f:
+
+------------------------------------------------------------------------
+
+Compute $E(X)$.
+Show your supporting work below.
+
+### Solution to Question 8f:
+
+------------------------------------------------------------------------
+
+Be sure to provide all supporting work.
+
+$E(X) = \int_{0}^{2} xf(x) \, dx$
+
+\
+$E(X) = \int_0^2 x \cdot \frac{x}{2} \ dx = \int_0^2 \frac{x^2}{2} \ dx$\
+
+$E(X) = \frac{x^3}{6} \ |_0^2$
+
+$E(X) = \frac{2^3}{6} - \frac{0^3}{6}$
+
+```{r}
+(2**3)/6
+```
+
+The expected value is 1.333333 or $\frac{3}{2}$.

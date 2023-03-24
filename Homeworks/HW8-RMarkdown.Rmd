@@ -1,0 +1,688 @@
+---
+title: "MATH 3382: Homework 8 - Due Nov. 3 at 2PM"
+author: "Ivy Truong"
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions:
+
+------------------------------------------------------------------------
+
+**Submit your work electronically as an R Markdown file extension `.Rmd`.**
+
+Upload your file into the Homework 8 assignment in Canvas before **2 PM on Thursday, Nov. 3**.
+
+**You must provide supporting work for your all of your answers.**
+
+-   [That work might be inserting some R code cells.]{style="color: blue;"}
+
+    -   **Feel free to insert as much R code as you like.**
+    -   You must interpret or explain how the output of a code cell is being utilized to solve the problem.
+    -   **Code with incomplete or missing explanations of why the output is useful may not receive full credit.**
+
+-   [It might involve doing some algebra and/or calculus (integrating, differentiating, etc).]{style="color: blue;"}
+
+    -   **Be sure to type/write out the steps of your work so I can see how you arrived at your answer.**
+    -   **If typing takes too long no problem.** You can write out the support work on paper and hand that in before class.
+
+-   [Probably it a little bit of both on most problems, but you decide how you want to solve the problems!]{style="color: blue;"}
+
+## Important Academic Policies:
+
+------------------------------------------------------------------------
+
+-   **Be your own work.** Though you may collaborate with others, everyone is responsible for writing up the work in their own way using their own methods. Plagiarism of any form is not tolerated.
+-   **Be complete.** You must provide all work and/or explanations needed to find the solution. Answers with insufficient or incomplete supporting work may lose credit.
+-   **Adhere to the Code of Academic Honesty.**
+-   **Be clearly written (and legible if written).** Your solution to a problem must be clear, written in complete sentences. You may lose credit for work that is unclear or hard to follow.
+
+### [Let me know if you need help, and **GOOD LUCK!!!**]{style="color: blue;"}
+
+------------------------------------------------------------------------
+
+# Question 1
+
+------------------------------------------------------------------------
+
+Suppose a student is working on a project using data on pulse rates collected from a random sample of 100 students at her university.
+She finds a 95% confidence interval for the mean pulse rate to be from 65.5 to 71.8 beats per minute.
+Explain (in complete sentences) why each of the statements below would be an improper interpretation of this interval.
+
+## Question 1a
+
+------------------------------------------------------------------------
+
+I am 95% sure that all students will have pulse rates between 65.5 to 71.8 beats per minute.
+
+### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+Explain (in complete sentences) why the statement is an **improper interpretation** of this interval.
+
+Note: I use the word 'sureness', but it means 'the confidence in' or ' percent correctness' in my own words.
+
+This statement is incorrect in describing the confidence interval because it is describing the 'sureness' of the data observed/whole population (pulse rates).
+The confidence interval should describe the 'sureness' of the interval found.\
+
+## Question 1b
+
+------------------------------------------------------------------------
+
+I am 95% sure that the mean pulse rate for this sample will fall between 65.5 to 71.8 beats per minute.
+
+### Solution to Question 1b
+
+------------------------------------------------------------------------
+
+Explain (in complete sentences) why the statement is an **improper interpretation** of this interval.
+
+This statement is incorrect in describing the confidence interval because it is describing the 'sureness' of the mean pulse rate (a sample statistic).
+The confidence interval should describe the 'sureness' of the interval found.\
+
+\
+
+## Question 1c
+
+------------------------------------------------------------------------
+
+95% of all students at this university will have pulse rates between 65.5 and 71.8 beats per minute.
+
+### Solution to Question 1c
+
+------------------------------------------------------------------------
+
+Explain (in complete sentences) why the statement is an **improper interpretation** of this interval.
+
+This statement is incorrect in describing the confidence interval because it is describing the 'sureness' of a portion of the population.
+It states that 95% of the population will fit in the fixed interval.
+The confidence interval should describe the 'sureness' of the interval found.\
+
+\
+
+## Question 1d
+
+------------------------------------------------------------------------
+
+95% of the mean pulse rates for random samples of 100 students will fall between 65.5 and 71.8 beats per minute.
+
+### Solution to Question 1d
+
+------------------------------------------------------------------------
+
+Explain (in complete sentences) why the statement is an **improper interpretation** of this interval.
+
+\
+This interpretation is incorrect because it is describing the 'sureness' of a sample of means.
+It states that given a list of calculated sample means, 95% of those sample means will be in the fixed interval.
+The confidence interval should describe the 'sureness' of the interval found.\
+
+\
+
+# Question 2
+
+------------------------------------------------------------------------
+
+For all high school seniors who took the SAT exam in 2018, the mean math SAT score was $\mu=515$ with a standard deviation of $\sigma = 116$.
+From a random sample of 25 students at your university, you find the average SAT math score of the sample is 538.
+You forgot to compute the standard deviation of your sample, so you assume the standard deviation of math SAT scores at your university is the same as the standard deviation of the population, $\sigma = 116$.
+
+## Question 2a
+
+------------------------------------------------------------------------
+
+Compute a 95% confidence interval for the mean SAT math score at this university.
+
+-   Show your work by replacing each of the ?? below with an appropriate value.
+
+### Solution to Question 2a
+
+------------------------------------------------------------------------
+
+i.  A point estimate is predicting on a sample statistic.
+    The point estimate for this problem would be the mean SAT math score.
+
+ii. The value of $z_{\alpha/2}$ for a 95% confidence level is 1.96.
+
+-   Round your answer to two decimal places when typing it above.
+
+```{r}
+# Show work by entering a formula (using qnorm)
+# the confidence level to get is: area we want + (leftover area/2)
+(z <- qnorm((0.95+(0.05/2)),0,1))
+```
+
+iii. The standard error of the underlying sampling distribution is $\mbox{SE}(\bar{X}) =$ 23.20.
+
+-   Round your answer to two decimal places when typing it above.
+
+```{r}
+# Show work by entering a calculation
+# that gives the standard error
+(se <- 116 / sqrt(25)) #standard error of a sample proportion (standard deviation of population is known)
+```
+
+iv. The margin of error (MoE) for a 95% confidence interval is 45.47.
+
+-   Round your answer to two decimal places when typing it above.
+
+```{r}
+# Show work by entering a calculation
+# that gives the margin of error.
+#margin of error = confidence level * standard error
+(MOE <- z * se)
+```
+
+v.  A 95% confidence interval for the mean SAT math score of all students at the university is from 492.5 to 583.5.
+
+-   Round your answers to one decimal place when typing them above.
+
+    ```{r}
+    #get interval: sample mean - confidence level * standard error < sample mean < X + confidence level * standard error
+    samp.mean_mathSAT <- 538
+    (lower95 <- samp.mean_mathSAT - MOE)
+    (upper95 <- samp.mean_mathSAT + MOE)
+    ```
+
+## Question 2b
+
+------------------------------------------------------------------------
+
+Interpret the meaning of the confidence interval you found in [Question 2a] in practical terms to a person who knows very little statistics.
+
+-   Be sure to keep in the mind the cautions we discussed in class regarding interpretations of confidence intervals.
+
+### Solution to Question 2b
+
+------------------------------------------------------------------------
+
+**Write your interpretation below:**
+
+There is a 95% chance that the interval from 492.5 to 583.5 contains the mean SAT math score.\
+
+\
+\
+
+# Question 3
+
+------------------------------------------------------------------------
+
+A researcher is interested in the sugar content of vanilla ice cream.
+They obtain random samples of $n=20$ brands (each sample is a half cup serving of ice cream) and finds an average of 18.05 grams of sugar with a standard deviation of 5 grams.
+Assuming the distribution of sugar content of all brands of vanilla ice cream is normally distributed, **find a 90% confidence interval for the mean amount of sugar in a half cup serving of vanilla ice cream.**
+
+-   Show your work by replacing each of the ?? below with an appropriate value.
+
+### Solution to Question 3
+
+------------------------------------------------------------------------
+
+i.  A point estimate is the mean amount of sugar in half a cup serving of vanilla ice cream.
+
+ii. The value of $t_{\alpha/2}$ for a 90% confidence level is 1.729.
+
+-   Round your answer to three decimal places when typing it above.
+
+```{r}
+# Show work by entering a formula
+n <- 20
+dof <- n - 1 #degrees of freedom: num samples - 1
+(t <- qt((0.9+(0.1/2)),dof))
+```
+
+iii. The standard error of the underlying sampling distribution is $\mbox{SE}(\bar{X}) =$ 1.118.
+
+-   Round your answer to three decimal places when typing it above.
+
+```{r}
+# Show work by entering a calculation
+# that gives the standard error
+s.sugar <- 5
+(se.sugar <- s.sugar / sqrt(n))
+```
+
+iv. The margin of error (MoE) for a 90% confidence interval is 1.93.
+
+-   Round your answer to two decimal places when typing it above.
+
+```{r}
+# Show work by entering a calculation
+# that gives the margin of error.
+(MOE.sugar <- t * se.sugar)
+```
+
+v.  A 90% confidence interval for the mean amount of sugar in a half cup serving of vanilla ice cream is from 16.12 to 19.98.
+
+-   Round your answers to two decimal places when typing them above.
+
+    ```{r}
+    samp.mean_sugar <- 18.05
+    (lower90 <- samp.mean_sugar - MOE.sugar)
+    (upper90 <- samp.mean_sugar + MOE.sugar)
+    ```
+
+# Question 4
+
+------------------------------------------------------------------------
+
+United Airlines Flight 179 is a nonstop flight from Boston to San Francisco.
+During 2016 the mean length of time for all flights was 357.9 minutes and population standard deviation was 20.18 minutes.
+You want to construct a 95% confidence interval for the mean length of time of the flight in 2018 based on a sample of flights in 2018.
+**What is the minimum size of the sample needed in order to have a margin of error of two minutes or less?**
+
+-   You may assume the standard deviation of the population of all flights in 2018 is equal to the standard deviation of the all flight lengths in 2016.
+
+## Solution to Question 4
+
+------------------------------------------------------------------------
+
+Show supporting work/calculations in the space below.
+Answer without any supporting work will not earn credit.
+
+```{r}
+# Here's an R code cell if you'd like to use it!
+# find n where MOE <= 2
+# MOE = confidence level * se
+# se = standard deviation / sqrt(n)
+
+#since we are assuming that the population standard deviation is known, we will use the z confidence interval
+z.flight <- qnorm((0.95+(0.05/2)),0,1)
+MOE <- 2
+std.flight <- 20.18
+(n.flight <- ((std.flight * z.flight) / MOE)**2)
+```
+
+\
+Solve for n:
+
+$$
+MOE = z_\frac{\alpha}{2} * \frac{\sigma}{\sqrt{n}} \\
+\frac{MOE}{z_\frac{\alpha}{2}} = \frac{\sigma}{\sqrt{n}} \\
+\sqrt{n} = \frac{\sigma * z_\frac{\alpha}{2}}{MOE} \\
+n = (\frac{\sigma * z_\frac{\alpha}{2}}{MOE})^2
+$$
+
+\
+The minimum sample size needed to have a margin of error of 2 minutes or less is 392.
+The value of n solved is 391.1, and I'll round it up to 392 since sample size needs to be an integer.\
+
+# Question 5
+
+------------------------------------------------------------------------
+
+The dataset `Girls2004` from contains samples of the the birth weights of baby girls born in Wyoming and Alaska.
+You will need to load the `resampledata` package to access the dataset.
+
+```{r message=FALSE}
+library(resampledata)
+```
+
+## Question 5a
+
+------------------------------------------------------------------------
+
+Complete the given R code cell below to R find a 99% confidence interval for the difference in the mean weights of girls born in these two states.
+
+### Solution to Question 5a
+
+------------------------------------------------------------------------
+
+```{r}
+Weight <- Girls2004$Weight  # creates a vector birth weights
+
+# Create a vector of Alaska birth weights
+Weight.AK <-subset(Girls2004, select = Weight, 
+                   State == "AK", drop = T)
+
+# Create a vector of Wyoming birth weights
+Weight.WY <-subset(Girls2004, select = Weight, 
+                   State == "WY", drop = T)
+
+# Compute confidence interval
+t.test(Weight.AK, Weight.WY, conf.level = 0.99)$conf.int
+```
+
+-   In addition to R code and output from that code, **be sure to type a sentence indicating your answer.**
+-   Do not leave it for your reader (me!) to interpret the output.
+-   Round your answers to two decimal places when typing them.
+
+```{r}
+# summary(Girls2004)
+# ?t.test
+```
+
+There is a 99% chance that the interval from 9.57 to 607.33 contains difference in the mean weights of girls born in Alaska and Wyoming.
+
+## Question 5b
+
+------------------------------------------------------------------------
+
+Based on your previous answer, do you believe that there is a difference in the mean weights of babies born in these two states.
+**Explain why or why not.**
+
+### Solution to Question 5b
+
+------------------------------------------------------------------------
+
+**Be sure to provide a supporting explanation!**
+
+Yes there is a difference in the mean weights of babies born in these two states.
+Since 0 is not contained in the interval, it is plausible that there is a difference.
+This interval shows that the girls who were born in Alaska weighed more than girls born in Wyoming, assuming that the difference in mean calculation was mean weights of girls born in Alaska - mean weights of girls born in Wyoming.\
+
+\
+\
+
+## Question 5c
+
+------------------------------------------------------------------------
+
+Construct an approximate 99% confidence interval by following these steps below.
+
+-   Show your work by replacing each of the ?? below with an appropriate value.
+
+### Solution to Question 5c
+
+------------------------------------------------------------------------
+
+i.  The mean of the weights of the Wyoming sample is 3207.90. The standard deviation of the weights of the Wyoming sample is 418.32.
+
+-   Round your answers to two decimal places when typing them above.
+
+```{r}
+# Enter a formula for the mean of the Wyoming sample
+(mean.weight_wy <- mean(Weight.WY))
+
+# Enter a formula for the standard deviation of the Wyoming sample
+(sd.weight_wy <- sd(Weight.WY))
+
+```
+
+ii. The mean of the weights of the Alaska sample is 3516.35. The standard deviation of the weights of the Alaska sample is 578.83.
+
+-   Round your answers to two decimal places when typing them above.
+
+```{r}
+# Enter a formula for the mean of the Alaska sample
+(mean.weight_ak <- mean(Weight.AK))
+
+# Enter a formula for the standard deviation of the Alaska sample
+(sd.weight_ak <- sd(Weight.AK))
+
+```
+
+iii. If we use the degrees of freedom of the $t$ distribution equal to the minimum of $n_1-1$ and $n_2-1$, the value of $t_{\alpha/2}$ for a 99% confidence interval is 2.708.
+
+-   Round your answer to three decimal places when typing it above.
+
+```{r}
+# Show work by entering a formula
+(n1_ak <- length(Weight.AK)) #number of weights of girls in alaska
+(n2_wy <- length(Weight.WY)) #number of weights of girls in wyoming
+
+# (min(n1_ak-1,n2_wy-1))
+
+(t.weights <- qt((0.99 + (0.01/2)), min(n1_ak-1,n2_wy-1)))
+```
+
+iv. Using the previous answers in [Question 5c], a 99% confidence interval for the the difference in the mean weights of girls born in these two states is from 2.67 to 614.23.
+
+-   Round your answers to two decimal places when typing them above.
+
+```{r}
+# Feel free to use code cell for calculations
+#difference in means is X mean - Y mean
+diff.mean_weights <- mean.weight_ak - mean.weight_wy
+se1 <- (sd.weight_ak**2) / n1_ak
+se2 <- (sd.weight_wy**2) / n2_wy
+se <- sqrt(se1 + se2)
+moe.weights <- t.weights * se
+
+(lower.weights <- diff.mean_weights - moe.weights)
+(upper.weights <- diff.mean_weights + moe.weights)
+```
+
+v.  How does your previous answer compare the to confidence interval you found in [Question 5a]? **Explain in a complete sentence or two.**
+
+The confidence interval I found in 5c has a bigger range of values/wider range than the confidence interval I found in 5a.\
+
+\
+\
+
+# Question 6
+
+------------------------------------------------------------------------
+
+Is there a difference in the price of groceries sold by Target and Walmart?
+The `Groceries` dataset from the `resampledata` package contains a sample of products, and for each product there is a pair of prices, one for each retailer.
+
+## Question 6a
+
+------------------------------------------------------------------------
+
+Compute the sample mean difference in price and sample standard deviation of the difference in price.
+
+-   Show your work by replacing each of the ?? below with an appropriate value.
+
+### Solution to Question 6a
+
+------------------------------------------------------------------------
+
+The sample mean difference in price is 0.06.
+The sample standard deviation of the difference in the price is 0.66.
+
+-   Round your answers to two decimal places when typing them above.
+
+```{r}
+#difference in match pairs
+diff.prices <- Groceries$Target - Groceries$Walmart
+
+# Enter a formula for the sample mean difference in price
+# will be using for finding confidence interval of matched pair differences
+(diff.mean_price <- mean(diff.prices))
+
+# Enter a formula for the sample standard deviation of the difference in price
+(diff.sd_price <- sd(diff.prices))
+
+```
+
+## Question 6b
+
+------------------------------------------------------------------------
+
+Construct an approximate 90% confidence interval for the mean difference in price by following these steps below.
+
+-   Show your work by replacing each of the ?? below with an appropriate value.
+
+### Solution to Question 6b
+
+------------------------------------------------------------------------
+
+i.  A point estimate is the mean of the difference in match pairs of prices between Target and Walmart.
+
+ii. The value of $z_{\alpha/2}$ or $t_{\alpha/2}$ (you decide which is appropriate) for a 90% confidence level is 1.699.
+
+-   Round your answer to three decimal places when typing it above.
+
+```{r}
+# Show work by entering a formula
+#use t confidence interval since only sample standard deviation is known, and this is matched pair differences
+(t.prices <- qt((0.9+(0.1/2)),length(diff.prices)-1))
+```
+
+iii. The standard error of the underlying sampling distribution is 0.120.
+
+-   Round your answer to three decimal places when typing it above.
+
+```{r}
+# Show work by entering a calculation
+# that gives the standard error
+(se.prices <- sqrt(diff.sd_price**2/length(diff.prices)))
+```
+
+iv. The margin of error (MoE) for a 90% confidence interval is 0.205.
+
+-   Round your answer to three decimal places when typing it above.
+
+```{r}
+# Show work by entering a calculation
+# that gives the margin of error.
+(moe.prices <- t.prices * se.prices)
+```
+
+v.  A 90% confidence interval for the mean difference in price is from -0.148 to 0.261.
+
+-   Round your answers to three decimal places when typing them above.
+
+```{r}
+(lower.prices <- diff.mean_price - moe.prices)
+(upper.prices <- diff.mean_price + moe.prices)
+```
+
+## Question 6c
+
+------------------------------------------------------------------------
+
+Based on your previous answer, do you believe there is a difference in prices between Target and Walmart.
+**Explain why or why not.**
+
+### Solution to Question 6c
+
+------------------------------------------------------------------------
+
+**Be sure to provide a supporting explanation!**
+
+There is not a difference in the prices between Target and Walmart.
+Given the 90% confidence interval, which is -0.148 to 0.261, the value 0 is a plausible value in the interval.
+Since 0 is a plausible value, it means it is possible that there may be no difference between the prices in Target and Walmart.\
+
+\
+\
+
+# Question 7
+
+------------------------------------------------------------------------
+
+In a survey of 1000 US adults, twenty percent say they never exercise[^1].
+This is the highest level seen in five years.
+
+[^1]: "75% say exercise is important in daily life," Rasmussen Reports, March 26, 2011.
+
+## Question 7a
+
+------------------------------------------------------------------------
+
+Find a 95% confidence interval **using the Wald confidence interval** for a proportion.
+
+### Solution to Question 7a
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter calculations below.
+# Feel free to break up calculations
+# Into multiple code cells if you like
+
+#phat +/- z * sqrt(phat * (1-phat) / n)
+
+phat <- 0.2
+n <- 1000
+z <- qnorm((0.95 + (0.05/2)),0,1)
+se.wald <- sqrt((phat * (1-phat)) / n)
+moe.wald <- z * se.wald
+
+(lower.wald <- phat - moe.wald)
+(upper.wald <- phat + moe.wald)
+```
+
+-   In addition to R code and output from that code, **be sure to type a sentence indicating your answer.**
+-   Do not leave it for your reader (me!) to interpret the output.
+-   **Round your answers to four decimal places when typing them.**
+
+Using the Wald confidence interval, there is a 95% chance that the interval from 0.1752 to 0.2248 contains the proportion of adults that never exercise.
+
+## Question 7b
+
+------------------------------------------------------------------------
+
+Find a 95% confidence interval **using the Agresti-Coull confidence interval** for a proportion.
+
+### Solution to Question 7b
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter calculations below.
+# Feel free to break up calculations
+# Into multiple code cells if you like
+
+#p tilde +/- z * sqrt(p tilde * (1-p tilde) / n tilde)
+#X tilde = X + 2
+#n tilde = n + 4
+#p tilde = X tilde / n tilde
+
+Xtilde <- (1000 * 0.2) + 2
+ntilde <- 1000 + 4
+ptilde <- Xtilde/ntilde
+z <- qnorm((0.95 + (0.05/2)),0,1)
+se.ac <- sqrt((ptilde * (1-ptilde))/ntilde)
+moe.ac <- z * se.ac
+
+(lower.ac <- ptilde - moe.ac)
+(upper.ac <- ptilde + moe.ac)
+```
+
+-   In addition to R code and output from that code, **be sure to type a sentence indicating your answer.**
+-   Do not leave it for your reader (me!) to interpret the output.
+-   **Round your answers to four decimal places when typing them.**
+
+Using the Agresti-Coull confidence interval, there is a 95% chance that the interval from 0.1764 to 0.2260 contains the proportion of adults that never exercise.
+
+## Question 7c
+
+------------------------------------------------------------------------
+
+Find a 95% confidence interval **using the score confidence interval** for a proportion.
+
+### Solution to Question 7c
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter calculations below.
+# Hint: You should be able to calculate this in one line of code
+
+prop.test(0.2*1000, 1000, conf.level=0.95, correct=FALSE)$conf.int
+```
+
+-   In addition to R code and output from that code, **be sure to type a sentence indicating your answer.**
+-   Do not leave it for your reader (me!) to interpret the output.
+-   **Round your answers to four decimal places when typing them.**
+
+Using the score confidence interval, there is a 95% chance that the interval from 0.1764 to 0.2259 contains the proportion of adults that never exercise.
+
+## Question 7d
+
+------------------------------------------------------------------------
+
+Rank the confidence intervals you found in [Question 7a], [Question 7b], and [Question 7c] from smallest to largest margin of error.
+
+### Solution to Question 7d
+
+------------------------------------------------------------------------
+
+-   The smallest margin of error is from part 7c.
+
+-   The second smallest margin of error is from part 7b.
+
+-   The largest margin of error is from part 7a.
+
+```{r}
+# (moe.wald)
+# (moe.ac)
+# prop.test(0.2*1000, 1000, conf.level=0.95, correct=FALSE)
+```

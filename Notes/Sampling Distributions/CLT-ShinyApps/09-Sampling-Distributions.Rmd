@@ -1,0 +1,520 @@
+---
+title: '09: Sampling Distributions'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+## Importing Packages
+
+------------------------------------------------------------------------
+
+```{r, message = FALSE}
+library(dplyr)
+```
+
+# Shiny Apps
+
+------------------------------------------------------------------------
+
+[`Shiny`](https://shiny.rstudio.com) is an R package that creates interactive apps/widgets.
+If you have not install the `Shiny` package before, in the console first run the command `install.packages("shiny")`.
+
+-   See <https://shiny.rstudio.com/tutorial/>.
+
+```{r, message = FALSE}
+library(shiny) # loads shiny package
+```
+
+# Set the Working Directory
+
+------------------------------------------------------------------------
+
+## Identifying the Working Directory
+
+------------------------------------------------------------------------
+
+-   In `R`, the command `getwd()` will identify your current working directory.
+-   By default, the working directory should be the same as the directory where you have saved this file.
+
+```{r, eval = FALSE}
+getwd()
+```
+
+## Changing the Working Directory.
+
+------------------------------------------------------------------------
+
+-   If you would like to change your working directory to some other location, you can use the `setwd()` command.
+
+```{r, eval = FALSE}
+# Sample of a typical file path on Mac
+#setwd("/Users/adamspiegler/Documents/my/working/directory")
+
+# Sample of a typical file path on Windows
+#setwd("c:/Documents/my/working/directory")
+```
+
+## Downloading Shiny App Files
+
+------------------------------------------------------------------------
+
+We will be using 3 different **Shiny Apps** in this worksheet that you will need to save locally on your computer.
+
+-   Create three folders named **clt_bmi**, **clt_wait**, and **clt_quake**.
+
+1.  In the folder you named **clt_bmi**, save the file **app.R** linked here: [link to BMI app](https://www.dropbox.com/s/gyg67fnqn7s12qf/app.R?dl=0)
+
+2.  In the folder you named **clt_wait**, Save the file **app.R** linked here: [link to Wait Time app](https://www.dropbox.com/s/ns71bugx2lzp1nu/app.R?dl=0)
+
+3.  In the folder you named **clt_quake**, Save the file **app.R** linked here: [link to Quake app](https://www.dropbox.com/s/9ipgek818m8s6jc/app.R?dl=0)
+
+-   [Do not change the folder or file names. By default, Shiny App scripts are named **app.R**]{style="color: blue;"}.
+
+# Sampling Distributions
+
+------------------------------------------------------------------------
+
+-   A [**sampling distribution**]{style="color: blue;"} is the distribution of sample statistics (such as a mean, proportion, median, maximum, etc.) computed for **different samples of the same size from the same population**.
+    A sampling distribution shows us how the sample statistic varies from sample to sample.
+
+-   The problems below compare the sampling distributions for means from three different distributions.
+
+    -   Let $X$ denote the distribution of Body Mass Index (BMI) of all adult men.
+    -   Let $Y$ denote all times (in minutes) that people wait before their train arrives at a certain stop.
+    -   Let $Z$ denote the depth (in km) of all earthquakes that have occurred near Fiji since 1964.
+
+## Question 1: Plotting a Normal Population
+
+------------------------------------------------------------------------
+
+Let $X$ denote the distribution of BMI of all adult men.
+We can approximate this distribution by $X \sim N(26, 4)$.
+Interpret the code below.
+Add comments to explain what each command will do.
+Then run the code.
+
+```{r}
+# Create a vector name bmi of 100 bmi values 
+# chosen between x=10 and x=42
+bmi <- seq(26-4*4, 26+4*4, length=100)
+
+# Add your comment here
+# get the height of each BMI value
+pdf.bmi <- dnorm(bmi, 26, 4)
+
+# Add your comment here
+#plot a group of points and draw a line through those 100 points
+plot(bmi, pdf.bmi, 
+     type="l", lty=1, # type="l" draws line lty=1 is solid line
+     xlab="Body Mass Index (BMI)",
+  ylab="Density", main="Distribution of Population")
+```
+
+### Solution to Question 1:
+
+------------------------------------------------------------------------
+
+Enter comments in code cell above.
+
+\
+\
+
+## Question 2: Picking One Random Sample
+
+-   We can pick a random sample of size $n$ from a normal distribution $N(\mu, \sigma)$ using `rnorm(n, mean, sd)`.
+
+Replace each question mark in the code below to randomly select 4 individual BMI's from the population $X \sim N(26,4)$.
+
+```{r, eval=FALSE}
+my.sample <- rnorm(4, 26, 4) #Randomly picks 4 values from N(26,4)
+my.sample
+```
+
+### Solution to Question 2:
+
+------------------------------------------------------------------------
+
+Replace each ??
+in the code cell above with an appropriate value.
+
+\
+\
+
+## Question 3: Comparing Statistics and Parameters
+
+------------------------------------------------------------------------
+
+Calculate the mean and standard deviation of your sample by running the code below.
+Then:
+
+-   Discuss how the statistics of your sample will compare to the population parameters $\mu = 26$ and $\sigma =4$?
+-   Discuss how the statistics of your sample will compare to the statistics that others in class obtain with their own samples?
+
+```{r}
+mean(my.sample)
+sd(my.sample)
+```
+
+### Solution to Question 3:
+
+------------------------------------------------------------------------
+
+\
+Each student has a different sample space (4 different people in each sample)
+
+sample mean = x bar
+
+sample standard deviation = s
+
+sample mean and standard deviation can vary for each sample
+
+sampling distribution: distribution of all sample means selected from groups of random samples all size n\
+
+## Plotting a Sampling Distribution with $n=4$
+
+------------------------------------------------------------------------
+
+A sample of $n=4$ adult men are randomly selected.
+The mean BMI of the sample is calculated: $$ \bar{x} = \frac{x_1 + x_2 + x_3+x_4}{4}.$$
+
+Then another random sample of $n=4$ adult men are randomly selected, and again the mean BMI of this sample is computed.
+This is repeated 1000 times (each sample size $n=4$), and the sampling distribution for the mean BMI can be constructed with the code below:
+
+```{r}
+# creates an empty vector to store results
+n4.bmi.bar <- numeric(1000) 
+
+# A for loop that generates 1000 random samples 
+# Each size n=4, and calculates the sample mean.
+for (i in 1:1000)
+{
+  n4.bmi.sample <- rnorm(4, 26, 4) #Randomly picks 4 values from N(26,4)
+  #to make it an exponential distribution, change rnorm to rexp
+  n4.bmi.bar[i] <- mean(n4.bmi.sample)
+}
+
+# Plot the sampling distribution
+hist(n4.bmi.bar, xlim = c(14, 38), 
+     xlab = "Mean BMI of Sample",
+     main = "Sampling Distribution of Mean BMI for n=4",
+     xaxt='n')
+axis(1, at=seq(14, 38, 4), pos=0)
+abline(v = 26, col = "red", lwd = 2, lty = 2)
+```
+
+## Question 4: Center and Spread of the Sampling Distribution
+
+------------------------------------------------------------------------
+
+In the R code block below, enter commands to compute the center (as measured by the mean) and spread (as measured by the standard deviation) of the sampling distribution when $n=4$.
+
+-   Then comment on how these values compare to the population parameters $\mu=26$ and $\sigma =4$.
+
+```{r}
+mean(n4.bmi.bar) #this mean is pretty close to the population mean
+sd(n4.bmi.bar) #this std is much lower than the population std
+```
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+\
+notation for statistics of all random samples generated:
+
+$\mu_\bar{x} = mean \ of \ all \ random \ samples \ generated$
+
+$\sigma_\bar{x} = standard \ deviation \ of \ all \ random \ samples \ generated$\
+\
+
+## Shape of the Sampling Distribution
+
+------------------------------------------------------------------------
+
+We can use a **Quantile-Quantile** plot (called a **qqplot**) to compare the shape of our sampling distribution to the standard normal distribution $N(0,1)$.
+
+-   The closer the points are to the line, the more normal the distribution.
+-   The plot below seems mostly normal in the middle, but the tails are slightly deviating from the tails of a normal distribution.
+
+```{r}
+qqnorm(n4.bmi.bar)
+qqline(n4.bmi.bar)
+```
+
+## Question 5: Center, Shape, and Spread BMI Sampling Distribution
+
+------------------------------------------------------------------------
+
+Run the app below to investigate properties of the sampling distribution for the mean BMI, $\mu_X$ using the distribution $X \sim N(26,4)$.
+Based your observations, complete the table below.
+
+### Solution to Question 5 for BMI:
+
+------------------------------------------------------------------------
+
+```{r, eval = FALSE, message = FALSE}
+runApp("clt_bmi") # be sure you've loaded shiny package and setwd
+```
+
+| Property           | Population | $n=4$  | $n=9$  | $n=16$ | $n=81$ |
+|--------------------|------------|--------|--------|--------|--------|
+| Shape              | Normal     | Normal | Normal | Normal | Normal |
+| Mean               | 26         | 25.98  | 26.04  | 25.97  | 26.01  |
+| Standard Deviation | 4          | 2.0387 | 1.3497 | 0.9996 | 0.4513 |
+
+-spread in sample distribution stats is getting smaller: the standard deviation of the sampling distribution is getting smaller =\> standard error is getting smaller
+
+$\sigma_\bar{x} = SE$
+
+The larger the sample size gets, the more similar the means and std would be because you are choosing the people multiple times for each sample.
+
+## Question 6: Center, Shape, and Spread Wait Time Sampling Distribution
+
+------------------------------------------------------------------------
+
+Run the app below to investigate properties of the sampling distribution for the mean wait time $\mu_Y$ between successive trains at a certain train stop using the distribution $Y \sim \mbox{Exp} \left( \frac{1}{40} \right)$.
+Based your observations, complete the table below.
+
+### Solution to Question 6 for Wait Times:
+
+------------------------------------------------------------------------
+
+```{r, eval = FALSE, message = FALSE}
+runApp("clt_wait") # be sure you've loaded shiny package and setwd
+```
+
+| Property           | Population   | $n=4$        | $n=9$        | $n=16$       | $n=81$        |
+|--------------------|--------------|--------------|--------------|--------------|---------------|
+| Shape              | Skewed Right | Skewed Right | Skewed Right | Skewed Right | Almost Normal |
+| Mean               | 40           | 39.68        | 39.58        | 39.78        | 40.14         |
+| Standard Deviation | $\sqrt{40}$  | 19.4088      | 12.9812      | 9.8321       | 4.4347        |
+
+As the sample size gets larger, the sampling distribution becomes more normal even thought the population is skewed.
+
+## Working with Empirical Data: Earthquake Depth
+
+------------------------------------------------------------------------
+
+The dataset `quakes` in the `dplyr` package provides the following summary:
+
+> give the locations of 1000 seismic events of MB \> 4.0.
+> The events occurred in a cube near Fiji since 1964.
+
+-   `lat`: Latitude of event
+-   `long`: Longitude
+-   `depth`: Depth (km)
+-   `mag`: Richter Magnitude
+-   `stations`: Number of stations reporting
+
+### Numerical Summary of Quakes Data
+
+------------------------------------------------------------------------
+
+```{r}
+#library(dplyr)  # requires dplyr package
+summary(quakes)
+```
+
+### Graphical Summary of Depth of Quakes
+
+------------------------------------------------------------------------
+
+```{r}
+plot(density(quakes$depth), 
+         xlab = "Depth (in km)",
+         main = "Depths of All Earthquakes in Fiji Since 1964",
+         xaxt='n')
+    axis(1, at=seq(-100, 800, 100), pos=0)
+    abline(v = mean(quakes$depth), col = "red", lwd = 2, lty = 2)
+```
+
+## Question 7: Center, Shape, and Spread Wait Time Sampling Distribution
+
+------------------------------------------------------------------------
+
+Run the app below to investigate properties of the sampling distribution for the mean depth of earthquakes near Fiji since 1984, $\mu_Z$, using the observed data in `quakes`.
+Based your observations, complete the table below.
+
+### Solution to Question 7 for Earthquake Depth:
+
+------------------------------------------------------------------------
+
+```{r, eval = FALSE}
+runApp("clt_quake") # be sure you've loaded shiny package and setwd
+```
+
+```{r}
+mean(quakes$depth)
+sd(quakes$depth)
+```
+
+| Property           | Population | $n=4$    | $n=9$         | $n=16$        | $n=81$        |
+|--------------------|------------|----------|---------------|---------------|---------------|
+| Shape              | Bimodal    | Bimodal  | Almost Normal | Almost Normal | Almost Normal |
+| Mean               | 331        | 306.01   | 313.56        | 312.5         | 311.7         |
+| Standard Deviation | 215.5      | 111.4113 | 72.6518       | 54.0547       | 22.6241       |
+
+The sampling distribution becomes almost normal for small sample sizes because the population distribution is split about half of the data on the left and right of the mean.
+It is like two normal distributions in one distribution.
+
+# Notation for Population, Mean, and Distribution of Sample Means
+
+------------------------------------------------------------------------
+
+When describing the **mean** of a distribution we use the notation:
+
+-   Population mean: $\mu_X$
+-   Sample mean: $\bar{x}$
+-   Center of the Sampling distribution for a mean: $\mu_{\overline{X}}$
+
+When describing the **standard deviation** of a distribution we use the notation:
+
+-   Population standard deviation: $\sigma_X$
+
+-   Sample standard deviation: $s_X$
+
+-   Spread of the sampling distribution is called the **Standard Error**.
+
+    -   The standard error measures the variability in sample statistics due to randomness.
+    -   We use the notation $\mbox{SE}(\overline{X}) = \sigma_{\overline{X}}$.
+
+## Question 8: Shape of Sampling Distributions for a Mean
+
+------------------------------------------------------------------------
+
+In each of the three sampling distributions we examined, lets summarize what seems to be happening as the size of the samples, $n$, is increased.
+
+Does the shape of the sampling distribution stay the same as the population or does it change as $n$ increases?
+
+### Solution to Question 8:
+
+------------------------------------------------------------------------
+
+The shape of the sampling distribution does not stay the same as the population.
+As the sample size becomes larger, the shape becomes more normal regardless of the shape of the population.
+
+When n is small:
+
+-   If the population is skewed, the shape is skewed.
+    As n gets larger the shape is more normal.
+
+-   If the population is symmetric, then the sampling distribution will be normal for small values of n and gets more and more normal as n gets larger
+
+As long as n is large enough, the sampling distribution will become more normal.\
+
+\
+\
+
+## Question 9: Center of Sampling Distributions for a Mean
+
+------------------------------------------------------------------------
+
+Does the center of the sampling distribution, $\mu_{\overline{X}}$, stay the same or change as $n$ increases?
+How does the value of $\mu_{\overline{X}}$ compare to the population mean $\mu_X$?
+
+### Solution to Question 9:
+
+------------------------------------------------------------------------
+
+Center stays the same (more or less) regardless of n.
+The center of the sampling distribution is approximately equal to the population mean.\
+
+\
+\
+
+## Question 10: Spread of Sampling Distributions for a Mean
+
+------------------------------------------------------------------------
+
+Does the standard error of the sampling distribution, $\mbox{SE}(\overline{X})$, stay the same or change as $n$ increases?
+
+### Solution to Question 10:
+
+------------------------------------------------------------------------
+
+\
+The standard error of the sampling distribution gets smaller and smaller as n gets larger and larger.\
+
+\
+
+# Formal Statement of the Central Limit Theorem (for Sample Means)
+
+------------------------------------------------------------------------
+
+Let $X_1, X_2, \ldots , X_n$ be independent, identically distributed (iid) random variables from a population with mean and standard deviation $\mu$ and $\sigma$, then as long as $n$ is large enough (informally $\mathbf{n \geq 30}$), the sampling distribution for the mean, $\bar{X}$ will:
+
+-   Be (approximately) normally distribution.
+-   Have mean equal to the mean of the population, $\mu$.
+-   Have standard error $\mbox{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}$.
+
+We summarize the results more concisely below:
+
+$$ \overline{X} \sim N \left( \mu_{\overline{X}} , \sigma_{\overline{X}} \right) = N \left( \mu  , \frac{\sigma}{\sqrt{n}} \right)$$
+
+## Question 11:
+
+------------------------------------------------------------------------
+
+Using properties of expected value and variance of linear combinations of independent events, prove each of the following:
+
+a.  $\displaystyle E \left( \bar{X} \right) = E \left( \frac{X_1 + X_2 + \ldots + X_n}{n} + \right) = \mu_X$
+
+b.  $\displaystyle \mbox{Var} \left( \bar{X} \right) = \mbox{Var} \left( \frac{X_1 + X_2 + \ldots + X_n}{n} \right) = \frac{\sigma^2_X}{n}$
+
+### Solution to Question 11a:
+
+------------------------------------------------------------------------
+
+Properties of expected value: $\bar{X} = \frac{\sum{X}}{n}$
+
+$E \left( \bar{X} \right) = E \left( \frac{X_1 + X_2 + \ldots + X_n}{n} \right)$
+
+$=\frac{1}{n} \  E \left( {X_1 + X_2 + \ldots + X_n}\right)$
+
+$=\frac{1}{n} \  \left( {E(X_1) + E(X_2) + \ldots + E(X_n)}\right)$
+
+$=\frac{1}{n} \  \left( {\mu_x + \mu_x + \ldots + \mu_x}\right)$
+
+$=\frac{1}{n} \  n \cdot {\mu_x} => \mu_x$
+
+\
+\
+\
+
+### Solution to Question 11b:
+
+------------------------------------------------------------------------
+
+Properties of variance: $Var(aX + bY) = a^2Var(X) + b^2Var(Y)$
+
+$\mbox{Var} \left( \frac{X_1 + X_2 + \ldots + X_n}{n} \right) = \frac{\sigma^2_X}{n}$
+
+$\frac{1}{n^2} \ Var({X_1 + X_2 + \ldots + X_n})$
+
+$=\frac{1}{n^2} \ {Var(X_1) + Var(X_2) + \ldots + Var(X_n)}$
+
+$=\frac{1}{n^2} [n \cdot \sigma^2]$\
+\
+\
+
+# Appendix: Some Sample Shiny Apps to Explore
+
+------------------------------------------------------------------------
+
+```{r, eval = FALSE}
+runExample("01_hello")  # a histogram
+#runExample("02_text")  # tables and data frames
+#runExample("03_reactivity")  # a reactive expression
+#runExample("04_mpg")  # global variables
+#runExample("05_sliders")  # slider bars
+#runExample("06_tabsets")  # tabbed panels
+#runExample("07_widgets")  # help text and submit buttons
+#runExample("08_html")  # Shiny app built from HTML
+#runExample("09_upload")  # file upload wizard
+#runExample("10_download")  # file download wizard
+#runExample("11_timer")  # an automated timer
+```

@@ -1,0 +1,520 @@
+---
+title: '07: Common Continuous Random Variables'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Continuous Uniform Distribution
+
+------------------------------------------------------------------------
+
+If a continuous random variable is [**uniformly distributed**]{style="color: blue;"} on the interval $\lbrack a , b \rbrack$, then
+
+-   The pdf is $\displaystyle f(x) = \left\{ \begin{array}{ll} \frac{1}{b-a}, & a \leq x \leq b\\ 0, & \mbox{otherwise} \end{array} \right.$.
+
+-   The cdf is
+
+$$F(x) = \left\{ \begin{array}{ll} 
+0, &  x<a \\ 
+\frac{x-a}{b-a}, &  a \leq x \leq b \\ 
+1,  &  x>b 
+\end{array} \right.$$
+
+-   $E(X) = \dfrac{a+b}{2}$; $\mbox{Var}(X) = \dfrac{(b-a)^2}{12}$; Median $=E(X) = \dfrac{a+b}{2}$.
+
+1/b-a comes from: b-a is the length of the rectangle, and we know the total area = 1, rectangle area is (b-a) \* h = 1
+
+# Normal Distributions
+
+------------------------------------------------------------------------
+
+There are many cases where the data tends to be distributed symmetrically around a central value with no bias to the left or right like this[^1]
+
+[^1]: Photograph by Peter Morenus in conjunction with Professor Linda Strausberg, of the University of Connecticut
+
+![Distribution of Heights of Students](https://uconn-today-universityofconn.netdna-ssl.com/wp-content/uploads/2015/12/linda-bell-curve1-630x204.png){width="80%"}
+
+[**Normal distributions**]{style="color: blue;"} arise in many settings: Heights of people, size of items produced by machines, and most importantly in statistics data sets resulting from many independent random events.
+
+The shape of a normal distribution is determined by two parameters:
+
+-   The [**mean**]{style="color: blue;"}, $\color{blue}{\mu}$, is center of the distribution.
+-   The [**standard deviation**]{style="color: blue;"} $\color{blue}{\sigma}$, tells us how wide the distribution is.
+-   If $X$ is normally distributed with mean $\mu$ and standard deviation $\sigma$, we write $\color{blue}{\mathbf{X \sim N(\mu, \sigma)}}$.
+
+```{r, echo=FALSE, eval=TRUE}
+x <- seq(-10, 10, length=1000)
+stan <- dnorm(x)
+
+std <- c(1, 2, 4)
+colors <- c("black", "blue", "red")
+labels <- c("sigma=1", "sigma=2", "sigma=4")
+
+plot(x, stan, type="l", lty=2, xlab="x value",
+  ylab="Density", main="Comparison of St Dev")
+
+for (i in 1:3){
+  lines(x, dnorm(x, 0, std[i]), lwd=2, col=colors[i])
+}
+
+legend("topright", inset=.05, title="Distributions",
+  labels, lwd=2, lty=1, col=colors)
+```
+
+```{r, echo=FALSE, eval=TRUE}
+x <- seq(-7, 7, length=100)
+stan <- dnorm(x)
+mu <- c(0, 3)
+colors <- c("black", "blue")
+labels <- c("mu=0", "mu=3")
+
+plot(x, stan, type="l", lty=2, xlab="x value",
+  ylab="Density", main="Comparison of Means")
+
+for (i in 1:2){
+  lines(x, dnorm(x, mu[i], 1), lwd=2, col=colors[i])
+}
+
+legend("topright", inset=.05, title="Distributions",
+  labels, lwd=2, lty=1, col=colors)
+```
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+a.  What effect does increasing the standard deviation have on the shape of a normal distribution?
+
+b.  What effect does increasing the mean have on the shape of a normal distribution?
+
+### Solution to Question 1:
+
+------------------------------------------------------------------------
+
+a.  affects the width of the distribution
+
+b.  this translates the distribution to the left or right
+
+\
+\
+
+## The 68%-95%-99.7% Empirical Rule
+
+------------------------------------------------------------------------
+
+The [**empirical rule**]{style="color: blue;"} for normal distributions:
+
+-   68% of all values fall within one standard deviation (both above and below) from the mean, and
+-   95% of all values fall within two standard deviations of the mean.
+-   99.7% of all values fall within three standard deviations of the mean.
+
+![Image of Empirical Rule](https://drive.google.com/uc?id=1tuTLD_BP1C5eUpX1CEd3X96h12_zQ2ic)
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+> Last night, Israel became the first country ever to pass legislation banning the use of 'underweight' models in local ads and publications.
+> The new law employs an interesting tactic: Models must prove that their Body Mass Index (BMI) is higher than the World Health Organization's indication of malnourishment (a BMI of 18.5) by producing an up-to-date medical report --- no older than three months --- at all shoots to be used in the Israeli market.[^2]
+
+[^2]: "Israel Passes Law Requiring Models to Show Health Records and Meet Weight Standards", *New York Magazine* by Charlotte Cowles on April 20, 2012
+
+-   Let $X$ denote the BMI of adult men in Israel. We know that $X \sim N(26,4)$.
+-   Let $Y$ denote the BMI of adult women in Israel. We know that $Y \sim N(26.5,4.5)$.
+
+X \~ N(mean, std), if they want to mention variance: X \~ N(mean, std\^2)
+
+### Question 2a:
+
+------------------------------------------------------------------------
+
+What proportion of the men in Israel have BMI between 26 and 30?
+
+#### Solution to Question 2a:
+
+------------------------------------------------------------------------
+
+```{r}
+68/2
+```
+
+34% of men have a BMI between 26 and 30
+
+### Question 2b:
+
+------------------------------------------------------------------------
+
+What proportion of the women in Israel have BMI between 22 and 35.5?
+
+#### Solution to Question 2b:
+
+------------------------------------------------------------------------
+
+```{r}
+(95/2) + (68/2)
+```
+
+71.25% of women have a BMI between 22 and 35.5
+
+### Question 2c:
+
+------------------------------------------------------------------------
+
+How many standard deviations from the mean is a male BMI of 21?
+
+#### Solution to Question 2c:
+
+------------------------------------------------------------------------
+
+A male of BMI of 21 is a little over -1 standard deviations away from the mean.
+
+They are between 1 and 2 standard deviations below the mean.
+
+There are -5 units of BMI between 21 from the mean 26.
+
+-5 BMI units / (4 BMI units / 1 std)
+
+-1.25 std away from the mean (z score)
+
+\
+\
+\
+\
+
+## $Z$-Scores and the Standard Normal Distribution
+
+The number of standard deviations a given data value is from the mean is called the [**z-score**]{style="color: blue;"} for the value and is calculated using the formula
+
+$$\color{blue}{\large z = \frac{x-\mu}{\sigma}}.$$
+
+For example, the $z$-score of a male with a BMI 21 is $z=\frac{21-26}{4} = -1.25$.
+
+![Standardizing a Normal Distribution](https://drive.google.com/uc?id=1tyB0O5ZQJkupp8_nKg2mpkcl2xk52_g1)
+
+When you compute the z-score, you are [**"standardizing"**]{style="color: blue;"} your data.
+You describe values in terms of how many standard deviations from they are from the mean.
+Comparing areas, we see that $P(X<21) = P(Z < -1.25)$.
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+BMI distribution is approximately normal.
+In Israel, women have mean BMI of $26.5$ with a standard deviation $4.5$.
+What proportion of the women in Israel are legally "underweight" (BMI $< 18.5$)?
+
+### Question 3a:
+
+------------------------------------------------------------------------
+
+Calculate the $z$-score of a Israeli woman with a BMI of $18.5$.
+
+#### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+\
+z = 18.5 - 26.5 / 4.5
+
+```{r}
+(18.5 - 26.5)/4.5
+```
+
+\
+\
+\
+
+### Question 3b:
+
+------------------------------------------------------------------------
+
+Interpret the meaning of the value in part (a), and give an estimate for the proportion of women in Israel who are legally underweight.
+
+#### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+\
+A person with a BMI of 18.5 is 1.78 standard deviations below the mean.
+
+P(BMI \< 18.5) =\
+$$P(\mbox{BMI} < 18.5) = \int_{0}^{18.5} \frac{1}{4.5\sqrt{2\pi}} e^{-\frac{1}{2} \left( \frac{x-26.5}{4.5} \right)^2} \, dx$$
+
+\
+\
+
+## A Formula for Normal Distributions
+
+------------------------------------------------------------------------
+
+The probability density function for normal distribution (or Gaussian) $X \sim N(\mu,\sigma)$ is given by the formula
+
+$$\color{blue}{\large f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2} \left( \frac{x-\mu}{\sigma} \right)^2}}.$$
+
+To find the probability that a woman has a BMI less than $18.5$, we could try to evaluate
+
+$$P(\mbox{BMI} < 18.5) = \int_{0}^{18.5} \frac{1}{4.5\sqrt{2\pi}} e^{-\frac{1}{2} \left( \frac{x-26.5}{4.5} \right)^2} \, dx$$
+
+YIKES, good luck with that!
+So we need to find other methods.
+
+## Calculating Areas Under Normal Distributions
+
+------------------------------------------------------------------------
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+What proportion of women in Israel are below the $18.5$ BMI limit?
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+#### Using the standard normal distribution table:
+
+------------------------------------------------------------------------
+
+![Standardizing a Normal Distribution](https://drive.google.com/uc?id=1u-Xhx1nn44874feY90TC0Zy6ZeTjKN0b){width="70%"}
+
+standard deviation = -1.78, proportion at this std = 0.0375
+
+```{r}
+pnorm(-1.78, 0, 1)
+pnorm(18.5, 26.5, 4.5)
+#slightly different because of the accuracy of the first one (num decimals)
+```
+
+#### Areas Under Normal Distributions with R:
+
+------------------------------------------------------------------------
+
+As with other distributions, `p` before distribution name `norm` means `pnorm()` calculates cumulative distribution function for a normal distribution:
+
+-   `pnorm(x, mean, sd)`$=P(X<x)$ gives the area to the left of $x$ under $N(\mu,\sigma)$.
+-   `pnorm(x, mean,  sd, lower.tail=FALSE)`$=P(X>x)$ gives the area to the right of $x$ under $N(\mu,\sigma)$.
+
+Or you can find the $z$-score and use the standard normal distribution in R as well:
+
+-   `pnorm(z, 0, 1)`$=P(Z<z)$ gives the area to the left of $x$ under $N(0,1)$.
+-   `pnorm(z, 0,  1, lower.tail=FALSE)`$=P(Z>z)$ gives the area to the right of $x$ under $N(0,1)$.
+
+dnorm(x,mean, std) = height at that point, not helpful for this class
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+Intelligence quotient (IQ) scores are normally distributed.
+The mean IQ score is 100 points and the standard deviation is 16 points.
+
+### Question 5a:
+
+------------------------------------------------------------------------
+
+What proportion of people have an IQ score above 116?
+
+#### Solution to Question 5a:
+
+------------------------------------------------------------------------
+
+```{r}
+1 - pnorm(116, 100, 16)
+```
+
+### Question 5b:
+
+------------------------------------------------------------------------
+
+Marilyn vos Savant has been known to have the highest recorded IQ in the world.
+The $z$-score of her test result is $z=5.4$.
+What is her IQ score?
+
+#### Solution to Question 5b:
+
+------------------------------------------------------------------------
+
+5.4 = (x - 100) / 16
+
+```{r}
+(5.4 * 16) + 100
+```
+
+### Question 5c:
+
+------------------------------------------------------------------------
+
+What proportion of people have an IQ score between 75 and 100?
+
+#### Solution to Question 5c:
+
+------------------------------------------------------------------------
+
+1 - (P(X \< 75) + P(X \> 100)) or P(X\< 100) - P(X\< 75)
+
+P(X \> 100) = 1 - P(X\<=100)
+
+```{r}
+less75 <- pnorm(75, 100, 16)
+# less75
+big100 = 0.5 #since we know 100 is the mean, and anything less than 100 is 0.5 and anything greater than 100 is 0.5 of the distribution
+#pnorm(100, 100, 16) # is the same thing
+
+big100 - less75
+```
+
+### Question 5d:
+
+------------------------------------------------------------------------
+
+What is the 90th percentile for IQ?
+In other words, find the IQ score such that 90% of the people score less than that score.
+
+#### Solution to Question 5d:
+
+------------------------------------------------------------------------
+
+```{r}
+qnorm(0.9,100,16)
+```
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+Let $X$ denote the time (in minutes) spent waiting for the next light-rail to arrive at Union Station.
+On a separate piece of paper, sketch a possible graph for the probability distribution function of $X$.
+Explain how you determined the shape of your graph.
+
+### Question 6:
+
+------------------------------------------------------------------------
+
+Describe the shape of your graph, and why you believe the graph will have this shape.
+
+\
+exponential distribution
+
+(geometric probability distribution)\
+\
+
+# Exponential Distributions
+
+------------------------------------------------------------------------
+
+-   Uniform distributions model situations in which each outcome has an equally likely chance to occur.
+-   Most people are average height, but there are approximately an equal number of shorter and taller people. This can be modeled using a normal distribution.
+-   Most of the time, you do not need to wait very long for the next light rail. But sometimes, though rarely, you do get stuck waiting a longer amount of time.
+-   The waiting time for the light rail has properties that can be modeled using an [**exponential distribution**]{style="color: blue;"}.
+
+If a continuous random variable $X$ is [**exponentially distributed**]{style="color: blue;"}, the shape of its pdf depends on one parameter, $\lambda = \dfrac{1}{\mu}$ where $\mu$ denotes the average value of $X$.
+We write $X \sim Exp(\lambda)$.
+
+-   The pdf is $\displaystyle f(x) = \lambda e^{-\lambda x}$ for $x >0$ where $\lambda = \dfrac{1}{\mu}$.
+
+-   $E(X) = \dfrac{1}{\lambda}=\mu$ and $\mbox{Var}(X) = \dfrac{1}{\lambda^2} = \mu^2$.
+
+## Question 7:
+
+------------------------------------------------------------------------
+
+At a 911 call center, calls come in at an average rate of one call every two minutes.
+Let $X$ denote the time that elapses from one call to the next, and assume $X$ has an exponential distribution.
+
+### Question 7a:
+
+------------------------------------------------------------------------
+
+Give a formula and sketch the graph of the pdf $f$ (on a separate piece of paper).
+
+#### Solution to 7a:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 7b:
+
+------------------------------------------------------------------------
+
+Find the probability that after a call is received, it takes more than three minutes for the next call to occur.
+Illustrate this value on your graph.
+
+#### Solution to 7b:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 7c:
+
+------------------------------------------------------------------------
+
+Find a formula for the cdf, $F$.
+
+#### Solution to 7c:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 7d:
+
+------------------------------------------------------------------------
+
+Find a formula for the inverse of the cdf, $F^{-1}$.
+
+#### Solution to 7d:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 7e:
+
+------------------------------------------------------------------------
+
+Ninety-percent of all calls occur within how many minutes of the previous call?
+Hint: Use your previous answer.
+
+#### Solution to 7e:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 7f:
+
+------------------------------------------------------------------------
+
+Suppose that two minutes have elapsed since the last call.
+Find the probability that the next call will occur within the next minute.
+
+#### Solution to 7f:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\

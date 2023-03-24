@@ -1,0 +1,376 @@
+---
+title: '01: Introduction to Statistical Inference'
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Loading Libraries for This Session
+
+------------------------------------------------------------------------
+
+Have you installed `DataExplorer` and `dplyr`?
+You will need them to run some of the code cells in this document.
+
+-   If so great!
+    -   But we will still need to load the package before we are able to access the libraries of functions and data in the package.
+-   If you have not installed the packages, you will need to before running the code cell below.
+    -   There should be a message on top of these window asking if you would like to install. Click that link!
+-   Run the code cell below to load `DataExplorer` and `dplyr` packages.
+
+```{r, message=FALSE}
+# message=FALSE means output to console not displayed as output
+
+library(DataExplorer)
+library(dplyr)
+```
+
+-   Nothing appears on screen, but code is running in the console.
+-   The `message=FALSE` option means the message received as output will not be displayed after running.
+-   See <https://rmarkdown.rstudio.com/lesson-3.html> for a deeper explanation of code chunk options.
+
+# Introduction to Statistical Inference
+
+------------------------------------------------------------------------
+
+[**Statistics**]{style="color: blue;"} is the study of collection, organization, analysis, interpretation, and presentation of data.
+
+## Getting to Know Your Data
+
+------------------------------------------------------------------------
+
+The package `dplyr` contains a dataset called `storms`.
+Let's check out the documentation for the data.
+
+```{r}
+?storms  # must load dplyr
+```
+
+-   Whenever you have a question about a dataset or function, type `?data_name` or `?function_name` to view help documentation.
+-   For example, run the code cell below to learn about the `glimpse` function.
+
+```{r}
+?glimpse  # must load dplyr
+```
+
+### Getting a Glimpse of the Data
+
+------------------------------------------------------------------------
+
+```{r}
+glimpse(storms)  # get a glimpse of storms data
+```
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+What do you notice about the dataset `storms`?
+How would you summarize what information is contained in this dataset?
+
+### Solution to Question 1:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+\
+\
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+What additional information would be nice to know about the `storms` dataset?
+
+### Solution to Question 2:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+\
+\
+
+```{r set-options}
+options(width = 100)  # sets width of output so summary displays
+
+#summary(storms)  # summary of each variable in storms
+#head(storms)  # prints first 6 rows to screen
+#View(storms)  # opens new tab to display full dataset
+#tail(storms)  # opens last 6 rows to screen
+#plot_intro(storms)  # summary of data, requires DataExplorer
+#plot_missing(storms)  # where is missing data, requires DataExplorer
+```
+
+# The Structure of Data
+
+------------------------------------------------------------------------
+
+[**Data frames**]{style="color: blue;"} are two-dimensional data objects and are the **fundamental** data structure used by most of R's libraries of functions and datasets.
+
+-   Tabular data is [**tidy**]{style="color: blue;"} if each row corresponds to a different observation and column corresponds to a different variable.
+
+Each column of a data frame is a [**variable**]{style="color: blue;"} (stored as a **vector**) of possibly different data types.
+If the variable:
+
+-   Is measured or counted by a number, it is a [**quantitative**]{style="color: blue;"} or [**numerical**]{style="color: blue;"} variable.
+    -   Quantitative variables may be discrete (integers) or continuous (decimals).
+-   Groups observations into different categories or rankings, it is a [**qualitative**]{style="color: blue;"} or [**categorical**]{style="color: blue;"} variable.
+
+## Working with Categorical Data
+
+------------------------------------------------------------------------
+
+-   Sometimes we think a variable is one data type, but it is actually being stored (and thus interpreted by R) as a different data type.
+-   One common issue is categorical data is stored as characters. We would like observations with the same values to be group together.
+
+Categorical data should be stored as a [**factor**]{style="color: blue;"} in R.
+
+```{r}
+storms$status <- factor(storms$status)
+summary(storms$status)
+```
+
+# Data Visualization
+
+------------------------------------------------------------------------
+
+For an overview of different types of plots, see the document **Quick Reference: Plotting Data in R** file posted in the **R Help** Module on Canvas (source R Markdown file also posted on Canvas).
+
+The type analysis we can do depends on whether:
+
+-   We are investigating a single variable, or looking for correlation between multiple variables.
+-   The variable(s) are numerical and/or categorical.
+-   The data satisfies certain assumptions.
+
+```{r fig2, fig.height = 4, fig.width = 6}
+par(mfrow = c(2, 2))  # Create a 2 x 2 array of plots
+
+# The next 4 plots created will be arranged in the array
+boxplot(storms$wind)  # create boxplot of wind speed
+
+# Code below creates a histogram of wind speed
+hist(storms$wind,
+     col = "steelblue")  # change color of bars
+
+plot(storms$status, 
+     col = "gold")  # plots status, which is categorical
+
+plot(wind ~ pressure, data = storms)  # plots two numerical variables
+# ~ means comparing between two variables (x ~ y)
+
+par(mfrow = c(1, 1))   # change settings so one image displayed in a window
+
+# Compare numerical wind speed for different categories of storms
+plot(wind ~ status, data = storms, col = "springgreen4")
+
+#go to overview-of-plots file for list of plots in one document
+```
+
+-   **For one numerical variable:** histograms, boxplots, and density plots.
+-   **For one categorical variable:** barplots and pie charts.
+-   **For two numerical variables:** scatter plots.
+-   **For one numerical and one categorical variables:** side-by-side boxplots or density plots.
+-   **For two categorical variables:** grouped barplots.
+-   **For three or more variables:** add distinguishing colors, shape/line types, and/or interactivity to plots.
+
+# Statistical Inference
+
+------------------------------------------------------------------------
+
+-   A [**population**]{style="color: blue;"} includes all individuals or objects of interest.
+-   A [**sample**]{style="color: blue;"} is a subset of the population.
+-   [**Statistical inference**]{style="color: blue;"} is the process of drawing conclusions about the entire population based on information in a sample.
+-   This semester we will **focus on inference**, and we will need some **probability** to do so.
+
+![Diagram of Statistical Inference (see footnote to display image)[^1]](../Images/01-Inference.png){width="400"}
+
+[^1]: The image above will not display for you by default.
+    To see the image, go to [Diagram of Statistical Inference](https://drive.google.com/file/d/1wLs6EwNjoswH1rQk82H9I93N7g_m20hd/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+    Image credit: <https://bolt.mph.ufl.edu/6050-6052/unit-4/>
+
+[^2]: The image above will not display for you by default.
+    To see the image, go to [Diagram of Statistical Inference](https://drive.google.com/file/d/1wLs6EwNjoswH1rQk82H9I93N7g_m20hd/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+    Image credit: <https://bolt.mph.ufl.edu/6050-6052/unit-4/>
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+In the `storms` data example, is the data from a sample or a population?
+
+### Solution to Question 3:
+
+------------------------------------------------------------------------
+
+sample\
+\
+\
+\
+\
+\
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+What statistical questions might be worth investigating among the variables in the `storms` dataset?
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+Can location determine the occurrence of a storm?
+
+-   answered w/ probabilities
+
+What is the correlation b/w max wind speed and month?
+
+-   are storms stronger in certain months?
+
+How does pressure, wind speed, and/or diameter affect the status of the storm?\
+
+\
+\*\*This is what the final project is like: taking a data set, asking questions about it, and analyzing it\
+\
+\
+
+# Collecting Data: Sampling
+
+------------------------------------------------------------------------
+
+Since drawing a sample that resembles the population in every way (except smaller in number) is critical for drawing valid conclusions, how we pick samples is sometimes the most important step.
+
+![Diagram of Sampling Methods (see footnote to display image)[^3]](../Images/01-SampleMethods.png){width="450"}
+
+[^3]: The image above will not display for you by default.
+    To see the image, go to [Diagram of Sampling Methods](https://drive.google.com/file/d/1EpW3jTyO8c3YqjVcJ7T0Rz_Olq8uXZhG/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+    Image credit: <https://towardsdatascience.com/8-types-of-sampling-techniques-b21adcdd2124> by Prakhar Mishra
+
+[^4]: The image above will not display for you by default.
+    To see the image, go to [Diagram of Sampling Methods](https://drive.google.com/file/d/1EpW3jTyO8c3YqjVcJ7T0Rz_Olq8uXZhG/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+    Image credit: <https://towardsdatascience.com/8-types-of-sampling-techniques-b21adcdd2124> by Prakhar Mishra
+
+## Summary of Sampling Methods
+
+------------------------------------------------------------------------
+
+-   When selecting a [**simple random sample**]{style="color: blue;"}, all individuals are equally likely to be selected.
+-   When selecting a [**stratified sample**]{style="color: blue;"}, the population is subdivided into groups based on some meaningful characteristic.
+-   When selecting a [**systematic sample**]{style="color: blue;"}, the first individual is chosen at random. Then a rule is used so that every $\mbox{n}^{\mbox{th}}$ individual is selected after that.
+-   When selecting a [**cluster sample**]{style="color: blue;"} groups rather than individual units of the target population are selected at random for the test. For example, only people with last digit of phone number equal to 8 are chosen.
+-   A [**convenience sample**]{style="color: red;"} is when people or elements in a sample are selected on the basis of their accessibility and availability.
+-   [**Voluntary sampling**]{style="color: red;"} is a type of a convenience sample.
+
+[**Sampling bias**]{style="color: blue;"} occurs when the method of selecting a sample causes the sample to differ from the population in some relevant way.
+
+[**Randomly selecting samples is the best way to avoid bias!**]{style="color: blue;"}
+
+# Collecting Data: Designing Studies
+
+------------------------------------------------------------------------
+
+Often in statistics we would like to investigate whether one variable is associated to another.
+Researchers carry out studies to understand the conditions and causes of certain outcomes.
+
+-   Does smoking cause lung cancer?
+-   Is paying people or punishing people a more effective incentive to get vaccinated?
+-   Is a new vaccine effective at preventing disease?
+
+If we are using one variable to help us understand or predict the values (or category) of another variable, we call the first variable the [**explanatory or predictor variable**]{style="color: blue;"} and the second the [**response variable**]{style="color: blue;"}.
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+Both studies below are designed to examine determine whether rewarding good behavior or punishing bad behavior is a more effective method to help people quit smoking.
+Which study do you believe is better designed?
+Why?
+
+### Study a:
+
+------------------------------------------------------------------------
+
+Employees at a large company voluntarily enroll in a quit smoking study.
+When they join, they are provided two options to select from:
+
+-   Option 1 (Reward-based group): If after six months the participant has quit smoking, they get an \$800 reward.
+-   Option 2: (Deposit-based group): Pay an initial \$150 refundable deposit.
+
+If after six months the participant:
+
+-   Has quit smoking, they receive their \$150 deposit back plus an additional \$800 reward.
+-   Has not quit smoking, then they do not receive their \$150 deposit back.
+
+After six months, the success rate is compared between the two groups.
+
+### Study b:
+
+------------------------------------------------------------------------
+
+Employees at a large company voluntarily enroll in a quit smoking study.
+
+-   When they join, they are randomly assigned to either be in the Reward-based or Deposit-based group (same as described above).
+
+After six months, the success rate is compared between the two groups.
+
+### Solution to Question 5:
+
+------------------------------------------------------------------------
+
+I believe study 2 is slightly better designed.
+In option 1, participants are never penalized, so they are rewarded either with quitting smoking and money or still smoking and no money.
+In option 2, it provides 'incentive' for participants to work hard to get their deposit back.
+
+study 2 may be better because it is random.
+
+in study 1, if participants get to choose their treatment, there is bias
+
+-   people that choose reward group may not be as motivated as those who choose the deposit group
+
+-   the two options may result in unintentional categorical/characteristic splits (one group has younger people and another has older people)
+
+\
+\
+\
+\
+\
+\
+
+## Confounding Variables
+
+------------------------------------------------------------------------
+
+A variable that is associated with both the explanatory variable and the response variable is called a [**confounding variable**]{style="color: blue;"}.
+
+![Diagram of Confounding Variable (see footnote to display image)[^5]](../Images/01-Confounding.png){width="250"}
+
+[^5]: The image above will not display for you by default.
+    To see the image, go to [Diagram of Confounding Variable](https://drive.google.com/file/d/1pTd1yic3sBi0BnnHAhz2DwwmVH7V6CHT/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+[^6]: The image above will not display for you by default.
+    To see the image, go to [Diagram of Confounding Variable](https://drive.google.com/file/d/1pTd1yic3sBi0BnnHAhz2DwwmVH7V6CHT/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+## Experiments and Observational Studies
+
+------------------------------------------------------------------------
+
+-   An [**observational study**]{style="color: blue;"} is a study in which the researcher does not actively control the value of any variable.
+-   An [**experiment**]{style="color: blue;"} is a study in which the researcher actively controls one or more of the explanatory variables.
+-   The different categories of the explanatory variable are called [**treatments**]{style="color: blue;"}.
+-   In a [**randomized experiment**]{style="color: blue;"} the explanatory variable for each unit is determined randomly, before the response variable is measured.
+-   If treatment groups are randomly determined, they should be similar in every way except for the treatment.
+-   [There are almost always confounding variables in observational studies. Thus observational studies can almost never be used to establish causation.]{style="color: red;"}

@@ -1,0 +1,1023 @@
+---
+title: "MATH 3382: Homework 10 - Due Dec. 1 at 2PM"
+author: "Ivy Truong"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions:
+
+------------------------------------------------------------------------
+
+**Submit your work electronically as an R Markdown file extension `.Rmd`.**
+
+Upload your file into the Homework 10 assignment in Canvas before **2 PM on Thursday, Dec 1**.
+
+**You must provide supporting work for your all of your answers.**
+
+-   [That work might be inserting some R code cells.]{style="color: blue;"}
+
+    -   **Feel free to insert as much R code as you like.**
+    -   You must interpret or explain how the output of a code cell is being utilized to solve the problem.
+    -   **Code with incomplete or missing explanations of why the output is useful may not receive full credit.**
+
+-   [It might involve doing some algebra and/or calculus (integrating, differentiating, etc).]{style="color: blue;"}
+
+    -   **Be sure to type/write out the steps of your work so I can see how you arrived at your answer.**
+    -   **If typing takes too long no problem.** You can write out the support work on paper and hand that in before class.
+
+-   [Probably it a little bit of both on most problems, but you decide how you want to solve the problems!]{style="color: blue;"}
+
+## Important Academic Policies:
+
+------------------------------------------------------------------------
+
+-   **Be your own work.** Though you may collaborate with others, everyone is responsible for writing up the work in their own way using their own methods. Plagiarism of any form is not tolerated.
+-   **Be complete.** You must provide all work and/or explanations needed to find the solution. Answers with insufficient or incomplete supporting work may lose credit.
+-   **Adhere to the Code of Academic Honesty.**
+-   **Be clearly written (and legible if written).** Your solution to a problem must be clear, written in complete sentences. You may lose credit for work that is unclear or hard to follow.
+
+### [Let me know if you need help, and **GOOD LUCK!!!**]{style="color: blue;"}
+
+------------------------------------------------------------------------
+
+# Question 1
+
+------------------------------------------------------------------------
+
+Suppose you do an experiment as follows.
+Five volunteers wish to quit smoking cigarettes.
+They are randomly split into two groups.
+
+-   Three people are placed into a reward only group.
+    -   If after six months they have successfully quit, they receive a $\$100$ reward.
+    -   If they are not successful, no penalty.
+-   The other two people make a $\$50$ deposit.
+    -   If after six months they have successfully quit, they receive a reward of $\$150$.
+    -   If they have not quit smoking after six months, they lose their $\$50$ deposit.
+
+The results of the experiment are given below.
+The names are modified so that [names that begin with $S$ denote they successfully quit]{style="color: blue;"}, while those that [begin with $N$ denote they were not successful quitting]{style="color: red;"}.
+
+| Group       | Result                                                          |
+|-------------|-----------------------------------------------------------------|
+| Reward Only | [Sam , Sole]{style="color: blue;"}, [Nino]{style="color: red;"} |
+| Deposit     | [Serge]{style="color: blue;"}, [Nell]{style="color: red;"}      |
+
+Researchers want to test to see if the proportion of people that quit is higher when they are rewarded as opposed to when they are penalized by losing a deposit.
+Answer the questions below to complete the steps of a hypothesis test to answer this question.
+
+## Question 1a
+
+------------------------------------------------------------------------
+
+Set up the hypotheses for this test.
+
+### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+**Be sure to express each hypothesis both in words and using appropriate notation.**
+
+$H_0$: There is no difference in the proportion of people that quit smoking when they are put in the reward only group or deposit group.
+
+$p_{reward} - p_{deposit} = 0$
+
+$H_a$: The proportion of of people that quit smoking is higher when they are put in the reward only group than the deposit group.
+
+$p_{reward} - p_{deposit} > 0$
+
+p = probability that people quit smoking
+
+## Question 1b
+
+------------------------------------------------------------------------
+
+Compute the observed test statistic.
+
+-   *Hint: Find the difference in the proportion of people in each sample that successfully quit smoking after six months.*
+
+### Solution to Question 1b
+
+------------------------------------------------------------------------
+
+Be sure to provide supporting work.
+
+```{r}
+reward_success <- 2/3
+deposit_success <- 1/2
+
+#test statistic is proprotion reward group was successful - proportion deposit group was successful
+(obs_test_stat <- reward_success - deposit_success)
+```
+
+The observed test statistic is 0.16667.
+
+## Question 1c
+
+------------------------------------------------------------------------
+
+How many total permutation resamples are possible?
+In other words, out of a total of 5 people, how many ways can we select three people to be in the reward only group?
+
+### Solution to Question 1c
+
+------------------------------------------------------------------------
+
+Be sure to provide supporting work.
+
+```{r}
+# Feel free to use code to help show your work
+choose(5, 3)
+```
+
+\
+There are 10 ways to choose 3 people from a group of 5.\
+
+\
+
+## Question 1d
+
+------------------------------------------------------------------------
+
+Type out all possible permutations resamples and calculate the difference in sample proportions for each resample.
+
+### Solution to Question 1d
+
+------------------------------------------------------------------------
+
+The first couple of rows in the table below have been completed.
+Add additional rows and complete the table.
+You should have as many samples in your table as you identified in [Question 1c].
+
+For example complete the list below:
+
+| Sample | Reward Only Group | Deposit Group | Test stat |
+|--------|-------------------|---------------|-----------|
+| 1      | Sam, Sole, Nino   | Serge, Nell   | $1/6$     |
+| 2      | Serge, Sole, Nino | Sam, Nell     | $1/6$     |
+| 3      | Nell, Sole, Nino  | Serge , Sam   | $-2/3$    |
+| 4      | Sam, Serge, Nino  | Nell, Sole    | $1/6$     |
+| 5      | Sam, Serge, Nell  | Nino, Sole    | $1/6$     |
+| 6      | Sam, Sole, Nell   | Nino, Serge   | $1/6$     |
+| 7      | Serge, Sole, Nell | Nino, Sam     | $1/6$     |
+| 8      | Nell, Nino, Serge | Sam, Sole     | $-2/3$    |
+| 9      | Nell, Nino, Sam   | Serge, Sole   | $-2/3$    |
+| 10     | Sam, Sole, Serge  | Nell, Nino    | $1$       |
+
+\
+\
+\
+
+## Question 1e
+
+------------------------------------------------------------------------
+
+Based on your previous answers, what is the P-value of the observed test statistic?
+
+### Solution to Question 1e
+
+------------------------------------------------------------------------
+
+Show or explain how you computed the P-value.
+
+\
+P value = P(test stat \| H0 is true)
+
+```{r}
+#test statistic from the observed/original sample was 2/3 - 1/2 = 1/6
+#the total number of possible permutations is 10
+
+#out of all 10 samples, which ones have a test stat that matches the observed test stat (get the ratio)
+
+#number of samples with test stat >= 1/6 / total number of samples
+(p_val <- 7 / 10)
+```
+
+The p value of the observed test statistic is 0.7.
+
+# Question 2
+
+------------------------------------------------------------------------
+
+A sample of 10 registered voters are randomly selected.
+Each voter was asked if they supported a bill forgiving student loans.
+They were also asked how much outstanding student loan debt they currently have (in thousands of US dollars).
+The results are summarized in the table below.
+
+| ID  | Support student loan forgiveness? | Outstanding Student Debt (thousands of dollars) |
+|-----|-----------------------------------|-------------------------------------------------|
+| 1   | YES                               | 8                                               |
+| 2   | YES                               | 65                                              |
+| 3   | YES                               | 0                                               |
+| 4   | YES                               | 152                                             |
+| 5   | YES                               | 12                                              |
+| 6   | YES                               | 45                                              |
+| 7   | NO                                | 115                                             |
+| 8   | NO                                | 0                                               |
+| 9   | NO                                | 0                                               |
+| 10  | NO                                | 62                                              |
+
+A researcher wants to perform a hypothesis test to determine whether voters that support the bill (responded `YES`) have more student debt, on average, compared to voters that do not support the bill (responded `NO`)?
+She can use the code below to perform part of the permutation test.
+
+-   DO NOT RUN THE CODE BELOW (unless you really want to).
+-   The questions that follow will ask you to explain what some parts of the code are doing.
+
+```{r eval=FALSE}
+debt <- c(8, 65, 0, 152, 12, 45, 115, 0, 0, 62)
+N <- 10^3 - 1 # Number of resamples we will create
+result <- numeric(N)
+
+for (i in 1:N)
+{
+  index <- sample(10, size = 6, replace = FALSE)
+  result[i] <- mean(debt[index]) - mean(debt[-index])
+}
+```
+
+## Question 2a
+
+------------------------------------------------------------------------
+
+Explain what the first line in the for loop is doing.
+
+-   `index <- sample(10, size = 6, replace = FALSE)`
+
+### Solution to Question 2a
+
+------------------------------------------------------------------------
+
+Be sure to explain why each of inputs `10`, `size = 6` and `replace = FALSE` are used in the `sample()`.
+
+This line of code is sampling 6 different values from 1 through 10 without replacement and saving those values in a variable named index.
+The first argument in the sample function is 10 because there were 10 people total surveyed in the observed sample.
+The second argument size is equal to 6 because we want to choose randomly 6 people to represent the people who said yes in this resample, similar to the number of people who said yes in the original observed sample.
+Replacement is equal to FALSE because we want different people each time instead of simulating that we are interviewing the same people (if that makes sense).\
+
+\
+
+## Question 2b
+
+------------------------------------------------------------------------
+
+Give a possible vector that could be the output stored to `index` as a result of `sample(10, size = 6, replace = FALSE)`
+
+-   For example, output could be a vector such as (1, 2, 3, 4, 5, 6).
+-   Give another such possible vector for `index` in the space below. Answers should vary.
+-   Do not use any code to help answer this question.
+
+### Solution to Question 2b
+
+------------------------------------------------------------------------
+
+-   The vector `index` could be (8, 5, 3, 7, 2, 9).
+
+-   **Explain how you determined your answer in the space below.**
+
+The vector index has values between 1 through 10, the vector size should be of size 6, and there should be no repeats in the vector index because we want to get 6 unique indexes/people.
+The values are randomized because sample chooses values in random order.\
+
+\
+\
+
+## Question 2c
+
+------------------------------------------------------------------------
+
+Using your previous answer in [Question 2b], what would be stored in the vector `debt[index]`.
+
+-   Refer to your vector `index` from [Question 2b] and the vector `debt` created earlier.
+-   **Do not use any code to help answer this question.**
+-   **Support your answer with a one sentence explanation of how you determined your answer.**
+
+### Solution to Question 2c
+
+------------------------------------------------------------------------
+
+-   Based on my [Solution to Question 2b], the vector `debt[index]` would be (0, 12, 0, 115, 65, 0).
+
+-   **Explain how you determined your answer in the space below.**
+
+We can access the values in the debt vector using indexing notation.
+For example, debt[8] = 0.
+So debt[8,5,3,7,2,9] = (0,12,0,115,65,0).\
+
+\
+\
+
+## Question 2d
+
+------------------------------------------------------------------------
+
+Using your previous answer in [Question 2b], what would be stored in the vector `debt[-index]`.
+
+-   Refer to your vector `index` from [Question 2b] and the vector `debt` created earlier.
+-   **Do not use any code to help answer this question.**
+-   **Support your answer with a one sentence explanation of how you determined your answer.**
+
+### Solution to Question 2d
+
+------------------------------------------------------------------------
+
+-   Based on my [Solution to Question 2b], the vector `debt[-index]` would be (8, 152, 45, 62).
+
+-   **Explain how you determined your answer in the space below.**
+
+The values that are not in index are (1, 4, 6, 10).
+So the values that the vector debt[-index] will output is the values that are stored in those positions 1, 4, 6, 10 in the debt vector.\
+
+\
+\
+
+# Question 3
+
+------------------------------------------------------------------------
+
+**Does chocolate ice cream have more calories than vanilla ice cream?** The dataset `IceCream` in the `resampledata` package contains calorie information for a sample of brands of vanilla and chocolate ice cream.
+The code cell below loads the `resampledata` package and prints the first 5 rows of data.
+
+```{r, message=FALSE}
+library(resampledata)
+head(IceCream)
+```
+
+## Question 3a
+
+------------------------------------------------------------------------
+
+Explain why this is an example of a matched pairs data.
+
+### Solution to Question 3a
+
+------------------------------------------------------------------------
+
+This is an example of a matched pairs data because you want to compare a metric between two dependent samples.
+This example is comparing a metric between two samples that are in a matching category, which is ice cream, and the example wants to measure the difference in the two types/flavors of ice cream.\
+
+\
+\
+
+## Question 3b
+
+------------------------------------------------------------------------
+
+Compute the mean number of calories for each of the two flavors separately.
+
+### Solution to Question 3b
+
+------------------------------------------------------------------------
+
+Answer the question using the code cell below.
+
+```{r}
+# Use code cell to answer
+(mean_vanilla_calories <- mean(IceCream$VanillaCalories))
+(mean_chocolate_calories <- mean(IceCream$ChocolateCalories))
+```
+
+The mean calories for vanilla ice cream is 191.41, while the mean calories for chocolate ice cream is 198.74.\
+
+\
+\
+
+## Question 3c
+
+------------------------------------------------------------------------
+
+State the hypothesis, **both practically speaking in words and using appropriate notation**.
+
+### Solution to Question 3c
+
+------------------------------------------------------------------------
+
+$H_0$: There is no difference in the mean difference between matched pairs of vanilla and chocolate ice cream calories.
+
+$\mu_{C_{calories} - V_{calories}} = 0$
+
+$H_a$: The mean difference between matched pairs shows that chocolate ice cream has more calories than vanilla ice cream.
+
+$\mu_{C_{calories} - V_{calories}} > 0$\
+\
+\
+
+## Question 3d
+
+------------------------------------------------------------------------
+
+Calculate the value of the relevant test statistic.
+
+### Solution to Question 3d
+
+------------------------------------------------------------------------
+
+Answer the question using the code cell below.
+
+```{r}
+# Use code cell to answer
+diff_pairs <- IceCream$ChocolateCalories - IceCream$VanillaCalories
+(obs_diff_pairs <- mean(diff_pairs))
+```
+
+\
+The observed test statistic value is 7.33.\
+
+\
+
+## Question 3e
+
+------------------------------------------------------------------------
+
+Construct a permutation distribution to see the distribution of test statistics.
+Be sure your code includes the following:
+
+-   Include at least $N=10^5-1$ permutation resamples in your distribution.
+-   Your code should include a `for` loop to construct the permutation distribution.
+-   Display your permutation distribution as a histogram, and mark the observed test statistic with a vertical line on the histogram.
+
+### Solution to Question 3e
+
+------------------------------------------------------------------------
+
+```{r}
+# Create and plot a permutation distribution here
+N <- 10^5 - 1
+res <- numeric(N)
+
+samp_length <- length(diff_pairs)
+
+for(i in 1:N){
+  sign <- sample(c(-1,1),size=samp_length,replace=TRUE)
+  new_diff <- sign * diff_pairs
+  res[i] <- mean(new_diff)
+}
+
+hist(res, xlab="x-bar diff", main="Permutation Distribution")
+abline(v=obs_diff_pairs, col="blue")
+```
+
+\
+\
+\
+
+## Question 3f
+
+------------------------------------------------------------------------
+
+Calculate the P-value of the observed test statistic.
+
+### Solution to Question 3f
+
+------------------------------------------------------------------------
+
+```{r}
+# Calculate P-value here
+
+#probability that permutation distribution is greater than or equal to observed test statistic
+#add 1 to include the observed/original sample
+p_val_ice <- (sum(res >= obs_diff_pairs)+1)/(N+1)
+p_val_ice
+```
+
+The p-value of the observed test statistic is 0.00035.\
+
+\
+\
+
+## Solution 3g
+
+------------------------------------------------------------------------
+
+Make a decision using a 5% significance level.
+**Be sure to state your answer in the context of the problem** (i.e. do not just say *reject null* or *fail to reject null*).
+
+### Solution to Question 3g
+
+------------------------------------------------------------------------
+
+**Be sure to state your answer in the context of the problem** (i.e. do not just say *reject null* or *fail to reject null*).
+
+5% = 0.05
+
+The p-value of the observed test statistic above is 0.00035.
+Since the observed test statistic p-value is less than the significance level of 0.05, we can safely reject the null hypothesis that there is no difference in the mean difference between matched pairs of vanilla and chocolate ice cream calories.
+Since we are able to reject the null hypothesis, there is enough evidence to support the claim that chocolate ice cream has more calories than vanilla ice cream.\
+
+\
+\
+
+# Question 4
+
+------------------------------------------------------------------------
+
+The mean cholesterol level for vegetarians in the United States is 161 mg/dl, and the distribution is normal.
+You suspect vegetarians in your town have different cholesterol than the rest of the US.
+You gather data from a random sample of 24 vegetarians in your town, and you find a sample mean cholesterol level of 164 mg/dl with a sample standard deviation of 5 mg/dl.
+**Do these data support the claim that cholesterol levels of vegetarians in your town are different from the rest of the US?**
+
+## Question 4a
+
+------------------------------------------------------------------------
+
+State the hypotheses **using both appropriate notation and in practical language related to this context**.
+
+### Solution to Question 4a
+
+------------------------------------------------------------------------
+
+$H_0$: There is no difference in mean cholesterol levels between vegetarians from the local town and in the US.
+
+$\mu_{veggie \ US} - \mu_{veggie \ town} = 0$
+
+$H_a$: There is a difference in mean cholesterol levels between vegetarians from the local town and in the US.
+
+$\mu_{veggie \ US} - \mu_{veggie \ town} \ne 0$\
+\
+\
+
+## Question 4b
+
+------------------------------------------------------------------------
+
+Calculate the value of the test statistic of the observed sample.
+
+### Solution to Question 4b
+
+------------------------------------------------------------------------
+
+Use the code cell below to compute the observed test statistic.
+
+```{r}
+# compute the test statistic
+
+#test statistic: (x bar - population mean)/(s/sqrt(n))
+
+US_mean <- 161 #US mean cholesterol for vegetarians (population mean)
+town_mean <- 164 #town mean cholesterol for vegetarians (x bar)
+
+t <- (town_mean - US_mean)/(5/sqrt(24)) #test statistic
+t
+```
+
+\
+\
+\
+
+## Question 4c
+
+------------------------------------------------------------------------
+
+Based on your test statistic in [Question 4b], compute the P-value.
+Since we do not have the raw data, you will need to apply formulas from classical methods of hypothesis testing (using CLT).
+
+### Solution to Question 4c
+
+------------------------------------------------------------------------
+
+```{r}
+# Compute the P-value
+# find probability that value is greater than or equal to test stat and less than or equal to test stat
+# problem states that it is a normal distribution so pnorm will be used
+
+p_val <- 2 * (pt(-1*abs(t),24-1)) #p value for two tailed test
+
+p_val
+```
+
+normal distribution of all samples using CLT:
+
+$\bar{X} \sim N(\mu, \frac{\sigma}{\sqrt{n}}) \\ \bar{X} \sim N(161, \frac{5}{\sqrt{24}})$\
+\
+$\frac{\bar{x} - \mu_0}{\frac{s}{\sqrt{n}}}$\
+
+The P value using the CLT method is 0.00736.
+
+## Question 4d
+
+------------------------------------------------------------------------
+
+Make a decision using a **1% significance level**.
+Be sure to state your answer in the context of the problem.
+Do not just say *reject null* or *fail to reject null*.
+
+### Solution to Question 4d
+
+------------------------------------------------------------------------
+
+The p-value of the observed test statistic above is 0.00736.
+Since the p-value is less than the significance level of 0.01, the test is statistically significant.
+Therefore, we can safely reject the null hypothesis.
+We can safely state with evidence that there is a difference between the the cholesterol levels of those in town and the rest of the US.\
+
+\
+\
+
+# Transactions Dataset For Question 5
+
+------------------------------------------------------------------------
+
+## Initial Loading of Data
+
+------------------------------------------------------------------------
+
+In the code cell below, we import a dataset to a dataframe named `transactions`.
+
+```{r}
+# import data as data frame
+transactions <- read.csv(file = "https://raw.githubusercontent.com/CU-Denver-MathStats-OER/Statistical-Theory/main/Data/Transactions.csv",
+                  header = TRUE,
+                  sep = ",",)
+summary(transactions)
+```
+
+## Cleaning the Data
+
+------------------------------------------------------------------------
+
+-   From the summary above, we can see there are some issues with the date. To name a few:
+    -   There are some missing values that are coded as `NA`.
+    -   Categorical variables are saved as character strings, and not as `factors`.
+    -   Dates in `transaction_data` are saved as character strings.
+    -   Dates in `product_first_sold_date` are saved as `numeric`.
+-   In the code cell below, we address some of these:
+    -   We remove all rows that have any missing values.
+    -   We convert a variables in columns 5 to 10 to `factors`.
+    -   We are not going to be working with dates, so we ignore that issue.
+
+```{r}
+# Removing observations with any missing data
+transactions <- na.omit(transactions)
+
+# Convert categorical variables to factors
+for (i in 5:10)
+{
+  transactions[,i] <- factor(transactions[,i])
+}
+
+summary(transactions)
+```
+
+## Summarizing Transaction Variables
+
+------------------------------------------------------------------------
+
+The dataframe `transaction` we created is random sample of sales transactions at a bicycle shop[^1].
+Each observation corresponds to the sale of an individual item.
+There are a total of 13 variables in the dataset.
+We will not be interested in most.
+The variables of interest are defined below:
+
+[^1]: Data from [Kaggle](https://www.kaggle.com/rohitsahoo/bicycle-store-dataset?select=Transactions.csv).
+
+-   `online_order`: TRUE means the sale was online.
+    FALSE means the sale was in-store.
+
+-   `brand`: The brand of the item purchased.
+    For example: Giant Bicycles, Solex, WeareA2B, Trek Bicycles, ...
+
+-   `product_line`: Describes what type of bicycle the purchase is for.
+    For example: Mountain, Road, Standard, and Touring.
+
+-   `list_price`: The amount the item was sold for.
+
+-   Feel free to play around with different plots to get an sense of the data.
+
+-   Some examples are below.
+
+### Displaying Categorical Data: Brands
+
+------------------------------------------------------------------------
+
+```{r}
+# Bar plot of brands
+plot(transactions$brand,
+     las = 2,  # this option rotates labels
+     cex.names = 0.8)  # this option shrinks fontsize
+plot(transactions$product_line,
+     las = 2,  # this option rotates labels
+     cex.names = 0.8)  # this option shrinks fontsize
+```
+
+### Displaying Numerical Data: List Price
+
+------------------------------------------------------------------------
+
+```{r}
+par(mfrow=c(1,2))  # displays figures in 1 by 2 array
+
+boxplot(transactions$list_price)  # boxplot
+plot(density(transactions$list_price))  # density plot 
+#hist(transactions$list_price, breaks=10)  # histogram
+
+par(mfrow=c(1,1))  # resets display back to 1 figure.
+```
+
+## You Must Load and Create the `transactions` Dataframe Before Solving Question 5
+
+------------------------------------------------------------------------
+
+# Question 5
+
+------------------------------------------------------------------------
+
+For each statistical questions in [Question 5a], [Question 5b], and [Question 5c], answer the following questions:
+
+1.  State the hypothesis, both practically speaking in words and using appropriate notation.
+
+2.  Calculate the value of the relevant test statistic.
+    Complete the R code block to show how you computed this value.
+
+3.  Construct a permutation distribution to see the distribution of test statistics.
+
+-   Include at least $N=10^5-1$ permutation resamples in your distribution.
+-   Construct the permutation distribution using a `for` loop.
+-   Display your permutation distribution as a histogram, and mark the observed test statistic(s) with vertical line(s) on the histogram.
+
+4.  Calculate the P-value of the observed test statistic.
+
+5.  Make a decision using a 5% significance level.
+    Be sure to state your answer in the context of the problem.
+    Do not simply say "reject null: or"fail to reject null".
+
+## Question 5a
+
+------------------------------------------------------------------------
+
+Are list prices of the brand `Giant Bicycles` different from the list prices of the brand `WeareA2B`?
+Perform a hypothesis comparing the mean list prices for each `brand`.
+
+### Solution to Question 5a
+
+------------------------------------------------------------------------
+
+1.  State the hypothesis, both practically speaking in words and using appropriate notation.
+
+$H_0$: There is no difference between the mean prices from Giant Bicycles and the mean prices from WeareA2B.
+
+$\mu_{Giant \ Bicycles} - \mu_{WeareA2B} = 0$
+
+$H_a$: There is a difference between the mean prices from Giant Bicycles and the mean prices from WeareA2B.
+
+$\mu_{Giant \ Bicycles} - \mu_{WeareA2B} \ne 0$\
+\
+
+2.  Calculate the value of the relevant test statistic. Complete the R code block below to show how you computed this value.
+
+```{r}
+# Note the symbol | is the logical "OR" in R
+pooled <- subset(transactions, select = "list_price",
+                 brand == "Giant Bicycles" | brand == "WeareA2B",
+                 drop = T)
+
+giant <- subset(transactions, select = "list_price",
+                brand == "Giant Bicycles", drop = T)
+
+wearea2b <- subset(transactions, select = "list_price",
+                brand == "WeareA2B", drop = T)
+
+observed <- mean(giant) - mean(wearea2b)  # compute the observed test stat
+observed  # print output of previous line
+```
+
+\
+The value of the test statistic is -29.03429.\
+
+3.  Construct a permutation distribution to see the distribution of test statistics.
+
+```{r}
+total <- length(pooled)  # size of pooled sample
+m <- length(giant)  # size of sample 1, giant bicycles
+
+N <- 10^5 - 1  # Number of resamples we will create
+result <- numeric(N)  # permutation sample differences stored here
+
+
+for (i in 1:N)
+{
+  index <- sample(total, size = m, replace = FALSE)
+  result[i] <- mean(pooled[index]) - mean(pooled[-index])
+}
+
+# Creates histogram to display permutation distribution.
+hist(result, xlab = "xbar_giant - xbar_wearea2b",
+     main = "Permutation Distribution for Diff in Mean List Price")
+abline(v = c(observed, -observed), col = c("blue", "red"))
+```
+
+\
+\
+
+4.  Calculate the P-value of the observed test statistic.
+
+```{r}
+# Use code cell to compute P-value
+left_tail <- (sum(result <= observed)+1)/(N+1) #get everything less extreme than the observed statistic
+right_tail <- (sum(result >= -observed)+1)/(N+1) #get everything in the upper tail (everything more extreme than the -observed statistic)
+
+left_tail
+right_tail
+
+pval_brand <- left_tail + right_tail
+pval_brand
+```
+
+\
+\
+
+5.  Make a decision using a 5% significance level. Be sure to state your answer in the context of the problem. Do NOT simply say *reject null* or *fail to reject null*.
+
+The p-value for the given permutation test is 0.02643.
+Since the p-value is less than 0.05, we can safely reject the null hypothesis and see the p-value is statistically significant.
+We can state given enough evidence that there is a difference between the mean prices of the Giant Bicycle brand and Wearea2B brand.\
+
+\
+\
+
+## Question 5b
+
+------------------------------------------------------------------------
+
+Is the variance in list price of all `Road` bikes less than the variance in list price of all `Standard` bikes?
+
+-   Note `Road` and `Standard` are values of the variable `product_line`.
+
+### Solution to Question 5b
+
+------------------------------------------------------------------------
+
+1.  State the hypothesis, both practically speaking in words and using appropriate notation.
+
+$H_0$: There is no difference in the variance of the price of Road bikes and the variance of the price of Standard bikes.
+
+$\sigma^2_{Road} - \sigma^2_{Standard} = 0$
+
+$H_a$: The variance of the price of Road bikes are less than the variance of the price of Standard bikes.
+
+$\sigma^2_{Road} - \sigma^2_{Standard} < 0$\
+\
+\
+
+2.  Calculate the value of the relevant test statistic. Create your own code below.
+
+```{r}
+# Calculate observed test statistic
+road <- subset(transactions, select = "list_price",
+                product_line == "Road", drop = T)
+standard <- subset(transactions, select = "list_price",
+                product_line == "Standard", drop = T)
+pooled_prod <- subset(transactions, select = "list_price",
+                product_line == "Standard" | product_line == "Road", drop = T)
+
+obs_var <- var(road) - var(standard)
+obs_var
+```
+
+\
+The value of the test statistic is -38304.56.\
+
+3.  Construct a permutation distribution to see the distribution of test statistics. Be sure to include a plot of the distribution (as a histogram) and include vertical line(s) at the observed test statistic(s).
+
+```{r}
+# create and plot a permutation distribution
+total_prod <- length(pooled_prod)
+samp1 <- length(road)
+
+N <- 10^5 - 1
+result_var <- numeric(N)
+
+for(i in 1:N){
+  index1 <- sample(total_prod, size=samp1, replace = FALSE)
+  result_var[i] <- var(pooled_prod[index1]) - var(pooled_prod[-index1])
+}
+
+hist(result_var, xlab = "var_road - var_standard",
+     main = "Permutation Distribution for Diff in Var List Price for Product Lines")
+abline(v = c(obs_var, -obs_var), col = c("blue"))
+```
+
+\
+\
+
+4.  Calculate the P-value of the observed test statistic.
+
+```{r}
+# Use code cell to compute P-value
+#We only want the left tail
+
+(pval_prod <- (sum(result_var <= obs_var)+1)/(N+1))
+```
+
+5.  Make a decision using a 5% significance level. Be sure to state your answer in the context of the problem. Do NOT simply say *reject null* or *fail to reject null*.
+
+The p-value for this permutation test is $1 \ e^{-5}$.
+Since the p-value is less than the significance level of 0.05, we can safely reject the null hypothesis and see the p-value is statistically significant.
+With enough evidence we can state that the variance in the list price of all Road bikes is less than the variance in the list price of all Standard bikes.\
+
+\
+\
+
+## Question 5c
+
+------------------------------------------------------------------------
+
+Is the proportion of online bicycle sales that have a list price more than 1,000 dollars greater than the proportion of in-store bicycle sales that have a list price more than 1,000 dollars?
+
+### Solution to Question 5c
+
+------------------------------------------------------------------------
+
+1.  State the hypothesis, both practically speaking in words and using appropriate notation.
+
+$H_0$: There is no difference between the proportion of online bicycle sales that have a list price more than 1,000 dollars and the proportion of in store bicycle sales that have a list price more than 1,000 dollars.
+
+$p_{online} - p_{inStore} = 0$
+
+$H_a$: The proportion of online bicycle sales with a list price more than 1,000 dollars is greater than the proportion of online bicycle sales that have a list price more than 1,000 dollars.
+
+$p_{online} - p_{inStore} > 0$\
+\
+\
+
+2.  Calculate the value of the relevant test statistic. Create your own code below.
+
+```{r}
+# Calculate observed test statistic
+online <- subset(transactions, select = "list_price",
+                online_order == TRUE, drop = T)
+inStore <- subset(transactions, select = "list_price",
+                online_order == FALSE, drop = T)
+pooled_orders <- subset(transactions, select = "list_price", drop = T)
+
+# sum(online > 1000) + sum(inStore > 1000)
+# length(pooled_orders)
+
+total_online <- length(online)
+total_inStore <- length(inStore)
+
+prop_online <- sum(online > 1000) / total_online
+prop_online
+mean(online > 1000)
+prop_inStore <- sum(inStore > 1000) / total_inStore
+prop_inStore
+mean(inStore > 1000)
+
+# prop_online
+# prop_inStore
+
+obs_prop <- prop_online - prop_inStore
+obs_prop
+```
+
+The value of the test statistic is 0.0009459.\
+
+\
+
+3.  Construct a permutation distribution to see the distribution of test statistics. Be sure to include a plot of the distribution (as a histogram) and include vertical line(s) at the observed test statistic(s).
+
+```{r}
+# create and plot a permutation distribution
+total_orders <- length(pooled_orders)
+samp2 <- total_online
+
+N <- 10^5 - 1
+result_prop <- numeric(N)
+
+for(i in 1:N){
+  index2 <- sample(total_orders, size=samp2, replace = FALSE)
+  sampprop_online <- sum(pooled_orders[index2] > 1000) / samp2
+  sampprop_inStore <- sum(pooled_orders[-index2] > 1000) / (total_orders - samp2)
+  result_prop[i] <- sampprop_online - sampprop_inStore 
+}
+
+hist(result_prop, xlab = "prop_online -  prop_inStore",
+     main = "Permutation Distribution for Proportions of Online and Offline Orders")
+abline(v = c(-obs_prop, obs_prop), col = c("blue","red"))
+
+```
+
+\
+\
+
+4.  Calculate the P-value of the observed test statistic.
+
+```{r}
+# Use code cell to compute P-value
+(pval_prop <- (sum(result_prop >= obs_prop) + 1)/(N+1))
+```
+
+\
+\
+\
+
+5.  Make a decision using a 5% significance level. Be sure to state your answer in the context of the problem. Do NOT simply say *reject null* or *fail to reject null*.
+
+The p-value of this permutation test is 0.45334.
+Since the p-value is greater than 0.05, we can say that this is statistically insignificant, therefore we fail to reject the null hypothesis.
+Given a lack of evidence, we cannot determine that there the proportion of online sales with a list price more than \$1000 is greater than the proportion of in store sales with a list price more than \$1000.
+Therefore we conclude that this test is inconclusive.\
+
+\
+\

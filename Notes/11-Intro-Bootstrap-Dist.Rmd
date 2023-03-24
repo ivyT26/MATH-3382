@@ -1,0 +1,595 @@
+---
+title: '11: Introduction to Bootstrap Distributions'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Load Packages for Today:
+
+------------------------------------------------------------------------
+
+```{r, message = FALSE}
+library(resampledata)
+```
+
+# Sampling Distributions Using CLT
+
+------------------------------------------------------------------------
+
+A common feature of previous examples is that the distribution for the population(s) was known.
+
+-   For example if a coin is fair, then we know the population is binomial with $p=0.5$, and we can answer questions about the probability of certain events occurring.
+-   If we have population $X \sim \mbox{Exp} ( \lambda )$, then we can use CLT to calculate $P( \overline{X} < 10 )$.
+
+# Sampling Distributions When Population is Unknown
+
+------------------------------------------------------------------------
+
+**What if the population is unknown?** When we use data from a sample to describe some characteristic of the population, we are doing statistics!
+
+-   A [**parameter**]{style="color: blue;"} is a characteristic of a population (which may be a probability distribution).
+-   A [**statistic**]{style="color: blue;"} is a characteristic of a sample.
+-   A parameter is a typically a number (mean, proportion, ratio of two means) that is unknown.
+-   Recall we use different notation for parameters and statistics.
+-   Statistic(s) from a sample can be used to estimate unknown population parameter(s).
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+You would like to answer the following question?
+
+> "What is the average weight of all babies that were born this past year?"
+
+How could you go about answering this question?
+Devise a method for answering this question.
+
+### Solution to Question 1:
+
+------------------------------------------------------------------------
+
+-   What is our population?
+    What is "all"?
+    Is it the whole world, a country, a city, etc.
+
+-   Reduce the time frame.
+    Instead of past year, maybe past 6 months?
+
+-   Get random sample, each of size n and then compute averages of averages.
+
+    -   pick a large sample size\
+        \
+        \
+
+# Estimating the Weight of All Newborns
+
+------------------------------------------------------------------------
+
+The dataset `NCBirths2004` from the `resampledata` package contains data from a sample of 1009 babies born in North Carolina in 2004 and contains variables
+
+-   `Age` is the mother's age, in years.
+-   `Tobacco` is whether or not the mother used tobacco while pregnant.
+-   `Gender` is the gender assigned to the newborn at birth.
+-   `Weight` of the newborn (in grams).
+-   `Gestation` is the gestation period (in weeks) when the mother gave birth.
+-   We can find more information about the data using the help manual.
+
+```{r, eval = FALSE}
+?NCBirths2004
+```
+
+-   For the purposes of this thought experiment, **we will consider the 1009 observations in `NCBirths2004` as the population.**
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+Run the code cell below.
+Then explain what operation is being performed by the code.
+
+```{r}
+#library(resampledata)  # this should be loaded already
+
+my.samp <- sample(NCBirths2004$Weight, 10, replace = FALSE) 
+my.samp  # print your sample to the screen
+```
+
+### Solution to Question 2:
+
+------------------------------------------------------------------------
+
+\
+Take one random sample of 10 babies' weights without replacement.
+
+```{r}
+mean(my.samp)
+```
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+Do you think your classmates will have the same estimate?
+How can we account for this variability in our estimate?
+
+### Solution to Question 3:
+
+------------------------------------------------------------------------
+
+No, because the samples are different.
+To account for the variability, we could take multiple random samples and add all the averages together to get a closer estimate.\
+
+\
+\
+
+## What is a Statistical Question?
+
+------------------------------------------------------------------------
+
+A [**statistical question**]{style="color: blue;"} is one that can be answered by collecting data and where there will be variability in that data.
+
+# Accounting for the Uncertainty of Our Estimate
+
+------------------------------------------------------------------------
+
+If we had a [**sampling distribution**]{syle="color: blue;"}, we could use the **standard error** to measure the variability of sample statistics.
+[**But in practice, we only have one sample, and know very little about the population.**]{style="color: red;"}
+
+## Bootstrapping
+
+------------------------------------------------------------------------
+
+[**Bootstrapping**]{style="color: blue;"} is a process that uses data from a sample to construct a new distribution called a [**bootstrap distribution**]{style="color: blue;"} that approximates the distribution for some sample statistic (such as a mean, proportion, variance, and others).
+We can use bootstrapping when the Central Limit Theorem does not apply!
+
+Given an original sample of size $n$ from a population:
+
+1.  Draw a resample of size $n$ (same size as original sample) with replacement from the sample.
+2.  Compute the relevant statistic (mean, proportion, max, variance, etc) of that sample.
+3.  Repeat this many times (say $10,\!000$ times).
+
+-   The distribution of statistics from the bootstrap samples is called a [**bootstrap distribution**]{style="color: blue;"} of the statistic.
+-   The bootstrap distribution gives an approximation for the sampling distribution.
+-   We can inspect the center, spread and shape of the bootstrap distribution and do statistical inference.
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+Consider a random sample of 4 baby weights: 3800, 3065, 2950, and 4100.
+Which of the following could be a possible bootstrap resample?
+Explain why or why not.
+
+### Question 4a:
+
+------------------------------------------------------------------------
+
+3800, 3065, 4100
+
+#### Solution to Question 4a:
+
+------------------------------------------------------------------------
+
+This would no be a bootstrap resample because it chooses values out of the original sample with replacement, but it is not the same size as the original sample (3 values in resample vs 4 values in original sample).\
+
+\
+\
+
+### Question 4b:
+
+------------------------------------------------------------------------
+
+3800, 3800, 3800, 3800
+
+#### Solution to Question 4b:
+
+------------------------------------------------------------------------
+
+This would be a boostrap resample because it chooses values out of the original sample with replacement and it is the same size as the original sample size.\
+
+\
+\
+
+### Question 4c:
+
+------------------------------------------------------------------------
+
+3800, 3065, 2950, 4100
+
+#### Solution to Question 4c:
+
+------------------------------------------------------------------------
+
+This would be a bootstrap resample.\
+
+\
+\
+
+### Question 4d:
+
+------------------------------------------------------------------------
+
+3800, 3065, 2950, 4100, 4100
+
+#### Solution to Question 4d:
+
+------------------------------------------------------------------------
+
+This would not be a bootstrap resample.\
+
+\
+\
+
+### Question 4e:
+
+------------------------------------------------------------------------
+
+3800, 3065, 2950, 3450
+
+#### Solution to Question 4e:
+
+------------------------------------------------------------------------
+
+No, because value 3450 is not a value from the original sample.\
+
+\
+\
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+How many possible bootstrap resamples can be constructed from an original sample that has $n$ values?
+
+### Solution to Question 5:
+
+------------------------------------------------------------------------
+
+n\^n observations with replacement (and this gets all the different permutations)
+
+we don't care about the order of the resamples, so it would be 2n-1 choose n samples\
+\
+\
+
+# Creating a Bootstrap Distribution
+
+------------------------------------------------------------------------
+
+Let's return to our question:
+
+> "What is the average weight of all babies that were born in North Carolina in 2004?"
+
+-   For us, the population is the 1009 newborns in `NCBirths2004` (but in practice we do not have access from full data from the population).
+-   From one random sample of 10 newborns picked from the population, we can create a bootstrap distribution for the sample mean.
+
+```{r}
+N <- 10^5 # Number of bootstrap samples
+boot.dist <- numeric(N) #create vector to store bootstrap means
+
+for (i in 1:N)
+{
+  x <- sample(my.samp, 10, replace = TRUE) #bootstrap
+  boot.dist[i] <- mean(x)  #mean of bootstrap
+}
+
+# Show bootstrap distribution
+hist(boot.dist,  xlab = "xbar",
+     main = "Bootstrap Distribution")
+
+# Add a red line at the observed sample mean
+abline(v = mean(my.samp), col = "red", lwd = 2, lty = 1)
+
+# Add a blue line at the center of bootstrap dist
+abline(v = mean(boot.dist), col = "blue", lwd = 2, lty = 2)
+
+# Add a green line at the population mean
+abline(v = mean(NCBirths2004$Weight), col = "green", lwd = 2, lty = 2)
+```
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+What are the center and standard error of the bootstrap distribution?
+Complete the code below to compute these values.
+
+mean follows CLT because it is a linear combo of values, so it is best to use mean
+
+```{r, eval = FALSE}
+mean(boot.dist) #Calculate center of bootstrap dist
+sd(boot.dist) #Calculate bootstrap standard error
+```
+
+### Solution to Question 6:
+
+------------------------------------------------------------------------
+
+Edit code cell above.
+
+\
+\
+
+# Measuring the Bias of Booststrap Estimates
+
+------------------------------------------------------------------------
+
+Let $\widehat{\theta}$ denote an [**estimator**]{style="color: blue;"} for the [**parameter**]{style="color: green;"}.
+We define the [**bias**]{syle="color: blue;"} of an estimator as
+
+$$\mbox{Bias} = \color{blue}{\widehat{\theta}} - \color{green}{\theta}$$.
+
+**In the case of bootstrapping:**
+
+-   We use the mean of the bootstrap distribution as the estimator for the population mean (which is unknown).
+-   We use sample mean $\bar{x}$ in place of the parameter.
+
+$$\mbox{Bootstrap Bias} = \color{blue}{\mu_{\rm Boot}} -  \color{green}{\bar{x}}$$.
+
+## Question 7:
+
+------------------------------------------------------------------------
+
+Compute the bootstrap bias if we use the mean of the bootstrap distribution from [Question 6:] as our estimate for the mean weight of all newborns in North Carolina in 2004.
+
+### Solution to Question 7:
+
+------------------------------------------------------------------------
+
+```{r}
+mean(boot.dist) - mean(my.samp) #describes the bias between the bootstrap distribution and the original sample means
+```
+
+## Question 8:
+
+------------------------------------------------------------------------
+
+Compute the actual mean birth weight of the population (which we assume is the 1009 observations in `NCBirths2004`).
+
+### Solution to Question 8:
+
+------------------------------------------------------------------------
+
+```{r}
+mean(my.samp) #mean of single sample (x bar)
+mean(boot.dist) #mean of boostrap distribution (x boot)
+mean(NCBirths2004$Weight) #mean of population (mu subscript x)
+#mean of sampling distribution with CLT (mu subscript x bar)
+```
+
+sampling distribution has two methods:
+
+-   parametric method: using CLT
+
+-   non-parametric method: using bootstrapping
+
+## Question 9:
+
+------------------------------------------------------------------------
+
+Compute the actual variance of birth weight of the population (which we assume is the 1009 observations in `NCBirths2004`), and then compute the standard error for the sampling distribution using the Central Limit theorem.
+Compare your answer the bootstrap standard error you found in [Question 6:].
+
+### Solution to Question 9:
+
+------------------------------------------------------------------------
+
+```{r}
+pop.var <- var(NCBirths2004$Weight)
+
+clt.se <- sqrt(pop.var/10) #std / sqrt n
+
+clt.se
+```
+
+# Comparing CLT with Bootstrapping
+
+------------------------------------------------------------------------
+
+Consider the theoretical population $X \sim N(23,7)$.
+Below we compare the sampling distribution for the mean obtained using the central limit theorem on the top row with one random sample and a corresponding bootstrap distribution for the sample mean on the bottom row\footnote{See file Chap5-Compare.R for code that created the figure}..
+
+```{r echo=FALSE}
+set.seed(138) 
+par(mfrow=c(2,2))
+u <- 23; sd<-7; n<-50; L<-u-3*sd; U<-u+3*sd
+X <- seq(L,U,.1)
+dat <- rnorm(n=n,mean=u,sd=sd)
+
+B <- 1000
+my.boot <- numeric(B)
+for (i in 1:B)
+{
+  x <- sample(dat, size=50, replace=TRUE)   #draw resample 
+  my.boot[i] <- mean(x)                     #compute mean, store in my.boot
+}
+
+plot(X,dnorm(X,mean=u,sd=sd), type="l", lwd=2, col="red", ylab="Density",
+     main="Population, N(23,7)", xlim=c(0,46))
+
+plot(X,dnorm(X,mean=u,sd=sd/sqrt(n)), type="l", lwd=2, col=1, ylab="Density",
+     main="CLT, N(23,7/sqrt(50))", xlim=c(17,29), xlab=expression(bar(X)))
+lines(c(u,u), c(0,1), col="blue", lwd=2, lty=2)
+
+hist(dat,xlab="X",ylab="Density", xlim=c(0,46), lwd=2, main="Sample, n=50")
+
+hist(my.boot,xlab=expression(bar(X)),ylab="Density", xlim=c(17,29), lwd=2, main="Bootstrap distribution")
+boot.mean <- mean(my.boot)
+lines(c(boot.mean, boot.mean), c(0,250), col="blue", lwd=2, lty=2)
+par(mfrow=c(1,1))
+```
+
+```{r}
+samp.mean <- mean(x)
+samp.sd <- sd(x)
+boot.mean <- mean(my.boot)
+boot.se <- sd(my.boot)
+samp.mean
+samp.sd
+boot.mean
+boot.se
+```
+
+|                                         | Mean                     | Standard deviation                                    |
+|-----------------------------------------|--------------------------|-------------------------------------------------------|
+| Population                              | $\mu_X= 23$              | $\sigma_X = 7$                                        |
+| Theoretical Sampling Dist for $\bar{X}$ | $\mu_{\bar{X}}= 23$      | $\sigma_{\bar{X}} = \mbox{SE}(\bar{X}) = 0.99$        |
+| Sample ($n=50$)                         | $\bar{x} = 22.69$        | $s = 6.15$                                            |
+| Bootstrap distribution                  | $\mu_{\rm Boot} = 22.88$ | $\sigma_{\rm Boot} = SE_{\rm{Boot}}(\bar{X}) = 0.938$ |
+
+## Question 10:
+
+------------------------------------------------------------------------
+
+a.  Compare the population and sample distributions. What is similar about the two distributions? What are the differences?
+
+\
+
+b.  Compare the CLT sampling distribution and bootstrap sampling distribution. What is similar about the two distributions? What are the differences?
+
+### Solution to Question 10:
+
+------------------------------------------------------------------------
+
+a.  Similar means and standard deviations. Similar center and spread.
+
+\
+\
+
+b.  Similar means and standard deviations. Similar shape, center, and spread.
+
+\
+
+# The Plug-in Principle
+
+------------------------------------------------------------------------
+
+[**The Plug-in Principle:**]{style="color: blue;"} If something (such as a characteristic of a population) is unknown, substitute (plug-in) an estimate.
+
+-   Bootstrapping is an extreme application of this principle.
+-   We replace the entire population (not just one parameter with one value) by the entire set of data from the sample.
+
+## Properties of Bootstrap Distributions Estimators
+
+------------------------------------------------------------------------
+
+-   The goal of a bootstrap distribution is to estimate a sampling distribution for some statistic.
+-   Bootstrap distributions are [**biased estimators for the center**]{style="color: red;"} of a sampling distribution since they are centered near $\bar{x}$ not necessarily $E(\overline{X}) = \mu$.
+-   Thus the center of a bootstrap distribution is not useful alone, but they are useful at quantifying the behavior of a parameter estimate.
+-   For most common statistics, bootstrap distributions provide good estimates for the true [**spread**]{style="color: blue;"}, [**shape**]{style="color: blue;"}, and [**bias**]{style="color: blue;"} of a sampling distribution.
+
+## Question 11: Arsenic Case Study
+
+------------------------------------------------------------------------
+
+Arsenic is a naturally occurring element in the groundwater in Bangladesh.
+Much of this water is used for drinking in rural areas, so arsenic poisoning is a serious health issue.
+The dataset `Bangladesh` in the `resampledata` package contains measurements on arsenic, chlorine, and cobalt levels (in parts per billion, ppb) present in each of 271 groundwater samples.
+
+```{r, eval = FALSE}
+#library(resampledata)  # this has already been loaded
+?Bangladesh
+```
+
+### Question 11a:
+
+------------------------------------------------------------------------
+
+Complete the code cell below to calculate the mean and standard deviation and size of the arsenic level of the sample.
+
+```{r, eval = FALSE}
+# Load and summarize the sample
+arsenic <- Bangladesh$Arsenic
+mean.arsenic <- mean(arsenic)
+sd.arsenic <- sd(arsenic)
+n.arsenic <- length(arsenic) # how many observations in arsenic
+```
+
+#### Solution to Question 11a:
+
+------------------------------------------------------------------------
+
+Complete the code cell above.
+
+\
+\
+
+### Question 11b:
+
+------------------------------------------------------------------------
+
+Create a histogram to show the shape of the distribution of the sample data.
+How would you describe the shape?
+
+```{r, eval = FALSE}
+hist(arsenic)
+
+# Optional code below creates a cool thing we have yet to encounter.
+# We'll see how to interpret this plot shortly.
+qqnorm(arsenic)
+qqline(arsenic)
+```
+
+#### Solution to Question 11b:
+
+------------------------------------------------------------------------
+
+Complete the code cell above.
+
+\
+\
+
+### Question 11c:
+
+------------------------------------------------------------------------
+
+Complete the code cell below to generate a bootstrap distribution for the sample mean.
+What are the center and spread (standard error) of the bootstrap distribution?
+
+```{r, eval = FALSE}
+N <- 10^5 # Number of bootstrap samples
+boot.dist <- numeric(N) #create vector to store bootstrap means
+
+# Set up a for loop!
+
+for (i in 1:N)
+{
+  x <- sample(arsenic, n.arsenic, replace = TRUE) #get a sample from the dataset and give it a sample size
+  boot.dist[i] <- mean(x)
+}
+
+mean(boot.dist) #Calculate center of bootstrap dist
+sd(boot.dist) #Calculate bootstrap standard error
+
+# Show bootstrap distribution
+hist(boot.dist,  xlab = "xbar",
+     main = "Bootstrap Distribution")
+
+# Add a red line at the observed sample mean
+abline(v = mean.arsenic, col = "red", lwd = 2, lty = 1)
+
+# Add a blue line at the center of bootstrap dist s
+abline(v = mean(boot.dist), col = "blue", lwd = 2, lty = 2)
+
+# Compare bootstrap dist to normal dist
+# Again, we'll get to these.
+qqnorm(boot.dist)
+qqline(boot.dist)
+```
+
+#### Solution to Question 11c:
+
+------------------------------------------------------------------------
+
+Complete the code cell above.
+
+The bootstrap distribution is approximately normally distributed.
+The mean of the bootstrap distribution is 125.3815278, and the bootstrap standard error is 18.0526238 .
+
+\
+Use clt for small sample sizes
+
+Use bootstrap for large sample sizes\

@@ -1,0 +1,453 @@
+---
+editor_options:
+  markdown:
+    wrap: 72
+output: pdf_document
+---
+
+# Does a Pandemic Lead to a Change in Behavior that Affects Unnatural Deaths?\--Team Rabbit
+
+## Introduction
+
+------------------------------------------------------------------------
+
+As observed globally, pandemics alter the lives of people in and around
+affected areas in many ways. Studying these changes in behavior of the
+people affected by a pandemic and varying pandemic mitigation measures
+is fundamental to understanding secondary effects of these changes. The
+objective of this analysis is to assess the statistical significance of
+unnatural causes of death during a pandemic time period verses during a
+non-pandemic time period, and afterwards to raise the question as to
+whether possible changes in behavior might have had a positive or
+negative effect on total unnatural deaths during a pandemic. Unnatural
+deaths are defined as all deaths relating to intentional and
+unintentional injury. They are the fourth leading cause of death in the
+United States over the time period analyzed. We have sampled 13 months
+for our non-pandemic data (January 1, 2019 to January 31, 2020); and we
+have sampled 10 months for our pandemic data (March 1, 2020 to December
+31, 2020). We exclude February 2020 to avoid ambiguity of the definition
+of "pandemic".
+
+In the following sections we break down our statistical analysis into
+three hypothesis tests. First, we test a difference in two means over
+neighboring time periods to assess whether there is a statistical
+significance in raw number differences in the average deaths in each
+respective time period. Second, we test a difference in two proportions
+of unnatural deaths to total deaths in each time period respectively.
+The proportion test will show whether unnatural deaths are expected to
+scale proportionally to total deaths during a pandemic as they would in
+a non-pandemic time period. Third, we run a permutation test on the
+difference in means in order to gather a third and final perspective.
+The results will show fundamental generalities to an otherwise complex
+topic, and we will discuss the results at the end of this analysis.
+
+## Preliminary Work and General Data
+
+------------------------------------------------------------------------
+
+```{r}
+# Original Data Extract Lives Online
+# Data from CDC: https://wonder.cdc.gov/ucd-icd10.html
+
+mortality <- read.delim("https://raw.githubusercontent.com/CU-Denver-MathStats-OER/Statistical-Theory/main/Data/UnderlyingCauseofDeath1999-2020.txt")
+
+# There are 41 NA's in Deaths
+# Removing observations with any missing data
+mortality <- na.omit(mortality)
+
+# There are rows of aggregated data (with no month) we remove
+mortality <- mortality[mortality$Month.Code > 0, ] 
+
+n <- nrow(mortality)  # number of rows in dataframe
+
+# Create new variables natural and unnatural deaths
+Natural  <- numeric(n)
+Unnatural  <- numeric(n)
+
+for (i in 1:n) {
+  if (mortality$ICD.Chapter.Code[i] == "V01-Y89"){
+    Unnatural[i] = mortality$Deaths[i]
+  } else {
+    Natural[i] = mortality$Deaths[i]
+  }
+}
+
+mortality$Natural <- Natural
+mortality$Unnatural <- Unnatural
+
+mortality <- mortality[c("Month.Code", "Natural","Unnatural")]
+
+# Convert strings to categorical variables using factors
+mortality$Month.Code <- factor(mortality$Month.Code)
+
+# Aggregate by month
+mortality2 <- aggregate(cbind(Natural, Unnatural) ~ Month.Code, data = mortality, FUN = sum)
+
+# Create a Total column
+mortality2$Total <- mortality2$Natural + mortality2$Unnatural
+tail(mortality2)
+
+##########################
+##########################
+##########################
+
+library(stringr)
+
+mortality2[c("year", "month")] <- str_split_fixed(mortality2$Month.Code, '/', 2)
+
+#subset unnatural deaths by non pandemic and pandemic times
+mortality2$month <- strtoi(mortality2$month, 10L)
+
+# Unnatural Deaths -- Unnatural deaths not specified, but natural deaths are
+
+NonPandemic <- subset(mortality2, select="Unnatural", ((year == "2019" & month >= "1") & (year == "2019" & month <= 12)) | (year == "2020" & month == 1),  drop=T)
+
+Pandemic <- subset(mortality2, select="Unnatural", ((year == "2020" & month >= 3) & (year == "2020" & month <= 12)), drop=T)
+
+# Natural Deaths
+
+NonPandemicNatural <- subset(mortality2, select="Natural", ((year == "2019" & month >= "1") & (year == "2019" & month <= 12)) | (year == "2020" & month == 1),  drop=T)
+
+PandemicNatural <- subset(mortality2, select="Natural", ((year == "2020" & month >= 3) & (year == "2020" & month <= 12)), drop=T)
+```
+
+## Summary Statistics
+
+------------------------------------------------------------------------
+
+### Numerical Summaries
+
+```{r}
+summary(mortality2)
+```
+
+### Barplot Comparing Proportions of Unnatural Deaths 2019 to 2020
+
+```{r}
+# Find proportion of death 2019:
+p.nonpandemic <- sum(NonPandemic) / (sum(NonPandemicNatural) + sum(NonPandemic))
+
+# Find proportion of death 2020:
+p.pandemic <- sum(Pandemic) / (sum(PandemicNatural) + sum(Pandemic))
+
+# Bind together for bar chart
+bind.proportion <- cbind(p.nonpandemic, p.pandemic)
+
+# Plot Proportion Differences
+prop.barplot <- barplot(bind.proportion,
+        beside = TRUE,
+        main = "Proportions of Unnatural Deaths Pandemic vs Non-pandemic",
+        col = "Red",
+        xlab = "Sample Time Period",
+        ylab = "(Total Unnatural Deaths)/(Total Deaths)",
+        ylim = c(0, .12))
+text(prop.barplot, 0, round(bind.proportion, 5), cex = 1, pos = 3)
+```
+
+### Box Plot Comparing Unnatural Deaths 2019 to 2020
+
+```{r}
+#boxplot(mortality2$Natural)
+
+#Bind together for Box plot
+bind.unnatural <- cbind(NonPandemic, Pandemic)
+
+boxplot(bind.unnatural, 
+        beside = TRUE,
+        main = "Unnatural Deaths Pandemic vs Non-pandemic",
+        col = "pink",
+        xlab = "Sample", 
+        ylab = "Death Count", 
+        ylim = c(20000, 28000))
+```
+
+### Histogram of Unnatural Death of All Time
+
+```{r}
+hist(mortality2$Unnatural, 
+     xlab = "Unnatural Death Counts Per Month",
+     main = "Histogram of Unnatural Death Counts of All Time")
+```
+
+## Hypothesis Tests
+
+------------------------------------------------------------------------
+
+### Difference in Two Means
+
+We want to know if the mean total unnatural deaths during a pandemic is
+different from the mean total unnatural deaths not during a pandemic per
+month in the US.
+
+We choose the $5\%$ significance level and our hypotheses are below:
+
+$H_0 : \mu_{p} = \mu_{n}$ : The mean number of unnatural deaths per
+month during a pandemic is the same as as the mean number of deaths per
+month in a non-pandemic year
+
+$H_a: \mu_{p} \neq \mu_{n}$ : The mean number of unnatural deaths per
+month during a pandemic is different from the mean number of deaths per
+month in a non-pandemic year.
+
+Since we do not know the population standard deviation and our sample
+size is small, we are using the Student's t-distribution to test our
+hypothesis. Here we show the results for both "by hand" and using the R
+command `t.test()`.
+
+By "by hand", it means we select two sub-samples from the original
+sample: `Pandemic` and `NonPandemic` and calculate their sample means
+separately. Then, we use the formula of $t$-score for independent sample
+means:
+
+$${\large {t = \frac{\bar{X}-\bar{Y}}{\sqrt{\frac{S_1^2}{n_1}+ \frac{S_2^2}{n_2}}}}}.$$
+We use $df = n_{\rm min} -1$ as the degrees of freedom when calculating
+the $p$-value with R command `qt()`, where $n_{\rm min}$ is the smaller
+of the two sample sizes.
+
+```{r}
+# Calculate t-score and p-value "by hand"
+mean.pandemic <- mean(Pandemic)
+se.pandemic <- sd(Pandemic)
+
+mean.nonpandemic <- mean(NonPandemic)
+se.nonpandemic <- sd(NonPandemic)
+
+test.stat <- mean.pandemic - mean.nonpandemic
+test.stat
+
+t.score <- test.stat/sqrt(se.pandemic^2/length(Pandemic)+se.nonpandemic^2/length(NonPandemic))
+t.score
+
+pt(t.score, min(length(Pandemic), length(NonPandemic)) - 1, lower.tail = FALSE)*2
+```
+
+We get a test statistic of 3157.215 more unnatural deaths per month
+during a pandemic than not in a pandemic. The $t$-score we get is 5.845
+and the $p$-value we get is approximately $.00025 \le \alpha=0.05$.
+
+We also use the command
+`t.test(Variable ~ HowGroupsSplit, data = Dataset_name, alt = "two.sided")`
+to test our hypotheses on the $t$-distribution with degrees of freedom
+computed from Welch's approximation. Here we use the pooled data with a
+binary (categorical) variable called `pandemic`. When the observation is
+from before February 2020, we assign it with `pandemic = 1` and 0
+otherwise.
+
+However, this command calculates the test statistic as the difference
+between non-pandemic and pandemic, which shows negative sign. This does
+not affect the $p$-value. This $p$-value is different from the "by hand"
+$p$-value because we were using the smaller number of observations
+between the two samples minus one to approximate Welch's degrees of
+freedom.
+
+```{r}
+# Using pooled data (excluding Feb 2020)
+mortality2_nofeb20<-subset(mortality2, Month.Code != "2020/02")
+
+# generate a dummy variable called pandemic
+mortality2_nofeb20$pandemic <- ifelse(mortality2_nofeb20$year=="2019" 
+                                      | mortality2_nofeb20$Month.Code=="2020/01", 0, 1)
+
+t.test(Unnatural ~ pandemic, data = mortality2_nofeb20, alt = "two.sided")
+```
+
+Alternatively, we graph the $t$-distribution below with the $95\%$
+confidence interval marked with blue solid lines. The orange curve
+represents the probability density function (PDF) for the
+$t$-distribution. Our $t$-score is marked with a red dash line, which is
+well within the rejection region.
+
+```{r}
+# Store the Welch's degrees of freedom
+DF <- t.test(Unnatural ~ pandemic, data = mortality2_nofeb20, alt = "two.sided")$parameter
+
+# Take a random sample from the t-distribution of size 10000 and draw a histogram
+rsample <- rt(10000, df=DF)
+hist(rsample, prob=TRUE, 
+     xlim=c(-8,8), breaks = seq(-8, 8, 0.3), 
+     xlab = "t-score with df = 13.913",
+     main = "Student's t-distribution (PDF)")
+lines(density(rsample), col="orange", lwd=2)
+
+# Add a red line at the t-score
+abline(v = t.score, col = "red", lwd = 2, lty = 2)
+
+# Add blue lines at the 95% confidence level for the t-distribution
+lower.t <-  qt(0.025, df=DF)
+upper.t <-  qt(0.975, df=DF)
+
+abline(v = lower.t, col = "blue", lwd = 2, lty = 1)
+abline(v = upper.t, col = "blue", lwd = 2, lty = 1)
+```
+
+#### Results
+
+The $p$-value from the $t$-score we hand-calculated is approximately
+$.00025 < \alpha=0.05$. When using Welch's approximated degrees of
+freedom, our $p$-value is $4.36\times10^{-5} < \alpha = 0.05$.
+Therefore, we reject the null and have evidence to support the
+alternative hypothesis that the mean unnatural deaths per month during
+the pandemic is different than not during a pandemic in the US at the
+$5\%$ significance level.
+
+------------------------------------------------------------------------
+
+### Difference in Proportions
+
+For this section, we want to see if there is a difference in proportion
+between unnatural deaths that occur during a pandemic versus not during
+a pandemic.
+
+The null hypothesis will be that there is no difference between the
+proportion of deaths during a pandemic versus non-pandemic times, while
+the alternative hypothesis is that there is a difference. The
+mathematical expressions of the hypotheses are below:
+
+$H_0 : p_{p} = p_{n}$
+
+$H_a : p_{p}\neq p_{n}$
+
+In order to find the $p$-value, two different methods are used. The
+first method is the "easy" method, found by using
+`prop.test(c(x1, x2), c(n1, n2), alt="two.sided")`. In this case, `x1`
+and `x2` represent the number of unnatural deaths in pandemic and
+non-pandemic time, while `n1` and `n2` represent the total number of
+deaths for pandemic and non-pandemic time.
+
+```{r}
+#Totaling the number of unnatural deaths
+n.nonpandemic <- sum(mortality2$Unnatural[1:13])
+n.pandemic <- sum(mortality2$Unnatural[15:24])
+
+#Totaling the number of deaths in nonpandemic and pandemic years
+total.nonpandemic <- sum(mortality2$Total[1:13])
+total.pandemic <- sum(mortality2$Total[15:24])
+
+#Finding the Necessary Proportions for the Foruma
+prop.pandemic <- n.pandemic/total.pandemic
+prop.nonpandemic <- n.nonpandemic/total.pandemic
+
+#Pooled Proportion
+pooled.prop <- (n.pandemic + n.nonpandemic)/(total.pandemic+total.nonpandemic)
+
+#Finding the P Value using a "more simple approach"
+prop.test(c(n.pandemic,n.nonpandemic),c(total.pandemic,total.nonpandemic), alt="two.sided")
+```
+
+The second method makes use of finding a test statistic, and using that
+test statistic in a `pnorm()` function. The test statistic is found by
+using the formula,
+$${\large {z= \frac{\hat{p}_1-\hat{p}_2}{\sqrt{\hat{p}_p(1-\hat{p}_p) \left( \frac{1}{n_1}+\frac{1}{n_2} \right) }}}}.$$
+
+This $z$-score is then used in a `pnorm()` function to get the
+$p$-value, which is almost 0 (because of rounding).
+
+```{r}
+#finding the Test Statistic
+z <- (prop.pandemic-prop.nonpandemic)/sqrt(pooled.prop*(1-pooled.prop)*(1/total.pandemic+1/total.nonpandemic))
+z
+
+#Finding the P value "by hand"
+pnorm(z)*2
+```
+
+#### Results
+
+In both tests, we end up with a p-value extremely small (almost 0).
+Using the $5\%$ significance level, we can reject the null hypothesis,
+and there is evidence that supports the alternative hypothesis. If we
+were to reduce the significance interval to $1\%$, the results still
+point to being able to reject the null hypothesis.
+
+------------------------------------------------------------------------
+
+### Permutation Test for Difference in Two Means
+
+We sustain the hypotheses in the classical hypothesis test for
+[difference in two means]. Here we do not repeat them in redundance.
+
+```{r}
+#permutation test for difference in two means
+all_unnatural <- mortality2_nofeb20$Unnatural
+total_unnatural <- length(all_unnatural)
+length.pandemic <- length(Pandemic)
+
+N <- 10^5 - 1
+result_mean <- numeric(N)
+
+for(i in 1:N){
+  #get random indices to get random values of unnatural deaths from original samples to use for resample
+  index <- sample(total_unnatural, size=length.pandemic, replace = FALSE)
+  #calculate diff in means for this resample
+  result_mean[i] <- mean(all_unnatural[index]) - mean(all_unnatural[-index])
+}
+
+hist(result_mean, xlab = "Difference in sample mean",
+     main = "Permutation Distribution for Difference in Sample mean", breaks = 20)
+abline(v = c(test.stat), col = c("blue"))
+```
+
+```{r}
+#get p-value for diff in two means (we are doing two tailed test)
+p_valmean <- (sum(abs(result_mean) >= abs(test.stat))+1)/(N+1)
+p_valmean
+```
+
+#### Results
+
+a)  The test statistic is taking the difference in the mean of unnatural
+    deaths during a pandemic and mean of unnatural deaths not during a
+    pandemic in the US. The observed test statistic is 3157.215.
+
+b)  The underlying null distribution used to compute the $p$-value was a
+    permutation distribution.The $p$-value calculated from this test was
+    0.00002.
+
+c)  When using a significance level of $\alpha = 0.05$, we can see that
+    $2\times10^{-5} < 0.05$. We can safely reject the null hypothesis
+    and have evidence to support the alternative hypothesis that there
+    is a difference in the mean of unnatural deaths during a pandemic
+    and not during a pandemic in the US.
+
+## Conclusions
+
+------------------------------------------------------------------------
+
+In our [Hypothesis Tests] section, we performed both parametric tests
+and a permutation test. The $p$-values we got were extremely small
+$(10^{-5})$, indicating a very significant test statistic. We rejected
+all of our null hypotheses at the $5\%$ significance level and concluded
+that---
+
+1.  The mean number of unnatural deaths per month during a pandemic
+    during a pandemic is different from not during a pandemic in the US;
+
+2.  The ratio of unnatural deaths to total deaths in the United States
+    during a pandemic is different from not during a pandemic in the US.
+
+According to the results of our hypothesis tests, we think the pandemic
+is indeed associated with a change of behavior among people that may
+have caused significant difference in the number and ratio of unnatural
+deaths per month. We suggest future studies to look into more specific
+mechanisms potentially causing the behavioral change and its other
+health and economic consequences. Alternatively, policy scholars might
+inquire into this phenomenon and recommend policy changes to mitigate
+part of the losses from the pandemic.
+
+## Updated List for Division of Work
+
+------------------------------------------------------------------------
+
+Data gathering and cleaning: Garry
+
+Hypothesis Test for difference in two means: Yuxin
+
+Permutation Test for difference in two means: Ivy
+
+Hypothesis Test for difference in two proportions: Kaysi
+
+Make relevant predictions and interpret results: Yuxin
+
+Design Presentation Slides: Everyone
+
+Report: Everyone

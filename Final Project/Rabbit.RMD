@@ -1,0 +1,63 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Plot Unnatural Deaths
+
+```{r}
+# Create Vectors of Natural Deaths
+N2019 <- X2019c$Natural
+N2020 <- X2020c$Natural
+
+# Create Vectors of Unnatural Deaths
+U2019 <- X2019c$Unnatural
+U2020 <- X2020c$Unnatural
+
+#######################################################################
+
+#Bind together for Box plot
+bind.unnatural <- cbind(U2019, U2020)
+
+# Plot
+boxplot(bind.unnatural, 
+        beside = TRUE,
+        main = "Unnatural Deaths in 2019 and 2020",
+        col = "pink",
+        xlab = "Month", 
+        ylab = "Death Count", 
+        ylim = c(20000, 28000))
+```
+
+# Five Number Summary for Unnatural Deaths
+
+```{r}
+# Rounded numbers because decimals are not statistically significant
+
+round(fivenum(U2019), digits = 0)
+round(fivenum(U2020), digits = 0)
+```
+
+# Plot Proportions of Unnatural Deaths to Total Deaths
+
+```{r}
+# Find proportion of death 2019:
+Proportion.2019 <- sum(U2019) / (sum(U2019) + sum(N2019))
+
+# Find proportion of death 2020:
+Proportion.2020 <- sum(U2020) / (sum(U2020) + sum(N2020))
+
+# Bind together for bar chart
+bind.proportion <- cbind(Proportion.2019, Proportion.2020)
+
+# Plot Proportion Differences
+prop.barplot <- barplot(bind.proportion,
+        beside = TRUE,
+        main = "Proportions of Unnatural Deaths to Total Deaths",
+        col = "Red",
+        xlab = "Year",
+        ylab = "(Total Unnatural Deaths)/(Total Deaths)",
+        ylim = c(0, .15))
+text(prop.barplot, 0, round(bind.proportion, 4), cex = 1, pos = 3)
+```

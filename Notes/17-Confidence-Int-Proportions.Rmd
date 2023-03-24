@@ -1,0 +1,482 @@
+---
+title: '17: Confidence Intervals for Proportions'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Confidence Intervals for Proportions
+
+------------------------------------------------------------------------
+
+A recent PBS NewsHour/NPR/Marist poll[^1] surveyed $1,\!082$ randomly selected registered voters in the US to gauge their opinions on how the US is handling the COVID pandemic.
+
+[^1]: "Politics still drives how Americans fell about COVID response, one year in'', PBS, March 11, 2021
+
+![Vaccination Poll Barchart](https://drive.google.com/uc?export=view&id=15UUGHUAPn5flVxg8mD38Ss_VbTW3s3eE)
+
+[**Based on this survey, approximately what proportion of adults in the US do NOT plan to get vaccinated?**]{style="color: blue;"}
+
+![Vaccination Poll Table](https://drive.google.com/uc?export=view&id=15UK92CrkvGjOq7_Y0mK_-AEoNgnqjlnM)
+
+# Central Limit Theorem for Proportions
+
+------------------------------------------------------------------------
+
+Recall if $p$ is the proportion of a population that have a certain characteristic, then the distribution of the sample proportion (when samples size $n$ are randomly selected) will be
+
+$$ \widehat{P} \sim N \left( \color{blue}{\mu_{\widehat{P}}}, \color{red}{\sigma_{\widehat{P}}} \right) = N \left( \color{blue}{p}, \color{red}{\sqrt{ \frac{p(1-p)}{n}}} \ \right) $$
+
+provided both $np \geq 10$ and $n(1-p) \geq 10$.
+
+## Question 1
+
+------------------------------------------------------------------------
+
+Justify each of the steps below to find an interval which will contain the value of $p$ 95% of the time.
+
+$$\begin{aligned}
+P \left( -1.96 < Z < 1.96 \right) &= P \left( -1.96 < \frac{\hat{p} - \color{blue}{\mu_{\widehat{P}}}}{\color{red}{\sigma_{\widehat{P}}}} < 1.96 \right) & \mbox{Definition of z-score} \\
+&= P \left( -1.96 < \frac{\hat{p} -\color{blue}{p} }{\color{red}{\sqrt{ \frac{p(1-p)}{n}}}} < 1.96 \right) & \mbox{Explanation 1}\\
+&=P \left(-1.96 \cdot \color{red}{\sqrt{ \frac{p(1-p)}{n}}} < \hat{p} -\color{blue}{p} <  1.96 \cdot \color{red}{\sqrt{ \frac{p(1-p)}{n}}} \right) & \mbox{Explanation 2}\\
+&= P \left(- \hat{p} -1.96 \cdot \color{red}{\sqrt{ \frac{p(1-p)}{n}}} < -\color{blue}{p} <  - \hat{p} + 1.96 \cdot \color{red}{\sqrt{ \frac{p(1-p)}{n}}} \right) & \mbox{Explanation 3}\\
+&= P \left( \hat{p} -1.96 \cdot \color{red}{\sqrt{ \frac{p(1-p)}{n}}} < \color{blue}{p} < \hat{p} + 1.96 \cdot \color{red}{\sqrt{ \frac{p(1-p)}{n}}} \right) & \mbox{Explanation 4}
+\end{aligned}$$
+
+Thus we have
+
+$${\large P \left( \hat{p} -1.96 \cdot \sqrt{ \frac{p(1-p)}{n}} < \color{blue}{p} < \hat{p} + 1.96 \cdot \sqrt{ \frac{p(1-p)}{n}} \right) = 0.95}$$
+
+There is a 95% chance the interval $\hat{p} -1.96 \cdot \sqrt{ \frac{p(1-p)}{n}}$ to $\hat{p} + 1.96 \cdot \sqrt{ \frac{p(1-p)}{n}}$ contains the actual value of the population proportion $p$.
+
+### Solution to Question 1
+
+------------------------------------------------------------------------
+
+Explanation 1:
+
+\
+\
+
+Explanation 2:
+
+\
+\
+
+Explanation 3:
+
+\
+\
+
+Explanation 4:
+
+\
+\
+
+## Question 2
+
+------------------------------------------------------------------------
+
+In [Question 1] we determined there is a 95% chance the interval $\hat{p} -1.96 \cdot \sqrt{ \frac{p(1-p)}{n}}$ to $\hat{p} + 1.96 \cdot \sqrt{ \frac{p(1-p)}{n}}$ contains the actual value of the population proportion $p$.
+
+-   **Explain why using this interval is problematic to apply in order to construct a confidence interval estimate for the population proportion** $p$.
+-   **Give a possible suggestion to help fix the problem you identified**.
+
+### Solution to Question 3
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+# Generalizing Results of Confidence Intervals
+
+------------------------------------------------------------------------
+
+Summary of Confidence Intervals
+
+| Parameter(s) of Interest                          | Point Estimate          | Margin of Error                                                                                           |
+|---------------------------------------------------|-------------------------|-----------------------------------------------------------------------------------------------------------|
+| A single mean ($\sigma^2$ known)                  | $\bar{x}$               | $z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$                                                              |
+| A single mean ($\sigma^2$ unknown)                | $\bar{x}$               | $\color{red}{t_{\alpha/2}} \cdot \frac{\color{red}{s}}{\sqrt{n}}$                                         |
+| A difference in two means (with unknown variance) | $\bar{x}_1 - \bar{x}_2$ | $\color{red}{t_{\alpha/2}} \cdot \sqrt{ \frac{\color{red}{s_1}^2}{n_1} + \frac{\color{red}{s_2}^2}{n_2}}$ |
+| A single proportion                               | $\hat{p}$               | $z_{\alpha/2} \cdot \sqrt{ \frac{\color{red}{\widehat{p}}(1-\color{red}{\widehat{p}})}{n}}$               |
+
+Before adding even more cases to the table above, let's comment on what all of these confidence intervals have in common.
+
+1.  Find a point estimate using a sample statistic.
+2.  Compute (estimate) the standard error, SE, of the underlying sampling distribution.
+3.  Based on the chosen confidence level, find either $z_{\alpha/2}$ or $t_{\alpha/2}$.
+4.  The margin of error, MoE, is $z_{\alpha/2} \cdot \mbox{SE}$ or $t_{\alpha/2} \cdot \mbox{SE}$
+
+$$\mbox{sample statistic} - \mbox{MoE} < \mbox{population parameter} < \mbox{sample statistic} + \mbox{MoE}$$
+
+## Question 3
+
+------------------------------------------------------------------------
+
+A random sample of 1,082 registered voters in the US, 29% of the people polled said they do not intend to get vaccinated for COVID-19.
+Construct a 95% confidence interval to estimate the proportion of all adults in the US that do not plan to get vaccinated for COVID-19.
+
+### Solution to Question 3
+
+------------------------------------------------------------------------
+
+```{r}
+# Use this code cell to compute confidence interval
+phat <- 0.29
+n <- 1082
+z <- qnorm((0.95 + (0.05/2)),0,1)
+se.vaccine <- sqrt((phat * (1-phat))/n)
+moe.vaccine <- z * se.vaccine
+(lower.vaccine <- phat - moe.vaccine)
+(upper.vaccine <- phat + moe.vaccine)
+```
+
+\
+\
+\
+
+# Wald Confidence Interval for a Proportion
+
+------------------------------------------------------------------------
+
+The [**Wald confidence interval for a proportion**]{style="color: blue;"} is given by
+
+$${\large \color{blue}{\hat{p}} - z_{\alpha/2} \cdot \sqrt{ \frac{\color{blue}{\hat{p}}(1-\color{blue}{\hat{p}})}{n}}  < p <  \color{blue}{\hat{p}} + z_{\alpha/2} \cdot \sqrt{ \frac{\color{blue}{\hat{p}}(1-\color{blue}{\hat{p}})}{n}}}$$
+
+We use the [**plug in principle**]{style="color: blue;"} and use $\color{blue}{\hat{p}}$ for the unknown value of $p$ when calculating the standard error.
+
+-   The advantage of this estimate is we can do it by hand.
+-   The downside is that when we use $\hat{p}$ in place of $p$ we lose quite a bit of accuracy.
+
+# Agresti-Coull Confidence Interval for a Proportion
+
+------------------------------------------------------------------------
+
+If $X$ denotes the number of successes in a sample of size $n$, let $\color{red}{\tilde{X} = X+2}$, $\color{red}{\tilde{n}=n+4}$, and $\color{red}{\tilde{p} = \dfrac{\tilde{X}}{\tilde{n}}}$.
+The [**Agresti-Coull confidence interval for a proportion**]{style="color: blue;"} is
+
+$$\color{red}{\tilde{p}} - z_{\alpha/2} \left( \sqrt{ \frac{\color{red}{\tilde{p}}(1-\color{red}{\tilde{p}})}{\color{red}{\tilde{n}}}} \right) < p <  \color{red}{\tilde{p}} + z_{\alpha/2} \left( \sqrt{ \frac{\color{red}{\tilde{p}}(1-\color{red}{\tilde{p}})}{\color{red}{\tilde{n}}}} \right)$$
+
+## Why Adjust the Sample Proportion?
+
+------------------------------------------------------------------------
+
+### Comparing Bias of the Two Estimators
+
+------------------------------------------------------------------------
+
+-   $\color{blue}{\hat{p} = \dfrac{X}{n}}$ is an **unbiased estimator** of $p$:
+
+$$E( \color{blue}{\hat{p}} ) = E \left( \frac{X}{n} \right) = \frac{1}{n} E(X) = \frac{1}{n} (np) = p$$
+
+-   $\color{red}{\tilde{p} = \dfrac{X+2}{n+4}}$ is an **biased estimator** of $p$:
+
+$$E( \color{red}{\tilde{p}} ) = E \left( \frac{X+2}{n+4} \right) = \frac{1}{n+4} E(X+2) = \frac{1}{n+4} ( np + 2) = \frac{np+2}{n+4} \ne p$$
+
+-   However, as $n \to \infty$, we see that $\color{red}{\tilde{p}}$ gets less and less biased, which is great!
+
+$$\lim_{n \to \infty} E(\color{red}{\tilde{p}}) = \lim_{n \to \infty} \frac{np+2}{n+4} = p$$
+
+### Comparing Efficiency of the Two Estimators
+
+------------------------------------------------------------------------
+
+-   For $\color{blue}{\hat{p}}$, we have
+
+$$\mbox{Var}(\color{blue}{\hat{p}}) =\mbox{Var} \left( \frac{X}{n} \right) = \frac{1}{n^2} \mbox{Var}(X) = \frac{1}{n^2} \big( np(1-p) \big) = \frac{p(1-p)}{n}.$$
+
+-   For $\color{red}{\tilde{p}}$, we have
+
+$$\mbox{Var}(\color{red}{\tilde{p}}) =\mbox{Var} \left( \frac{X+2}{n+4} \right) = \frac{1}{(n+4)^2} \mbox{Var}(X+2) = \frac{1}{(n+4)^2} \bigg( \mbox{Var}(X) + \mbox{Var}(2) \bigg) =  \frac{np(1-p)}{(n+4)^2}.$$
+
+-   Since $\mbox{Var}(\color{red}{\tilde{p}}) < \mbox{Var}(\color{blue}{\hat{p}})$, we see that $\color{red}{\tilde{p}}$ is a more efficient estimator than $\color{blue}{\hat{p}}$.
+
+-   [**This means our interval estimates will have smaller margins of error with Agresti-Coull!**]{style="color: blue;"}
+
+## Question 4
+
+------------------------------------------------------------------------
+
+Using the same poll from [Question 3], find 95% confidence interval for the proportion of all adults in the US that do not plan to get vaccinated using the Agresti-Coull Confidence Interval for a Proportion.
+
+### Solution to Question 4
+
+------------------------------------------------------------------------
+
+```{r}
+# Use code to help with the calculations!
+ptilde <- (314+2)/(1082+4)
+ntilde <- 1082+4
+se.tilde <- sqrt((ptilde*(1-ptilde))/ntilde)
+moe.with_tilde <- z*se.tilde
+(lower.tilde <- ptilde - moe.with_tilde)
+(upper.tilde <- ptilde + moe.with_tilde)
+```
+
+\
+\
+
+# Score Confidence Interval For a Proportion
+
+------------------------------------------------------------------------
+
+Initially in [Question 1] we began constructing a 95% confidence interval for a proportion using the fact that
+
+$$P \left( -1.96 < \frac{\hat{p} -\color{red}{p}}{\sqrt{\frac{\color{red}{p}(1-\color{red}{p})}{n}}} < 1.96 \right) =0.95$$
+
+-   When we substitute an estimate such as $\hat{p}$ or $\tilde{p}$ in place of $p$ in the formula for the standard error, we introduce additional uncertainty and error.
+-   Another approach is to algebraically solve the resulting equations for $p$.
+
+$$\dfrac{\hat{p} -\color{red}{p}}{\sqrt{\dfrac{\color{red}{p}(1-\color{red}{p})}{n}}} = 1.96 \qquad \mbox{and} \qquad \dfrac{\hat{p} -\color{red}{p}}{\sqrt{\dfrac{\color{red}{p}(1-\color{red}{p})}{n}}} = -1.96$$
+
+## Finding the Upper Cutoff
+
+------------------------------------------------------------------------
+
+To find the upper cutoff for $p$, we solve
+
+$$\begin{aligned}
+ \frac{\hat{p} -\color{red}{p}}{\sqrt{\frac{\color{red}{p}(1-\color{red}{p})}{n}}} &= 1.96\\
+ \hat{p} -\color{red}{p} &= 1.96 \left( \sqrt{\frac{\color{red}{p}(1-\color{red}{p})}{n}} \right) \\
+(1.96)^2 \left( \frac{\color{red}{p}(1-\color{red}{p})}{n} \right) &= \big( \hat{p} -\color{red}{p} \big)^2\\
+\color{red}{p} \left( \frac{1.96^2}{n} \right) - \color{red}{p}^2 \left( \frac{1.96^2}{n} \right) &= \hat{p}^2 - 2 \color{red}{p}\hat{p} + \color{red}{p}^2\\
+\left( 1+ \frac{1.96^2}{n} \right) \color{red}{p}^2 + \left(-2\hat{p}-\frac{1.96^2}{n} \right) \color{red}{p} + \hat{p}^2 &= 0
+\end{aligned}$$
+
+Solving the resulting the quadratic equation
+
+$$a\color{red}{p}^2 + b \color{red}{p} + c = \left( 1+ \frac{1.96^2}{n} \right) \color{red}{p}^2 + \left(-2\hat{p}-\frac{1.96^2}{n} \right) \color{red}{p} + \hat{p}^2 = 0.$$
+
+Solving $p$ gives an upper limit for a 95% score confidence interval
+
+$${\large \mbox{upper cutoff for p} = \frac{ \hat{p} + \dfrac{1.96^2}{2n} + 1.96 \cdot \sqrt{ \dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{1.96^2}{4n^2}}}{1+\dfrac{1.96^2}{n}}}$$
+
+## Score Confidence Interval Formulas
+
+------------------------------------------------------------------------
+
+-   If we adjust the confidence interval, then we use $z_{\alpha/2}$ in place of $1.96$ in the formula above.
+-   We can repeat the algebraic process above to similarly find the value of the lower cutoff.
+
+The [**score confidence interval for a proportion**]{style="color: blue;"} is given by
+
+$$\begin{aligned}
+&L= \dfrac{\hat{p} + \dfrac{z_{\alpha/2}^2}{2n} - z_{\alpha/2} \cdot \sqrt{ \dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z_{\alpha/2}^2}{4n^2}}}{1+ \dfrac{z_{\alpha/2}^2}{n}} \\
+\\
+&U= \dfrac{\hat{p} + \dfrac{z_{\alpha/2}^2}{2n} + z_{\alpha/2} \cdot \sqrt{ \dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z_{\alpha/2}^2}{4n^2}}}{1+ \dfrac{z_{\alpha/2}^2}{n}}
+\end{aligned}$$
+
+-   In R, use the command `prop.test(X, n, conf.level = CL, correct = FALSE)$conf.int`
+    -   $X$ denotes the number of "successes" observed in the sample.
+    -   $n$ denotes the total number of observations in the sample.
+    -   `CL` is a chosen confidence level (as a proportion).
+    -   The option `correct = FALSE` means no continuity correction is applied.
+
+Note: most accurate method to least accurate method:
+
+1)  score confidence interval: finds p upper and p lower algebraically
+
+2)  p tilde: some bias but smaller MoE
+
+3)  wald's method with phat: unbiased but larger MoE
+
+## Question 5
+
+------------------------------------------------------------------------
+
+Find 95% confidence interval for the proportion of all adults in the US that do not plan to get vaccinated by completing the `prop.test()` command in the first code cell.
+
+### Solution to Question 5
+
+------------------------------------------------------------------------
+
+```{r}
+prop.test(0.29*1082, 1082, conf.level = 0.95, correct = FALSE)$conf.int
+```
+
+-   **CHECK YOUR WORK BY COMPLETTING AND RUNNING THE CODE CELL BELOW.**
+
+```{r}
+##################################################
+# Replace the ?? in the two lines of code below
+# with appropriate values
+##################################################
+X <- 0.29*1082  # number of successes in sample (do not plan to get vax)
+n <- 1082  # sample size
+  
+phat <- X/n  # Compute sample proportion
+
+###################################################
+# Replace the ?? below with a command using qnorm
+###################################################
+z.star <- qnorm(0.975,0,1)  # find z_alpha/2
+
+# Computes Cutoffs for Score Confidence Interval
+lower <- (phat+z.star^2/(2*n) - 
+            z.star*sqrt( (phat*(1-phat))/n + z.star^2/(4*n^2) ) )/(1+z.star^2/n)
+upper <- (phat+z.star^2/(2*n) + 
+            z.star*sqrt( (phat*(1-phat))/n + z.star^2/(4*n^2) ) )/(1+z.star^2/n)
+
+# Print cutoffs to screen
+lower
+upper
+```
+
+## Applying the Continuity Correction
+
+------------------------------------------------------------------------
+
+Recall, when using a normal distribution to approximate the sampling distribution for a discrete random variable $X$, we can improve the estimate by using a continuity correction.
+In the case of a confidence interval for a proportion, the continuity correction as applied as follows:
+
+-   In the formula for the lower cutoff, we use the corrected sample proportion $\color{blue}{\hat{p}_L^*} = \dfrac{X-0.5}{n}$
+
+-   In the formula for the upper cutoff, we use the corrected sample proportion $\color{red}{\hat{p}_U^*} = \dfrac{X+0.5}{n}$.
+
+$$\begin{aligned}
+&L^* = \dfrac{\color{blue}{\hat{p}_L^*} + \dfrac{z_{\alpha/2}^2}{2n} - z_{\alpha/2} \cdot \sqrt{ \dfrac{\color{blue}{\hat{p}_L^*}(1-\color{blue}{\hat{p}_L^*})}{n} + \dfrac{z_{\alpha/2}^2}{4n^2}}}{1+ \dfrac{z_{\alpha/2}^2}{n}} \\
+\\
+&U^* = \dfrac{\color{red}{\hat{p}_U^*} + \dfrac{z_{\alpha/2}^2}{2n} + z_{\alpha/2} \cdot \sqrt{ \dfrac{\color{red}{\hat{p}_U^*}(1-\color{red}{\hat{p}_U^*})}{n} + \dfrac{z_{\alpha/2}^2}{4n^2}}}{1+ \dfrac{z_{\alpha/2}^2}{n}}
+\end{aligned}$$
+
+Apply continuity correction because we are dealing with discrete variables using a normal distribution that is used to handle continuous values.
+When applying normal distribution, the area under the curve will miss some of the area covered in the discrete graph.
+
+### Applying the Continuity Correction in Code
+
+------------------------------------------------------------------------
+
+-   Below we perform the direct calculations using the formulas we derived.
+
+```{r}
+############################################
+# Be sure you have run previous code cells
+# And have already defined X, n, and z.star
+############################################
+
+# Continuity corrections applied to sample proportion
+cc.phat.L <- (X - 0.5)/n
+cc.phat.U <- (X + 0.5)/n
+
+# Plugged into formulas for Score Conf Interval
+cc.lower <- (cc.phat.L + z.star^2/(2*n) - 
+            z.star*sqrt( (cc.phat.L*(1-cc.phat.L))/n + z.star^2/(4*n^2) ) )/(1+z.star^2/n)
+cc.upper <- (cc.phat.U + z.star^2/(2*n) + 
+            z.star*sqrt( (cc.phat.U*(1-cc.phat.U))/n + z.star^2/(4*n^2) ) )/(1+z.star^2/n)
+
+# Print results to screen to check
+cc.lower
+cc.upper
+```
+
+-   In the code cell below, we apply the continuity correction using the `correct = TRUE` option in `prop.test()` to check the result.
+
+```{r}
+prop.test(314, 1082, conf.level = 0.95, correct = TRUE)$conf.int
+```
+
+\
+\
+\
+
+# Confidence Intervals for a Difference in Two Proportions
+
+------------------------------------------------------------------------
+
+We can modify the [**Wald confidence interval**]{style="color: blue;"} to give an approximation for a confidence interval for a difference in two proportions
+
+-   The [**point estimate**]{style="color: blue;"} where the interval will be centered is the difference in the two sample proportions, $\color{blue}{\hat{p}_1 - \hat{p}_2}$.
+-   The [**standard error**]{style="color: blue;"} we approximate by plugging $\hat{p}_1$ and $\hat{p}_2$ in place of $p_1$ and $p_2$ in the formula for the standard error from the Central Limit Theorem
+
+$$\mbox{SE} \left( \widehat{P}_1 - \widehat{P}_2 \right) = \sqrt{ \frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}} \approx \sqrt{ \frac{\color{blue}{\hat{p}}_1(1-\color{blue}{\hat{p}}_1)}{n_1} + \frac{\color{blue}{\hat{p}}_2(1-\color{blue}{\hat{p}}_2)}{n_2}}$$
+
+-   We use the standard normal distribution to identify $z_{\alpha/2}$ to find the [**margin of error**]{style="color: blue;"}.
+
+$$(\hat{p}_1 - \hat{p}_2) - z_{\alpha/2} \cdot \sqrt{ \dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2 (1-\hat{p}_2) }{n_2}}  < p_1-p_2 < (\hat{p}_1 - \hat{p}_2) + z_{\alpha/2} \cdot \sqrt{ \dfrac{\hat{p}_1 (1-\hat{p}_1) }{n_1} + \frac{\hat{p}_2 (1-\hat{p}_2) }{n_2}}.$$
+
+-   There are other variations pf confidence intervals for a difference in two proportions, similar to the Agresti-Coull and score confidence intervals we discussed for a single proportion.
+
+-   [**For a difference in two proportions, we will use the Wald confidence interval.**]{style="color: blue;"}
+
+-   The command `prop.test(c(x1, x2), c(n1, n2), conf.level = CL, correction = FALSE)$conf.int` will compute a **Wald confidence interval for a difference in two proportions**.
+
+## Question 6
+
+------------------------------------------------------------------------
+
+Using the data below collected from a survey, construct a 90% interval for the difference in the proportion of all Democrats and proportion of all Republicans that do not plan to be vaccinated.
+
+| Party      | Yes, will | Yes, already | No  | Unsure | Total |
+|------------|-----------|--------------|-----|--------|-------|
+| Democrat   | 213       | 108          | 40  | 7      | 368   |
+| Republican | 93        | 70           | 120 | 9      | 292   |
+| Total      | 306       | 178          | 160 | 16     | 660   |
+
+### Solution to Question 6
+
+------------------------------------------------------------------------
+
+```{r}
+#using wald confidence interval
+#difference in proprotion use P(democrat) - P(republican)
+
+phat.dem.no_vac <- 40/368
+phat.rep.no_vac <- 120/292
+z.vac <- qnorm((0.9 + (0.1/2)),0,1)
+n1 <- 368
+n2 <- 292
+
+se.p_dem <- (phat.dem.no_vac * (1-phat.dem.no_vac)) / n1
+se.p_rep <- (phat.rep.no_vac * (1-phat.rep.no_vac)) / n2
+se.no_vac <- sqrt(se.p_dem + se.p_rep)
+
+moe.no_vac <- z.vac * se.no_vac
+
+diff.no_vac <- phat.dem.no_vac - phat.rep.no_vac
+
+(lower.no_vac <- diff.no_vac - moe.no_vac)
+(upper.no_vac <- diff.no_vac + moe.no_vac)
+```
+
+```{r}
+# use code cell to help
+#enter as a vector of successes and a vector of num trials using prop.test function
+no_vac <- c(40, 120)
+total <- c(368, 292)
+
+prop.test(no_vac, total, conf.level=0.9, correct=FALSE)$conf.int
+```
+
+```{r}
+#with continuity correction (try on your own)
+phat.dem.no_vac <- 40/368
+phat.rep.no_vac <- 120/292
+z.vac <- qnorm((0.9 + (0.1/2)),0,1)
+n1 <- 368
+n2 <- 292
+
+se.p_dem <- (phat.dem.no_vac * (1-phat.dem.no_vac)) / n1
+se.p_rep <- (phat.rep.no_vac * (1-phat.rep.no_vac)) / n2
+se.no_vac <- sqrt(se.p_dem + se.p_rep)
+
+moe.no_vac <- z.vac * se.no_vac
+
+diff.no_vac <- phat.dem.no_vac - phat.rep.no_vac
+
+(lower.no_vac <- diff.no_vac - moe.no_vac)
+(upper.no_vac <- diff.no_vac + moe.no_vac)
+```
+
+```{r}
+?prop.test
+```
+
+Confidence interval for matched pair differences
+
+mean(X1 - X2) +/- t \* sqrt((sdiff)\*\*2/n + (sdiff)\^2/n)

@@ -1,0 +1,412 @@
+---
+title: '06: Introduction to Continuous Random Variables'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Revisiting Our Definition of a Random Variable
+
+A manufacturer of lithium batteries measures the weight of each box they ship out to customers.
+Let $X$ denote the weight (in pounds) of a randomly selected shipment.
+It is possible that $X=8$ or $X=9$, but the weight could potentially be any value (greater than 0) such as $8.3671$ pounds if they want to be really precise.
+Recall the previous definition of a random variable below.
+
+A [**random variable**]{style="color: blue;"} is a mapping
+
+$$X: \Omega \to \mathbb{R}$$
+
+that assigns a real number $X(\omega)$ to each outcome $\omega \in \Omega$.
+
+-   With a [**discrete random variable**]{sytle="color: blue;"}, the sample space is mapped to the **integers** (or a subset of the integers).
+-   With a [**continuous random variable**]{sytle="color: blue;"}, the sample space is mapped to **an interval of values** in $\mathbb{R}$.
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+Imagine the GPA distribution for all students at a university follows a [**uniform distribution**]{style="color: blue;"} with GPA's of 0 and 4 being the smallest and largest GPA's possible.
+
+### Question 1a:
+
+------------------------------------------------------------------------
+
+Write a formula for probability density function $f_X(x)$ for the uniform distribution.
+
+#### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+\
+f(x) = l x h (uniform distribution)\
+\
+\
+
+### Question 1a:
+
+------------------------------------------------------------------------
+
+What proportion of students earned a GPA between $3$ and $3.5$?
+
+#### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+\
+l = 4 (because the range is from 0-4)
+
+h = 1/4 because the probability/area under the curve should equal 1 (100%)
+
+0.25 \* 0.5
+
+```{r}
+.25 * .5
+```
+
+```{r, echo=FALSE}
+par(mfrow=c(1,2))
+
+x <- 0:4
+uni <- c(0.25, 0.25, 0.25, 0.25, 0.25)
+
+plot(x, uni, 
+     type="l", 
+     col="red", 
+     lwd=3, 
+     xlim=c(0,4),
+     ylim=c(0,0.3),
+     yaxp  = c(0, 0.375, 3),
+     xlab="GPA", 
+     ylab="f(x)", 
+     main="Uniform GPA Distribution")
+abline(h =c(0, 0.125, 0.25), 
+       v = c(0,1,2,3,4), 
+       col=c("black", "grey", "grey","black",  "grey", "grey",  "grey", "grey"), 
+       lwd=1, 
+       lty=c(1,2,2,1,2,2,2,2)) 
+
+x1 <- 0:2
+x2 <- 2:4
+y1 <- 0.25*x1
+y2 <- -0.25*x2 + 1
+
+plot(c(x1, x2), c(y1, y2),
+     type="l", 
+     col="red", 
+     lwd=3, 
+     xlim=c(0,4),
+     ylim=c(0,0.5),
+     yaxp  = c(0, 0.5, 4),
+     xlab="GPA", 
+     ylab="f(x)", 
+     main="Other GPA Distribution")
+abline(h =c(0, 0.125, 0.25, 0.375, 0.5), 
+       v = c(0,1,2,3,4), 
+       col=c("black", "grey", "grey", "grey", "grey"), 
+       lwd=1, 
+       lty=c(1,2,2,2,2)) 
+
+par(mfrow=c(1,1))
+```
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+The graph of $f_X(x)$ on the right above shows the probability density function for the GPA's of all students at a university.
+
+### Question 2a:
+
+------------------------------------------------------------------------
+
+What proportion of students at the university have a GPA between 3 and 4?
+
+#### Solution to Question 2a:
+
+------------------------------------------------------------------------
+
+area between 3 and 4 is a triangle
+
+1/2 \* 0.25 \* 1
+
+```{r}
+.5 * .25 * 1
+```
+
+### Question 2b:
+
+------------------------------------------------------------------------
+
+What proportion of students at the university have a GPA between 1 and 3?
+
+#### Solution to Question 2b:
+
+------------------------------------------------------------------------
+
+steps to calculate:
+
+1)  sketch the area
+
+2)  compute the are using geometry or calculus
+
+area between 0 and 1 = area between 3 and 4 (graph is a normal distribution)
+
+total area = 1
+
+.125 + area between 1 and 3 + .125 = 1
+
+```{r}
+1-.125-.125
+```
+
+# Continuous Probability Distributions
+
+------------------------------------------------------------------------
+
+## Probability Density Function (pdf)
+
+------------------------------------------------------------------------
+
+If $X$ is a **continuous** random variable, the[**probability density function (pdf)**]{style="color: blue;"}, denoted $f(x)$ satisfies the following properties:
+
+-   $f(x) \geq 0$ for all $x$,
+-   $\displaystyle \int_{-\infty}^{\infty} f(x) = 1$, and
+-   $\displaystyle P(a < x < b) = \int_a^b f(x) \, dx$
+
+```{r, echo=FALSE}
+# Data
+set.seed(3)
+y <- rnorm(150)
+
+# Density estimation
+den <- density(y)
+
+# Plot
+plot(den, 
+     xlab="x", 
+     ylab="f(x)", 
+     main="P(a < x < b)",
+     xaxt ="n")
+axis(1, at = c(-1.5, 0.75),
+     labels = c("a", "b"))
+
+# Area between -1.5 and 2
+value1 <- -1.5
+value2 <- 0.75
+
+# Lower and higher indices on the X-axis
+l <- min(which(den$x >= value1))
+h <- max(which(den$x < value2))
+
+polygon(c(den$x[c(l, l:h, h)]),
+        c(0, den$y[l:h], 0),
+        col = "slateblue1")
+
+```
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+The probability of a transistor failing between time $x=a$ and $x=b$ months is given by the probability density function
+
+### $$ f(x) = c \int_a^b e^{-cx} \, dx.$$ Question 3a:
+
+------------------------------------------------------------------------
+
+If the probability of failure within the first six months, $0 < x < 6$, is 10%, set up (but do not solve) an equation to find the value of $c$?
+
+#### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+$$
+f(x) = c \int_0^6 e^{-cx} \, dx = 0.1
+$$\
+\
+
+### Question 3b:
+
+------------------------------------------------------------------------
+
+Set up (but do not evaluate) an integral to represent the probability the transistor fails within the second six months ($6<x<12$)?
+
+#### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+$$
+f(x) = c \int_6^{12} e^{-cx} \, dx = 0.1
+$$
+
+\
+\
+\
+
+### Question 3c:
+
+------------------------------------------------------------------------
+
+Interpret the meaning of $P(X \leq 9)$ and $P(X < 9)$.
+
+#### Solution to Question 3c:
+
+------------------------------------------------------------------------
+
+P(X \<= 9): the probability that the transistor fails in less than or equal to 9 months.
+
+P(X\<9): the probability that the transistor fails in less than 9 months.\
+
+\
+\
+P(X\<=9) and P(X\<9) are the same\
+
+## Cumulative Distribution Function (cdf)
+
+------------------------------------------------------------------------
+
+If $X$ is a **continuous** random variable, the [**cumulative distribution function (cdf)**]{style="color: blue;"}, denoted $F(x)$ is
+
+$$P(X < x) = F(x) = \int_{-\infty}^x f(t) \, dt.$$
+
+[**In other words,** $F(x)$ is an antiderivative of $f$,]{style="color: blue;"} and [$f(x)$ is the derivative of $F(x)$]{style="color: red;"}.
+
+PDF is the slope of CDF.
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+Match the graphs of the density functions (a), (b), and (c) with the graphs of the cumulative distribution functions I, II, and III.
+
+<img src="https://drive.google.com/uc?id=1toF3ssRugZB5_xu_7MDeNa4YgIaIsZFj" alt="PDf to CDF Matching Figure"/>
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+\
+
+| Graph (a) | Graph (b) | Graph (c) |
+|-----------|-----------|-----------|
+| ii        | i         | iii       |
+
+\
+CDFs are non-decreasing and flatten out at 1.\
+
+# Mean, Median, and Variance of Continuous Random Variables
+
+------------------------------------------------------------------------
+
+-   The [**mean**]{style="color: blue;"} of a continuous random variable is
+
+$$E(X) = \mu = \int_{-\infty}^{\infty} x \cdot f(x) \, dx.$$
+
+-   The [**variance**]{style="color: blue;"} of a continuous random variable is
+
+$$\mbox{Var}(X) = E(X-\mu)^2 = E(X^2) - \big( E(X) \big)^2  \ \ \ \mbox{(this can be proven similar as with discrete case)}.$$
+
+-   The [**median**]{style="color: blue;"} is the value $x$ such that $P(X < x) = 0.5$. Thus to find the median we solve the following for $x$:
+
+$$F(x) = \int_{-\infty}^x f(t) \, dt = 0.5.$$
+
+# Practice:
+
+------------------------------------------------------------------------
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+Consider the random variable with pdf
+
+$$ f(x) = \left\{ \begin{array}{ll} 
+\frac{x}{8}, &  0 \leq x \leq 4 \\ 
+0, &  \mbox{otherwise} 
+\end{array} \right. .$$
+
+### Question 5a:
+
+------------------------------------------------------------------------
+
+On a separate piece of paper, sketch a graph of the pdf, $f$.
+
+#### Solution to Question 5a:
+
+------------------------------------------------------------------------
+
+Sketch a graph on a separate piece of paper.
+
+\
+\
+
+### Question 5b:
+
+------------------------------------------------------------------------
+
+Give a formula for the cdf, $F$, and sketch its graph (on a separate piece of paper).
+
+#### Solution to Question 5b:
+
+------------------------------------------------------------------------
+
+Type the formula for $F$ below, and then sketch the graph on another piece of paper.
+
+\
+
+$$F_X(x) = \left\{ \begin{array}{ll}
+0 & x < 0\\
+\frac{x^2}{16} & 0 \leq x \leq 4 \\
+1 & x > 4 
+\end{array} \right.$$
+
+\
+\
+
+### Question 5c:
+
+------------------------------------------------------------------------
+
+Calculate $P(X < 1)$ and illustrate this value on both of your graphs.
+
+#### Solution to Question 5c:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 5d:
+
+------------------------------------------------------------------------
+
+Calculate $E(X)$.
+
+#### Solution to Question 5d:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+
+### Question 5e:
+
+------------------------------------------------------------------------
+
+Give the median value and illustrate this value on both of your graphs.
+
+#### Solution to Question 5e:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\

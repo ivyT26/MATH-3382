@@ -1,0 +1,1041 @@
+---
+title: "MATH 3382: Homework 6 - Due Oct. 18 at 2PM"
+author: "Ivy Truong"
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions:
+
+------------------------------------------------------------------------
+
+**Submit your work electronically as an R Markdown file extension `.Rmd`.**
+
+Upload your file into the Homework 6 assignment in Canvas before **2 PM on Tues, October 18**.
+
+**You must provide supporting work for your all of your answers.**
+
+-   [That work might be inserting some R code cells.]{style="color: blue;"}
+
+    -   **Feel free to insert as much R code as you like.**
+    -   You must interpret or explain how the output of a code cell is being utilized to solve the problem.
+    -   **Code with incomplete or missing explanations of why the output is useful may not receive full credit.**
+
+-   [It might involve doing some algebra and/or calculus (integrating, differentiating, etc).]{style="color: blue;"}
+
+    -   **Be sure to type/write out the steps of your work so I can see how you arrived at your answer.**
+    -   **If typing takes too long no problem.** You can write out the support work on paper and hand that in before class.
+
+-   [Probably it a little bit of both on most problems, but you decide how you want to solve the problems!]{style="color: blue;"}
+
+## Important Academic Policies:
+
+------------------------------------------------------------------------
+
+-   **Be your own work.** Though you may collaborate with others, everyone is responsible for writing up the work in their own way using their own methods. Plagiarism of any form is not tolerated.
+-   **Be complete.** You must provide all work and/or explanations needed to find the solution. Answers with insufficient or incomplete supporting work may lose credit.
+-   **Adhere to the Code of Academic Honesty.**
+-   **Be clearly written (and legible if written).** Your solution to a problem must be clear, written in complete sentences. You may lose credit for work that is unclear or hard to follow.
+
+### [Let me know if you need help, and **GOOD LUCK!!!**]{style="color: blue;"}
+
+------------------------------------------------------------------------
+
+# Question 1
+
+------------------------------------------------------------------------
+
+Consider the sample of three values $\left\{ 2, 35, 110 \right\}$ and answer the questions below.
+
+*Note there are no R code blocks needed to answer this question. In part (a) fill in the table. In parts (b) and (c), use your table in part (a) to answer.*
+
+## Question 1a
+
+------------------------------------------------------------------------
+
+Write out all possible bootstrap samples.
+You should ignore the ordering.
+For example a bootstrap sample of {2, 2, 110} as the same as {2, 110, 2}, so you should not list both.
+*Hint: There are exactly 10 distinct bootstrap samples.*
+
+**Then, for each sample, compute the sample mean and the maximum value in the sample.**
+
+### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+| Sample | Bootstrap Resample | Mean | Max |
+|--------|--------------------|------|-----|
+| 1\.    | 2, 35, 110         | 49   | 110 |
+| 2\.    | 2, 2, 2            | 2    | 2   |
+| 3\.    | 2, 2, 35           | 13   | 35  |
+| 4\.    | 2, 35, 35          | 24   | 35  |
+| 5\.    | 2, 2, 110          | 38   | 110 |
+| 6\.    | 2, 110, 110        | 74   | 110 |
+| 7\.    | 35, 35, 35         | 35   | 35  |
+| 8\.    | 35, 110, 110       | 85   | 110 |
+| 9\.    | 35, 35, 110        | 60   | 110 |
+| 10\.   | 110, 110, 110      | 110  | 110 |
+
+## Question 1b
+
+------------------------------------------------------------------------
+
+Based on your bootstrap samples, what is the probability that bootstrap sample has a mean less than or equal to 40?
+Be sure to provide an explanation that supports how you determined your answer.
+
+### Solution to Question 1b
+
+------------------------------------------------------------------------
+
+\
+There are 10 different unique bootstrap samples in total.
+The number of bootstrap samples that have a mean less than or equal to 40 is 5.
+The probability that a bootstrap sample has a mean less than or equal to 40 is $\frac{5}{10}$ or $\frac{1}{2}$.\
+
+\
+
+## Question 1c
+
+------------------------------------------------------------------------
+
+Based on your bootstrap samples, what is the probability that bootstrap sample has a maximum value less than or equal to 40?
+Be sure to provide an explanation that supports how you determined your answer.
+
+### Solution to Question 1c
+
+------------------------------------------------------------------------
+
+\
+The number of bootstrap samples that have a max value less than or equal to 40 is 4.
+The total number of unique bootstrap samples for this example is 10.
+The probability that a bootstrap sample has a max value less than or equal to 40 is $\frac{4}{10}$ or $\frac{2}{5}$.\
+
+\
+
+# Question 2
+
+------------------------------------------------------------------------
+
+Consider a population that has normal distribution with mean $\mu = 52$ and standard deviation $\sigma = 7$, and answer the questions below.
+
+## Question 2a
+
+------------------------------------------------------------------------
+
+**Using the Central Limit Theorem (CLT)**, describe the theoretical sampling distribution for the mean, $\bar{X}$, for samples of size $n=100$.
+What is the mean of the sampling distribution?
+What is the standard error?
+What is the approximate shape?
+
+### Solution to Question 2a
+
+------------------------------------------------------------------------
+
+Be sure to provide supporting explanations/calculations to justify your answers.
+Feel free to add R code cells to help with the analysis.
+
+The theoretical sampling distribution formula is: $N(\mu, \frac{\sigma}{\sqrt{n}})$.
+
+The mean of the sampling distribution is $\mu_{\bar{x}} = 52$\
+The standard error of the sampling distribution is $\sigma_\bar{x} = \frac{7}{\sqrt{100}} = \frac{7}{10}$\
+The approximate shape of this sampling distribution is a normal distribution graph.\
+
+## Question 2b
+
+------------------------------------------------------------------------
+
+Based on your answer to [Question 2a] using CLT, what is the probability of picking a random sample size $n=100$ that has a sample mean greater than 54?
+
+### Solution to Question 2b
+
+------------------------------------------------------------------------
+
+Be sure to provide supporting explanations/calculations to justify your answers.
+Feel free to add R code cells to help with the analysis.
+
+```{r}
+#use pnorm
+#P(x bar > 54) = 1 - P(x bar <= 54)
+1 - pnorm(54, 52, 7/10)
+```
+
+The probability of picking a random sample of size n = 100 that has a sample mean greater than 54 is 0.002137.
+
+## Question 2c
+
+------------------------------------------------------------------------
+
+Pick one random sample of size $n=100$ from a population $X \sim N(\mu, \sigma) = N(52, 7)$ and assign this sample to a vector named `my.samp`.
+Then calculate the mean and standard deviation of your sample by completing the code block below.
+
+### Solution to Question 2c
+
+------------------------------------------------------------------------
+
+```{r}
+my.samp <- rnorm(100, 52, 7)  # create your sample
+samp.mean <- mean(my.samp)  # compute the mean of your sample
+samp.sd <- sd(my.samp)  # compute the standard deviation of your sample
+
+# print last two calculation so to screen  
+samp.mean 
+samp.sd
+```
+
+## Question 2d
+
+------------------------------------------------------------------------
+
+Using your sample `my.samp` from the previous part, create a bootstrap distribution with $N=10^5$ different bootstrap samples.
+Create a histogram of your bootstrap distribution (indicating the location of the sample mean with a red vertical line) by completing the code below.
+
+### Solution to Question 2d
+
+------------------------------------------------------------------------
+
+-   You will need to refer to a vector you created in [Question 2c].
+
+```{r}
+
+N <- 10^5  # Number of bootstrap samples
+boot.dist <- numeric(N)  # create vector to store bootstrap means
+
+for (i in 1:N)
+{
+  x <- sample(my.samp, length(my.samp), replace = TRUE) # choose bootstrap resample
+  boot.dist[i] <- mean(x)  # mean of bootstrap resample
+}
+
+# Show bootstrap distribution
+hist(boot.dist,  xlab = "xbar",
+     main = "Bootstrap Distribution")
+
+# Add a red line at the observed sample mean
+abline(v = samp.mean, col = "red", lwd = 2, lty = 1)
+```
+
+## Question 2e
+
+------------------------------------------------------------------------
+
+Calculate the mean and standard error of the bootstrap distribution you created in [Question 2d].
+Then **comment on how the bootstrap mean and standard error compare the the CLT mean and standard error.**
+
+### Solution to Question 2e
+
+------------------------------------------------------------------------
+
+Be sure to provide supporting explanations/calculations to justify your answers.
+Feel free to add R code cells to help with the analysis.
+
+**Then comment on how the bootstrap mean and standard error compare the the CLT mean and standard error.**
+
+```{r}
+#mean of bootstrap distribution
+mean(boot.dist)
+#standard error of bootstrap distribution
+sd(boot.dist)
+```
+
+The bootstrap mean and CLT mean are very similar.
+The bootstrap mean is 52.3, while the CLT mean is 52.
+
+The bootstrap standard error and the CLT standard error are also very similar.
+The bootstrap standard error is 0.675, while the CLT standard error is 0.7.
+
+## Question 2f
+
+------------------------------------------------------------------------
+
+Using your bootstrap distribution from [Question 2d], approximate the probability of picking a random sample of size $n=100$ that has a sample mean greater than 54.
+After calculating the probability, comment on how it compares to your answer obtained using CLT in [Question 2b].
+
+```{r}
+# Enter R commands to answer 2f
+#use pnorm and the boot.dist mean and sd to plug into formula
+#1 - P(x boot <= 54) = P(x boot > 54)
+1 - pnorm(54, mean(boot.dist), sd(boot.dist))
+```
+
+**Then comment on how it compares to your answer obtained using CLT in [Question 2b].**
+
+The probability of picking a random sample where the sample mean is greater than 54 in the CLT method is 0.002137367.
+The probability of picking a random sample where the sample mean is greater than 54 in the bootstrap method is 0.00642023.
+Both of these values are pretty similar, but the value for the probability using the bootstrap method is slightly larger than the CLT method.\
+
+\
+\
+
+# Question 3
+
+------------------------------------------------------------------------
+
+Recall the package `resampledata` contains a dataset `Bangladesh` with data from 271 randomly selected groundwater samples.
+The dataset contains measurements on the `Arsenic`, `Cobalt` and `Chlorine` concentration levels (in parts per billion, ppb).
+Run the code cells below to load the `resampledata` package, summarize the dataset, and then remove the observation with an `NA` entry for `Cobalt`.
+
+## Summarizing and Cleaning the Data
+
+------------------------------------------------------------------------
+
+```{r message=FALSE}
+library(resampledata)  # load required package
+```
+
+```{r}
+summary(Bangladesh)  # summarize the data
+```
+
+-   Note there is one observation in `Bangladesh` that does not have a `Cobalt` level recorded. We want to ignore that observations before doing EDA. Run the command below to save the cleaned cobalt levels to a vector named `cobalt`.
+
+```{r}
+cobalt <- na.omit(Bangladesh$Cobalt)
+```
+
+**After running the three code cells above, answer the questions in the parts below.**
+
+## Question 3a
+
+------------------------------------------------------------------------
+
+Create a histogram of the cobalt sample data, and compute the mean and standard deviation of the cobalt concentration levels of the sample.
+
+### Solution to Question 3a
+
+------------------------------------------------------------------------
+
+-   You will need to refer to the vector `cobalt` created above in [Question 3].
+-   The **please do not use the `view` or `View` commands**.
+-   This applies applies to all problems and questions on assignments.
+-   **The reason why?** View commands often cause the knitting process to a pdf file to crash.
+    -   Rather than attempt to render the full (large) dataset to a pdf, the process stops.
+    -   Instead of answering questions looking at raw data, we use R commands that summarize (numerically an/or graphically) the data to answer the questions.
+    -   The `summary` command is a very helpful and reasonable command, so feel free to utilize that command as we did above!
+
+```{r}
+# Enter R commands to answer 3a
+hist(cobalt, xlab="cobalt concentration levels (ppb)", main="Frequency of Cobalt Concentration Levels")
+
+mean.cobalt <- mean(cobalt)
+mean.cobalt
+std.cobalt <- sd(cobalt)
+std.cobalt
+```
+
+## Question 3b
+
+------------------------------------------------------------------------
+
+Create a box plot of the cobalt sample data, and give the five number summary.
+Be sure you take the output from R and express your final answer for the five number summary in the form $(\mbox{min}, Q_1, \mbox{median}, Q_3, \mbox{max})$.
+
+### Solution to Question 3b
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 3b
+boxplot(cobalt, xlab="cobalt", ylab="concentration levels (ppb)", main="distribution of cobalt concentration levels", col="red")
+
+summary(cobalt)
+```
+
+Five number summary of cobalt data: (0.05, 0.2825, 0.41, 0.63, 3.18).
+
+## Question 3c
+
+------------------------------------------------------------------------
+
+Create a normal quantile plot of the data and describe the shape.
+Is the data normal?
+skewed?
+If skewed in what direction?
+
+### Solution to Question 3c
+
+------------------------------------------------------------------------
+
+```{r}
+# Complete the R commands to answer 3c
+
+qqnorm(cobalt)
+qqline(cobalt)
+```
+
+The data is skewed to the right (the tail of the distribution is more flat on the right side of the distribution graph, and most of the data points is on the left side of the distribution graph) because the values on the left are flatter (indicating more values in data set), while the values on the right are steeper (indicating less values in data set).
+
+## Question 3d
+
+------------------------------------------------------------------------
+
+Create a bootstrap distribution for the sample mean from the original sample.
+Use $N=10^5$ as the number of bootstrap samples.
+Complete the code below by replacing each `??` in the code cell with an appropriate R commands or values.
+
+### Solution to Question 3d
+
+------------------------------------------------------------------------
+
+-   The code cell below is one way to do this.
+-   Feel free to use another method if your prefer.
+
+```{r}
+N <- 10^5
+boot.cobalt <- numeric(N)
+for (i in 1:N)
+{
+  x <- sample(cobalt, length(cobalt), replace = TRUE)  #create a bootstrap resample
+  boot.cobalt[i] <- mean(x)   # calculate statistic of each bootstrap resample
+}
+```
+
+## Question 3e:
+
+------------------------------------------------------------------------
+
+What is the mean of the bootstrap distribution you created in [Question 3d]?
+
+### Solution to Question 3e
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 3e
+mean(boot.cobalt)
+```
+
+The mean of the bootstrap distribution is 0.5037153.
+
+## Question 3f
+
+------------------------------------------------------------------------
+
+What is the bootstrap standard error of the bootstrap distribution you created in [Question 3d]?
+
+### Solution to Question 3f
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 3f
+sd(boot.cobalt)
+```
+
+The standard error of the bootstrap distribution is 0.022876.
+
+## Question 3g
+
+------------------------------------------------------------------------
+
+**Based on the bootstrap distribution you created in [Question 3d], what is the bootstrap estimate of the bias?**
+
+*Note: We will cover this in more detail later, so you can skip and still complete the rest of the assignment and complete this part later.*
+
+### Solution to Question 3g
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 3g
+(boot.bias.mean <- mean(boot.cobalt) - mean(cobalt))
+```
+
+Bootstrap estimate of the bias = center of bootstrap distribution(mean of bootstrap) - sample statistic
+
+The sample statistic used for this problem is the sample mean of the original sample.
+
+The bootstrap estimate of the bias for this bootstrap distribution is -6.252556e-05.
+
+## Question 3h
+
+------------------------------------------------------------------------
+
+**Calculate the ratio of the bootstrap bias over the bootstrap standard error. Does this exceed the rule of thumb level for having a substantial effect on the accuracy of the estimate?**
+
+*Note: We will cover this in more detail later, so you can skip and still complete the rest of the assignment and complete this part later.*
+
+### Solution to Question 3h
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 3h
+(ratio.bias.error <- boot.bias.mean / sd(boot.cobalt))
+```
+
+**Then be sure to indicated whether or not this exceeds the rule of thumb level for having a substantial effect on the accuracy of the estimate.**
+
+\
+ratio formula: bootstrap bias / bootstrap standard error
+
+The rule of thumb states that if the ratio exceeds $\pm 0.02$ then the bias is large enough to have a substantial effect on the accuracy of the estimate.
+
+Since the ratio is -0.002733238, according to the rule of thumb the bias is not large enough and will not have a big effect on the accuracy of the estimate.\
+
+\
+
+## Question 3i
+
+------------------------------------------------------------------------
+
+Give a 95% bootstrap percentile confidence interval to estimate the mean cobalt level in all groundwater in Bangladesh.
+Then create a histogram of the bootstrap distribution with vertical lines indicating the cutoffs for the confidence interval.
+
+### Solution to Question 3i
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to compute cutoffs
+#cutoff total = 5% (0.05) lower cutoff = 0 + (0.05/2), upper cutoff = 0.95 + (0.05/2)
+left_cutoff <- quantile(boot.cobalt, probs=0.025)
+right_cutoff <- quantile(boot.cobalt, probs=0.975)
+
+left_cutoff
+right_cutoff
+```
+
+My lower cutoff for a 95% boostrap percentile confidence interval is 0.4608148.
+
+My upper cutoff for a 95% boostrap percentile confidence interval is 0.5504074.
+
+```{r}
+# Enter R commands below to create a histogram to illustrate
+# Be sure to add vertical lines through the cutoffs
+hist(boot.cobalt, xlab="cobalt concentration levels", main="bootstrap distribution of cobalt concentration levels")
+abline(v = left_cutoff, col = "blue", lwd = 2, lty = 2)
+abline(v = right_cutoff, col = "blue", lwd = 2, lty = 2)
+```
+
+## Question 3j
+
+------------------------------------------------------------------------
+
+Interpret the practical meaning of the confidence interval you found in [Question 3i] in a complete sentence.
+Explain to somebody who has little to no statistical background.
+
+### Solution to Question 3j
+
+------------------------------------------------------------------------
+
+There is a 95% level of confidence that the interval between 0.4608148 and 0.5504074 contains the mean cobalt concentration level.\
+
+\
+\
+
+# Question 4
+
+------------------------------------------------------------------------
+
+Researchers conducted a study of primary and early secondary school children in Italy to examine the gender differences in math anxiety.
+One of the measures used is the Abbreviated Math Anxiety Scale (AMAS), a self-reported math anxiety questionnaire.
+AMAS scores range from 9 to 45, with a higher score representing more math anxiety.
+The `resampledata` package contains the dataset `MathAnxiety` that has the results for a subset of the children in the original study.
+
+## Question 4a
+
+------------------------------------------------------------------------
+
+The code cell below first creates a vector called `amas` that contains the AMAS scores of all children in the dataset.Complete the remaining lines of code to create two separate vectors named `boy.amas` and `girl.amas` with AMAS scores separated for just the children that identify as boys and just the children that identify as girls, respectively.
+
+### Solution to Question 4a
+
+------------------------------------------------------------------------
+
+-   The code cell below uses the `subset` function.
+-   Feel free to use another method such as `filter` from `dplyr` or using logical statements with different code.
+-   If you use your own code, use the same array names `amas`, `boy.amas` and `girl.amas` so your output is compatible with code in [Question 4e].
+
+```{r}
+# If you have already loaded the required
+# package, you do not need to load it again
+
+#library(resampledata)  # load required package
+
+amas <- MathAnxiety$AMAS
+boy.amas <-subset(MathAnxiety, select = AMAS,
+                   Gender == "Boy", drop = T)
+girl.amas <-subset(MathAnxiety, select = AMAS,
+                   Gender == "Girl", drop = T)
+
+# head(boy.amas)
+```
+
+```{r}
+# head(MathAnxiety)
+```
+
+## Question 4b
+
+------------------------------------------------------------------------
+
+How many children are in the dataset?
+How many of the children identify as a boy?
+How many of the children identify as a girl?
+Answer the questions below using R commands (such as `length`).
+
+-   Remember (now and on future problems) **please do NOT enter a `view` command**.
+
+### Solution to Question 4b
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4b 
+# summary(MathAnxiety)
+
+#num boys
+length(boy.amas)
+#num girls
+length(girl.amas)
+#total children
+length(boy.amas) + length(girl.amas)
+```
+
+There are 599 total children in the data set.
+There are 323 of them that identify as boys, while 276 of them identify as girls.
+
+## Question 4c
+
+------------------------------------------------------------------------
+
+Create side-by-side box plots to show the math anxiety scores broken down by gender.
+**Both boys and girls scores should be graphed on the same plot as opposed to two separate plots.**
+
+### Solution to Question 4c
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4c
+boxplot(boy.amas, girl.amas, 
+        names=c("Boy", "Girl"),
+        col=c("blue", "red"),
+        main="AMAS scores of boys and girls")
+```
+
+## Question 4d
+
+------------------------------------------------------------------------
+
+What is the difference in the observed sample mean AMAS scores between the boys and girls?
+Be sure to provide supporting explanations/calculations to justify your answers.
+
+### Solution to Question 4d
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4d
+obs.mean.amas <- mean(boy.amas) - mean(girl.amas)
+
+obs.mean.amas
+```
+
+The difference in the observed sample mean AMAS scores between boys and girls is -1.7676.
+
+## Question 4e
+
+------------------------------------------------------------------------
+
+Create a bootstrap distribution for the difference in the mean anxiety score between boys and girls using the original sample.
+Use $N=10^5$ as the number of bootstrap samples.
+The code has been partially completed, complete the rest by replacing each `??` with appropriate code.
+
+### Solution to Question 4e
+
+------------------------------------------------------------------------
+
+-   The code cell below is one way to do this.
+-   If you use different array names in [Question 4a], then be sure to edit the code cell below accordingly.
+-   Feel free to use another method if your prefer.
+
+```{r}
+N <- 10^5
+diff.mean <- numeric(N)
+for (i in 1:N)
+{
+  boy.sample <- sample(boy.amas, length(boy.amas), replace = TRUE) #bootstrap resample for boys
+  girl.sample <- sample(girl.amas, length(girl.amas), replace = TRUE) #bootstrap resample for girls
+  diff.mean[i] <- mean(boy.sample) - mean(girl.sample)  #diff in sample means
+}
+```
+
+## Question 4f
+
+------------------------------------------------------------------------
+
+What is the mean of the bootstrap distribution you found in [Question 4e]?
+
+### Solution to Question 4f
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4f
+mean(diff.mean)
+```
+
+The bootstrap distribution mean was -1.76741.
+
+## Question 4g
+
+------------------------------------------------------------------------
+
+What is the bootstrap standard error?
+
+### Solution to Question 4g
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4g
+sd(diff.mean)
+```
+
+The bootstrap distribution standard error was 0.5326602.
+
+## Question 4h
+
+------------------------------------------------------------------------
+
+**What is the bootstrap estimate of the bias?**
+
+*Note: We will cover this in more detail later, so you can skip and still complete the rest of the assignment and complete this part later.*
+
+### Solution to Question 4h
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4h
+(boot.bias.diffmean <- mean(diff.mean) - obs.mean.amas)
+```
+
+The sample statistic is the difference of the mean of amas score for boys and mean of amas score for girls.
+
+The bootstrap estimate of the bias for this bootstrap distribution is 0.0001904002.
+
+## Question 4i
+
+------------------------------------------------------------------------
+
+**Calculate the ratio of the bootstrap bias over the bootstrap standard error. Does this exceed the rule of thumb level for having a substantial effect on the accuracy of the estimate?**
+
+*Note: We will cover this in more detail later, so you can skip and still complete the rest of the assignment and complete this part later.*
+
+### Solution to Question 4i
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 4i
+(ratio.meanbias.error <- boot.bias.diffmean / sd(diff.mean))
+```
+
+**Does this exceed the rule of thumb level for having a substantial effect on the accuracy of the estimate?**
+
+Since the ratio is 0.0003574516, according to the rule of thumb the ratio does not have a substantial effect on the accuracy of the estimate because the ratio is in the range -0.02 to 0.02.\
+
+\
+\
+
+## Question 4j
+
+------------------------------------------------------------------------
+
+Give a 99% bootstrap percentile confidence interval to estimate the difference in the mean AMAS scores between all boys and girls.
+Then create a histogram of the bootstrap distribution with vertical lines indicating the cutoffs for the confidence interval.
+
+### Solution to Question 4j
+
+------------------------------------------------------------------------
+
+Compute the 99% bootstrap percentile confidence interval.
+
+```{r}
+# Enter R commands to compute cutoffs
+# 99% cutoff -> 1% total
+# lower cutoff at 0 + (0.01/2), upper cutoff at 0.99 + (0.01/2)
+
+lower.amas <- quantile(diff.mean, probs=0.01/2)
+upper.amas <- quantile(diff.mean, probs=(0.99 + (0.01/2)))
+
+lower.amas
+upper.amas
+```
+
+My lower cutoff for a 99% boostrap percentile confidence interval is -3.149578.
+
+My upper cutoff for a 99% boostrap percentile confidence interval is -0.3931987.
+
+Create a histogram of the bootstrap distribution with vertical lines indicating the cutoffs for the confidence interval.
+
+```{r}
+# Enter R commands to plot the sampling distribution as 
+# a histogram and mark the cutoffs with vertical lines
+hist(diff.mean,
+     xlab="differences of amas score means between boys and girls",
+     main=" bootstrap distribution of difference of amas score means")
+
+abline(v = lower.amas, col = "blue", lwd = 2, lty = 2)
+abline(v = upper.amas, col = "blue", lwd = 2, lty = 2)
+```
+
+## Question 4k
+
+------------------------------------------------------------------------
+
+Based on your answer to the previous part, do you believe it is plausible that the boys and girls have different levels of math anxiety?
+Support your answer with an explanation.
+
+### Solution to Question 4k
+
+------------------------------------------------------------------------
+
+The range of plausible values for the mean difference in amas scores between boys and girls is from -3.149578 to -0.3931987.
+Since 0 is not in the interval, 0 is not a plausible value.
+The only plausible values are negative, which indicate that boys have less math anxiety while girls have more math anxiety.
+It is plausible to conclude that boys and girls have different levels of math anxiety.\
+
+\
+\
+
+# Question 5
+
+------------------------------------------------------------------------
+
+The package `resampledata` contains the dataset `Groceries` that has the prices at Walmart and Target for a sample of 30 different items.
+We want to find a 90% bootstrap percentile confidence interval for the mean difference in price of items at Walmart and Target.
+
+## Question 5a
+
+------------------------------------------------------------------------
+
+Calculate the mean and standard deviation for the price of items at **Walmart**.
+Calculate the mean and standard deviation for the price of items at **Target**.
+
+### Solution to 5a
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 5a
+
+# If you have already loaded the required
+# package, you do not need to load it again
+
+#library(resampledata)  # load required package
+
+# head(Groceries)
+
+#mean and standard deviation for price items at Walmart
+mean(Groceries$Walmart)
+sd(Groceries$Walmart)
+
+#mean and standard deviation for price items at Target
+mean(Groceries$Target)
+sd(Groceries$Target)
+```
+
+The mean for price items at Walmart is 2.7056.
+The standard deviation of price items at Walmart is 1.5602.
+
+The mean for price items at Target is 2.7623.
+The standard deviation of price items at Target is 1.5821.
+
+## Question 5b
+
+------------------------------------------------------------------------
+
+Create a new vector consisting of the differences in prices of the 30 matched pairs.
+Then calculate the sample mean of the difference in prices at Walmart and Target of the 30 items.
+
+-   Note the name of your vector will be useful in [Question 5c].
+
+### Solution to 5b
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 5b
+walmart.prices <- Groceries$Walmart
+target.prices <- Groceries$Target
+# head(walmart.prices)
+
+diff.prices <- walmart.prices - target.prices
+# head(diff.prices)
+
+diff.prices.mean <- mean(diff.prices)
+diff.prices.mean
+```
+
+The sample mean of the difference in prices for the 30 items between Walmart and Target is -0.05666667.
+
+## Question 5c
+
+------------------------------------------------------------------------
+
+Create a bootstrap distribution for the mean matched-pair difference in the prices at Walmart and Target using the original sample.
+Use $N=10^5$ as the number of bootstrap samples.
+
+### Solution to 5c
+
+------------------------------------------------------------------------
+
+Replace each `??` to complete the code and create a bootstrap distribution for the mean match-pair difference.
+
+-   The code cell below is one way to do this.
+-   Feel free to use another method if your prefer.
+
+```{r}
+N <- 10^5
+boot.matched <- numeric(N)
+for (i in 1:N)
+{
+  x <- sample(diff.prices, length(diff.prices), replace = TRUE) #bootstrap resample from differences
+  boot.matched[i] <- mean(x)  #mean of matched-pair differences
+}
+```
+
+## Question 5d
+
+------------------------------------------------------------------------
+
+What is the mean of the bootstrap distribution?
+
+### Solution to 5d
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 5d
+mean(boot.matched)
+```
+
+The mean of the bootstrap distribution is -0.05771236.
+
+## Question 5e
+
+------------------------------------------------------------------------
+
+What is the bootstrap standard error?
+
+### Solution to 5e
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 5e
+sd(boot.matched)
+```
+
+The standard error of the bootstrap distribution is 0.118008.
+
+## Question 5f
+
+------------------------------------------------------------------------
+
+**What is the bootstrap estimate of the bias?**
+
+*Note: We will cover this in more detail later, so you can skip and still complete the rest of the assignment and complete this part later.*
+
+### Solution to 5f
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 5f
+(boot.bias.matched <- mean(boot.matched) - diff.prices.mean)
+```
+
+The sample statistic for this problem was the mean matched pair difference.
+
+The bootstrap estimate of the bias for this bootstrap distribution is -0.001045693.
+
+## Question 5g
+
+------------------------------------------------------------------------
+
+**Calculate the ratio of the bootstrap bias over the bootstrap standard error. Does this exceed the rule of thumb level for having a substantial effect on the accuracy of the estimate?**
+
+*Note: We will cover this in more detail later, so you can skip and still complete the rest of the assignment and complete this part later.*
+
+### Solution to 5g
+
+------------------------------------------------------------------------
+
+```{r}
+# Enter R commands to answer 5g
+(ratio.matchedbias.error <- boot.bias.matched / sd(boot.matched))
+```
+
+**Does this exceed the rule of thumb level for having a substantial effect on the accuracy of the estimate?**
+
+Since the ratio is -0.008861208, according to the rule of thumb the ratio does not have a substantial effect on the accuracy of the estimate because the ratio is between the range -0.02 to 0.02.\
+
+\
+
+## Question 5h
+
+------------------------------------------------------------------------
+
+Find a 90% bootstrap percentile confidence interval.
+Then create a histogram of the bootstrap distribution with vertical lines indicating the cutoffs for the confidence interval.
+
+### Solution to 5h
+
+------------------------------------------------------------------------
+
+Compute the 90% bootstrap percentile confidence interval.
+
+```{r}
+# Enter R commands to compute cutoffs
+# 90% quantile: 10% cutoff, 5% on each end 
+#lower = 0 + 0.1/2, upper = 0.9 + (0.1/2)
+lower.cut.price <- quantile(boot.matched, probs=0.1/2)
+upper.cut.price <- quantile(boot.matched, probs=(0.9+(0.1/2)))
+
+lower.cut.price
+upper.cut.price
+```
+
+My lower cutoff for a 90% boostrap percentile confidence interval is -0.2336667.
+
+My upper cutoff for a 90% boostrap percentile confidence interval is 0.151.
+
+Create a histogram of the bootstrap distribution with vertical lines indicating the cutoffs for the confidence interval.
+
+```{r}
+# Enter R commands to plot the sampling distribution as 
+# a histogram and mark the cutoffs with vertical lines
+hist(boot.matched,
+     xlab="mean matched pair price differences at Walmart and Target",
+     main="bootstrap distribution of mean matched pair price differences")
+
+abline(v = lower.cut.price, col = "blue", lwd = 2, lty = 2)
+abline(v = upper.cut.price, col = "blue", lwd = 2, lty = 2)
+```
+
+## Question 5i
+
+------------------------------------------------------------------------
+
+Based on your answer to the previous part, do you believe it is plausible that there is a difference in the price at Walmart and Target?
+Support your answer with an explanation.
+
+### Solution to 5i
+
+------------------------------------------------------------------------
+
+\
+The range of plausible values for the mean matched-pair difference in price of items is from -0.2336667 to 0.151.
+Since 0 is in the interval, 0 is a plausible value.
+This indicates that it is not plausible there is a difference in the price of items at Walmart and Target.
+The interval tells us that the differences fluctuate, where the prices may be larger at Walmart than at Target, the prices may be larger at Target than at Walmart, or the there is no difference between the prices at all.\
+
+\

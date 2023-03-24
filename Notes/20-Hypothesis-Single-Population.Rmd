@@ -1,0 +1,308 @@
+---
+title: '20: Hypothesis Test for A Single Mean or Proportion'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Summary of Hypothesis Tests
+
+------------------------------------------------------------------------
+
+1.  State the hypotheses and identify (from the claim) if it is a one or two-tail test.
+
+2.  Compute the [**test statistic**]{style="color: blue;"}.
+
+    -   The test statistic measures how many standard errors the observed statistic(s) is/are from the null claim.
+    -   The farther the observed sample is from the null claim, the more significant the test result will be.
+
+3.  Using the null distribution, compute the [**P-value**]{style="color: blue;"}.
+
+    -   The P-value is the probability of getting a sample with a test statistic as or more extreme than the observed sample assuming $H_0$ is true.
+    -   It is the area in the tails(s) beyond the test statistic.
+    -   The more "extreme" the observed sample, the smaller the P-value.
+
+4.  Based on the [**significance level**]{style="color: blue;"}, $\alpha$, make a decision to reject or not reject the null hypothesis
+
+    -   If P-value $\leq \alpha$, we reject $H_0$.
+    -   If P-value $> \alpha$, we do not reject $H_0$.
+
+5.  Summarize the results in practical terms, **in the context of the problem**.
+
+    -   If we reject $H_0$, this means there is enough evidence to support the claim in $H_a$.
+    -   If we do not reject $H_0$, this means there is not evidence to support the claim in $H_a$. The test is inconclusive.
+
+# Hypothesis Tests For a Single Proportion
+
+------------------------------------------------------------------------
+
+## Question 1
+
+------------------------------------------------------------------------
+
+![Paul the Oracle Octopus](https://drive.google.com/uc?export=view&id=12BkB-pS9gVaAgly8YWdqQ6iu63J2w6wo)
+
+In the 2010 World Cup in Germany, Paul the octopus (aka the Oracle Octopus) correctly predicted the correct outcome in all 8 of the matches he predicted.
+Paul beat out his rival Mani, Singapore's psychic parakeet, who predicted six matches in a row before missing a prediction.
+**Is this evidence that Paul actually has psychic powers?**
+
+### Question 1a
+
+------------------------------------------------------------------------
+
+What would this proportion be if Paul does not have psychic powers?
+If he does?
+Set up the null and alternative hypotheses in terms of the proportion of all correct guesses an octopus makes.
+Use appropriate notation.
+
+#### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+H0: Paul has no special powers.
+He's just lucky.
+
+p = 0.5
+
+Ha: Paul has special powers.
+
+p \> 0.5
+
+This is a one tail test , righthanded (?).\
+
+\
+\
+
+### Question 1b
+
+------------------------------------------------------------------------
+
+How unusual would this be if Paul was just randomly guessing?
+Compute the P-value.
+
+#### Solution to Question 1b
+
+------------------------------------------------------------------------
+
+P value = P(test stat as or more extreme than observed given null hypothesis is true)
+
+X = \# of correct predictions out of 8
+
+Given that null hypothesis is true:
+
+X \~ Binom(8, 0.5) = Null Distribution
+
+We want to know P(X \>= 8)
+
+P(X \>= 8) = (1/2)\^8
+
+approximately 0.0039\
+\
+Testing for a single proportion uses a binomial distribution.\
+
+### Question 1c
+
+------------------------------------------------------------------------
+
+If a 5% significance level is chosen, what is the result?
+
+#### Solution to Question 1c
+
+------------------------------------------------------------------------
+
+The result is that Paul has special powers.\
+
+\
+\
+
+# Hypothesis Test for a Single Proportion
+
+------------------------------------------------------------------------
+
+**Let** $X$ be a binomial random and let $p_0$ denote the value of $p$ claimed in $H_0$.
+If we observe $X=x$ successes out of $n$ trials, then we can find the P-value using a binomial distribution using the assumed probability of success, $p_0$.
+
+# Hypothesis Test for a Single Mean (Known Population Variance)
+
+------------------------------------------------------------------------
+
+## Question 2
+
+------------------------------------------------------------------------
+
+SAT math scores[^1] in the US in 2017 were normally distributed with a mean of 570 and a standard deviation of 107.
+A high school district boasts their students are bright and their students are so good at math they can prove it (using a hypothesis test).
+A random sample of 25 seniors are selected, and the mean SAT math score of the sample is 613.
+
+[^1]: <https://nces.ed.gov/programs/digest/d17/tables/dt17_226.40.asp>
+
+### Question 2a
+
+------------------------------------------------------------------------
+
+Set up the null and alternative hypotheses both in words and using appropriate notation.
+
+#### Solution to Question 2a
+
+------------------------------------------------------------------------
+
+-   $H_0$: The mean SAT score at this school is equal to 570.
+    These students are just as good as any other school.
+
+    -   $\mu = 570$
+
+-   $H_a$: The mean SAT score at this school is above average.
+
+    -   $\mu > 570$
+
+\
+\
+
+### Question 2b
+
+------------------------------------------------------------------------
+
+Compute the test statistic and interpret the meaning in practical terms.
+
+#### Solution to Question 2b
+
+------------------------------------------------------------------------
+
+The test statistic for this problem would be the sample mean.
+
+Statistical significance is finding evidence that contradicts the null hypothesis and best supports the alternative hypothesis.
+The more the statistic contradicts the null hypothesis and best supports the alternative hypothesis, the more significant.\
+
+\
+\
+
+### Question 2c
+
+------------------------------------------------------------------------
+
+Compute the P-value and interpret the meaning in practical terms.
+
+#### Solution to Question 2c
+
+------------------------------------------------------------------------
+
+\
+P(test stat is or as more extreme \| null hypothesis is true)
+
+Use normal distribution (given in problem)
+
+X \~ N(570, 107) \<\-\-- describes a distribution of an individual school
+
+Get normal distribution of all samples using CLT (null distribution):
+
+X bar \~ N(570, 107/sqrt(25))\
+
+P(X bar \>= 613) = 1 - pnorm(613, 570, 107/sqrt(25))\
+
+### Question 2d
+
+------------------------------------------------------------------------
+
+If a 5% significance level is chosen, what is the result?
+If a 1% significance level is chosen, what is the result?
+
+#### Solution to Question 2d
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+## Question 3
+
+------------------------------------------------------------------------
+
+Are we getting enough sleep?
+It is generally recommended that adults sleep 8 hours per night.
+A random sample of 22 students at CU Denver had an average of $7.5$ hours with a standard deviation of $1.7$ hours.
+Is this evidence that sleeping patterns of students at CU Denver are different from the recommended amount of sleep?
+
+### Question 3a
+
+------------------------------------------------------------------------
+
+Set up the null and alternative hypotheses both in words and using appropriate notation.
+
+#### Solution to Question 3a
+
+------------------------------------------------------------------------
+
+-   $H_0$:
+
+    $\mu = 8$
+
+-   $H_a$:
+
+    $\mu \ne 8$
+
+\
+\
+\
+
+### Question 3b
+
+------------------------------------------------------------------------
+
+Compute the test statistic and interpret the meaning in practical terms.
+
+#### Solution to Question 3b
+
+------------------------------------------------------------------------
+
+t = $\frac{\bar{x} - \mu_0}{SE} = \frac{7.5-8}{\frac{1.7}{\sqrt{22}}} = -1.3797$\
+\
+\
+
+### Question 3c
+
+------------------------------------------------------------------------
+
+Compute the P-value and interpret the meaning in practical terms.
+
+#### Solution to Question 3c
+
+------------------------------------------------------------------------
+
+\
+Null distribution to use: t distribution because pop std is unknown
+
+```{r}
+p.val <- 2 * (pt(-1.3797,22-1))
+p.val
+```
+
+### Question 3d
+
+------------------------------------------------------------------------
+
+If a 5% significance level is chosen, what is the result?
+
+#### Solution to Question 3d
+
+------------------------------------------------------------------------
+
+0.1822 \> 0.05, therefore it is not statistically significant.
+we fail to reject our null hypothesis therefore the rest is inconclusive.\
+
+\
+\
+
+# Hypothesis Test for a Single Mean (Unknown Variance)
+
+------------------------------------------------------------------------
+
+Let $X_1, X_2, \ldots , X_n$ be a random sample from a normal population with unknown mean and **unknown standard deviation**.
+Let $\mu_0$ denote the value of $\mu$ claimed in $H_0$, then
+
+$$t = \frac{\bar{x}-\mu_0}{\frac{\color{red}{s}}{\sqrt{n}}}.$$
+
+**We use a** [$t$-distribution with $n-1$ degrees of freedom]{style="color: red;"} to compute the corresponding P-value.

@@ -1,0 +1,738 @@
+---
+title: "MATH 3382: Homework 1 - Due Sep. 1 at 2PM"
+author: "Ivy Truong"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Instructions:
+
+------------------------------------------------------------------------
+
+**Submit your work electronically as an R Markdown file extension `.Rmd`.**
+
+Upload your file into the Homework 1 assignment in Canvas before 2 PM on Thurs, September 1.
+
+**You must provide supporting work for your all of your answers.**
+
+-   [That work might be inserting some R code cells.]{style="color: blue;"}
+
+    -   **Feel free to insert as much R code as you like.**
+    -   You must interpret or explain how the output of a code cell is being utilized to solve the problem.
+    -   **Code with incomplete or missing explanations of why the output is useful may not receive full credit.**
+
+-   [It might involve doing some algebra and/or calculus (integrating, differentiating, etc).]{style="color: blue;"}
+
+    -   **Be sure to type/write out the steps of your work so I can see how you arrived at your answer.**
+    -   **If typing takes too long no problem.** You can write out the support work on paper and hand that in before class.
+
+-   [Probably it a little bit of both on most problems, but you decide how you want to solve the problems!]{style="color: blue;"}
+
+## Important Academic Policies:
+
+------------------------------------------------------------------------
+
+-   **Be your own work.** Though you may collaborate with others, everyone is responsible for writing up the work in their own way using their own methods. Plagiarism of any form is not tolerated.
+-   **Be complete.** You must provide all work and/or explanations needed to find the solution. Answers with insufficient or incomplete supporting work may lose credit.
+-   **Adhere to the Code of Academic Honesty.**
+-   **Be clearly written (and legible if written).** Your solution to a problem must be clear, written in complete sentences. You may lose credit for work that is unclear or hard to follow.
+
+### [Let me know if you need help, and **GOOD LUCK!!!**]{style="color: blue;"}
+
+------------------------------------------------------------------------
+
+**Load required packages first**
+
+```{r, message=FALSE}
+library(resampledata) # needed for questions 3 and 5
+library(dplyr) # has starwars dataset for question 4
+```
+
+# Question 1
+
+------------------------------------------------------------------------
+
+Consider the following excerpt from a recent article[^1] that discussed the spread of COVID-19 in various school settings. \> "A case-control study of exposures among children aged 0 through 18 years with ($n=154$) and without ($n=243$) SARS-CoV-2 infection in Mississippi found that having attended gatherings and social functions outside the home as well as having had visitors in the home was associated with increased risk of infection; however, in-person school attendance during the 14 days prior to diagnosis was not."
+
+[^1]: "Data and Policy to Guide Opening Schools Safely to Limit the Spread of SARS-CoV-2 Infection" by Honein, Barrios, and Brooks, <https://jamanetwork.com/journals/jama/fullarticle/2775875> in the Journal of American Medical Association published on January 26, 2021
+
+To summarize the research referred to above, out of all children in the study, 154 children did become infected with SARS-CoV-2 while 243 children did not become infected during the study. Researchers asked each child in the study, "Have you attended gatherings and social functions outside the home?'' They found that those children that answered YES, had a higher rate of infection compared to those children who answered NO.
+
+## Question 1a:
+
+------------------------------------------------------------------------
+
+Was this an observational study or an experiment? Support your answer with an explanation.
+
+### Solution to 1a:
+
+------------------------------------------------------------------------
+
+This case study was an observational study. Firstly, the researchers did not have active control over which children were allowed to attend outside activities or to stay home. This means that the researchers do not manipulate the treatments on a group of people. Secondly, the researchers simply surveyed a sample/group of people to obtain information about if the participants have been infected or not, therefore they did not influence the outcome of the study.\
+\
+\
+\
+\
+
+## Question 1b:
+
+------------------------------------------------------------------------
+
+Does the excerpt above imply that the connection between attending social gatherings and getting SARS-CoV-2 is a causal relationship? Answer YES or NO, and then provide an explanation of how you determined your answer.
+
+### Solution to 1b:
+
+------------------------------------------------------------------------
+
+No, the excerpt above does not imply that attending social gatherings and getting infected is a casual relationship. Since the study observed is not performed in a 'controlled' environment, it is possible that there are many other factors that contributed to higher infection rates that haven't been measured yet. For example, how much physical contact participant had with another person at the social gathering could be another contributing factor to higher infection rates, but the researchers wouldn't know because it hasn't been measured yet.
+
+Another reason that shows the connection between attending social gatherings and getting SARS-CoV-2 is not a casual relationship because the question asked by the researchers "Have you attended social gatherings and social functions outside the home?" does not include any relation to SAR-CoV-2. A more descriptive question or asking an additional question to indicate a possible relationship would be: "Have you attended social gatherings outside the home?" and "Were you in contact with someone who contracted SARS-CoV-2?"\
+\
+\
+\
+\
+
+## Question 1c:
+
+------------------------------------------------------------------------
+
+Give an example of one possible confounding variable that might be contributing to the association between attending social gatherings and getting SARS-CoV-2. Explain why your variable could be a confounding variable.
+
+### Solution to 1c:
+
+------------------------------------------------------------------------
+
+How much physical contact participant had with another person at the social gathering (or if there was any physical contact) could be another contributing factor to higher infection rates, but the researchers wouldn't know because it hasn't been measured yet. This variable could be a confounding variable because it relates to the independent variable (attending social gatherings or events with visitors) as it is something that happens with the independent variable and could change the result of the dependent variable (if the participant is infected or not). How the infection spreads is a contributing factor that may add another cause and effect relationship between the new variable and dependent variable, or invalidate the existence of the relationship between the original independent variable and the dependent variable.\
+\
+\
+\
+\
+
+# Question 2
+
+------------------------------------------------------------------------
+
+This question refers to a January 26, 2021 report from the Center for Disease Control (CDC) titled *COVID-19 Cases and Transmission in 17 K-12 Schools -- Wood County, Wisconsin, August 31-November 29, 2020* which is linked here <https://www.cdc.gov/mmwr/volumes/70/wr/pdfs/mm7004e3-H.pdf>.
+
+Researchers hoped to find insight into a very important question, "Does wearing masks help reduce the incidence of COVID-19?". The control group are the people in the communities in Wood County, Wisconsin where there is low compliance with mask wearing. The treatment group are the people (students, teachers, and staff) who are in a "high compliance mask wearing community (school)". The response variable is whether or not the individual became infected with COVID-19.
+
+**Read the introduction on page 136 and the first half of page 137 in the article linked above and answer the questions below.**
+
+## Question 2a:
+
+------------------------------------------------------------------------
+
+According to the article, how much lower was the incidence rate of COVID-19 in the treatment (high mask wearing, school setting) group compared to the control (rest of community) group?
+
+### Solution to 2a:
+
+------------------------------------------------------------------------
+
+Case rates in treatment group: 3453 cases per 100000 persons
+
+Case rates in control group: 5466 cases per 100000 persons
+
+The incidence rate of COVID-19 in the treatment group was 37% lower than the control group.\
+\
+\
+\
+\
+
+## Question 2b:
+
+------------------------------------------------------------------------
+
+Do you believe this research proves that mask wearing indeed lowers the transmission of COVID-19? Answer this question based solely on the design and description of the research, not on what you personally may have concluded based on your own research into this matter. If you answer yes, explain why. If you answer no, then give at least one possible confounding variable that might be the reason behind the lower transmission rate in the treatment (mask wearing) group.
+
+### Solution to 2b:
+
+------------------------------------------------------------------------
+
+No, I do not believe this research proves that mask wearing lowers the transmission of COVID-19. One confounding variable that is behind the lower transmission rate in the treatment group is the environment that the students and teachers were in. The students and teachers only had to wear a mask when it was during school, so the study only shows the effectiveness of masking wearing in lowering transmissions of COVID-19 in a school setting.\
+\
+\
+\
+\
+
+## Question 2c:
+
+------------------------------------------------------------------------
+
+This research is an example of an observational study. Describe a randomized controlled experiment that could be designed to investigate the question \`\`Does wearing masks help reduce the incidence of COVID-19?''. Though clearly vital and essential to consider in practice, for this question you may ignore any ethical or moral issues in your design.
+
+### Solution to 2c:
+
+------------------------------------------------------------------------
+
+First, sample 500 people in the Wood County Wisconsin area at random. Then split them into two groups randomly, where half of the group wear masks while performing their normal daily activities, and the other half of group does not wear masks. This experiment will be performed in the span of one month and participants will come back to get tested if they have been infected or not.\
+\
+\
+\
+\
+
+# Question 3
+
+------------------------------------------------------------------------
+
+For this problem use the dataset called `Recidivism` in the resampledata package. Note you will need to enter the command `library(resampledata)` in order to access the dataset `Recidivism`. This package should have been loaded after running the first code cell in this document. See section 1.4 page 4 of text for description of variables in the dataset.
+
+## Question 3a:
+
+------------------------------------------------------------------------
+
+How many observations are in the dataset?
+
+### Solution to 3a:
+
+------------------------------------------------------------------------
+
+Enter code below to help answer question.
+
+```{r}
+#this function gives a preview of the dataset
+glimpse(Recidivism)
+```
+
+Based on the output, write a complete sentence to answer the question.
+
+There are 17,022 observations in the dataset.\
+\
+\
+\
+\
+
+## Question 3b:
+
+------------------------------------------------------------------------
+
+List all of the categorical (qualitative) variables in the dataset.
+
+### Solution to 3b:
+
+------------------------------------------------------------------------
+
+Enter code below to help answer question.
+
+```{r, set-options}
+#set options to make viewing summary much easier
+options(width=75)
+#this function gives a summary/stats of the dataset
+summary(Recidivism)
+```
+
+Based on the output, write a complete sentence to answer the question.
+
+The categorical variables in the dataset are: Gender, Age, Age25, Race, Offense, Recid, and Type.\
+\
+\
+\
+\
+
+## Question 3c:
+
+------------------------------------------------------------------------
+
+List all of the quantitative variables in the dataset.
+
+### Solution to 3c:
+
+------------------------------------------------------------------------
+
+Based on output from previous code cells, write a complete sentence to answer the question.
+
+The quantitative variables in the dataset are: Days.\
+\
+\
+\
+\
+
+## Question 3d:
+
+------------------------------------------------------------------------
+
+Create table and barchart of the variable called `Recid`.
+
+### Solution to 3d:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+#make a table of Recid variable and store it in a new variable
+recidTable <- table(Recidivism$Recid)
+#output the Recid values in a table
+recidTable
+#create a barchart of Recid variable
+#main = title, xlab and ylab allows us to label the axis, col allows us to color the bars on the graph
+barplot(recidTable, 
+        main="Distribution of Recid Values",
+        xlab="Recid Values",
+        ylab="Frequency",
+        col="red")
+```
+
+\
+\
+
+## Question 3e:
+
+------------------------------------------------------------------------
+
+Create a histogram to display the distribution of values of the variable `Days`.
+
+### Solution to 3e:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+#create histogram of Days variable
+hist(Recidivism$Days,
+     main="Distribution of Days in Recidivism Data",
+     xlab="Days",
+     col="blue")
+```
+
+\
+\
+
+## Question 3f:
+
+------------------------------------------------------------------------
+
+Give the five number summary for the variable `Days`.
+
+### Solution to 3f:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below.
+
+```{r}
+summary(Recidivism$Days)
+```
+
+Then type your five number summary in the parentheses below:
+
+( 0, 241, 418, 687, 1095)
+
+The five number summary consists of the minimum, first quartile, median, third quartile, and maximum.\
+\
+
+# Question 4
+
+------------------------------------------------------------------------
+
+For this problem use the dataset called `starwars` in the `dplyr` package. Note you will need to enter the command `library(dplyr)` to access the `starwars` dataset. (Note this package was loaded at the start of this document.)
+
+## Question 4a:
+
+------------------------------------------------------------------------
+
+Which homeworld is home to the most characters in this dataset? How many characters are from this homeworld? Support your answer by including the R code that you used to find your answer.
+
+### Solution to 4a:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below.
+
+```{r, set-options}
+options(width=75)
+# summary(starwars)
+# head(starwars)
+# starwars$homeworld <-factor(starwars$homeworld) #factor so that same values are grouped together (for categorical variables)
+table(starwars$homeworld) #gets the frequency of categorical variables
+```
+
+Based on output from previous code cells, write a complete sentence to answer the question.
+
+The homeworld that has the most characters in this dataset is Naboo. There are 11 characters from Naboo.\
+\
+\
+\
+
+## Question 4b:
+
+------------------------------------------------------------------------
+
+Subset or filter the data to create a new dataset that includes only the characters with a homeworld of Naboo.
+
+### Solution to 4b:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r, set-options}
+options(width=75)
+# ?starwars #view the information about variables in the dataset
+#naboo.characters <- subset(starwars, select=name, homeworld=="Naboo")
+# naboo.characters
+starwars$homeworld <- factor(starwars$homeworld)
+naboo <- filter(starwars, homeworld=="Naboo")
+table(naboo$name)
+```
+
+\
+\
+
+## Question 4c:
+
+------------------------------------------------------------------------
+
+Subset or filter the data to create a new dataset that includes only the characters with a homeworld of Tatooine.
+
+### Solution to 4c:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r, set-options}
+options(width=75)
+tatooine <- subset(starwars, homeworld=="Tatooine")
+table(tatooine$name)
+```
+
+\
+\
+
+## Question 4d:
+
+------------------------------------------------------------------------
+
+Compute the standard deviation for the height of the sample of characters from Naboo.
+
+### Solution to 4d:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+sd(naboo$height)
+```
+
+\
+\
+
+## Question 4e:
+
+------------------------------------------------------------------------
+
+Which planet is taller on average?
+
+### Solution to 4e:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below.
+
+```{r}
+mean(naboo$height)
+mean(tatooine$height)
+```
+
+Based on output from previous code cells, write a complete sentence to answer the question.
+
+\
+On average, characters who live on homeworld Naboo are taller than characters who live on homeworld Tatooine.\
+\
+
+## Question 4f:
+
+------------------------------------------------------------------------
+
+Create side-by-side boxplots to compare the distribution of heights for characters from Naboo compared to characters from Tatooine.
+
+### Solution to 4f:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+boxplot(naboo$height, tatooine$height, 
+        names=c("Naboo", "Tatooine"),
+        main="Heights from top 2 populated homeworlds",
+        ylab="Height")
+```
+
+\
+\
+
+## Question 4g:
+
+------------------------------------------------------------------------
+
+Which character is the outlier in the Naboo boxplot? Which character is the outlier in the Tatooine boxplot?
+
+### Solution to 4g:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below.
+
+```{r}
+# View(naboo)
+# View(tatooine)
+
+# min(naboo$height)
+# min(tatooine$height)
+
+#filtering data with logic/dataframe subsetting
+# min.naboo.logic <- naboo[naboo$height==min(naboo$height),]
+# min.naboo.logic
+
+#get the minimum height of the character in Naboo
+min.naboo <- subset(naboo, height==min(naboo$height))
+min.naboo$name
+
+#get the minimum height of the character in Tatooine
+min.tatooine <- subset(tatooine, height==min(tatooine$height))
+min.tatooine$name
+```
+
+Based on output from previous code cells, write a complete sentence to answer the question.
+
+According to the boxplots, the outliers for characters in Naboo and Tatooine are those who are the shortest.\
+The outlier in the Naboo boxplot is a character named R2-D2, while the outlier in the Tatooine boxplot is a character named R5-D4.\
+\
+
+# Question 5
+
+------------------------------------------------------------------------
+
+For this problem use the dataset called `MobileAds` in the `resampledata` package. (see section 1.12 for a description of the mobile ads case study). We will investigate the variable `m.cpc`, the cost per click for the mobile platform.
+
+## Question 5a:
+
+------------------------------------------------------------------------
+
+Create separate histograms of the variables `m.cpc_pre` and `m.cpc_post`.
+
+### Solution to 5a:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+hist(MobileAds$m.cpc_pre,
+     xlab="cost per click before",
+     main="Histogram of cost per clicks before",
+     col="dark green")
+hist(MobileAds$m.cpc_post,
+     xlab="cost per click after",
+     main="Histogram of cost per clicks after",
+     col="dark red")
+```
+
+\
+\
+
+## Question 5b:
+
+------------------------------------------------------------------------
+
+Create a new variable called `m.cpc_diff` which is defined as the difference
+
+`MobileAds$m.cpc_post - MobileAds$m.cpc_pre`.
+
+Then create a histogram displaying the new variable `m.cpc_diff`.
+
+### Solution to 5b:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+m.cpc_diff <- MobileAds$m.cpc_post - MobileAds$m.cpc_pre
+# head(m.cpc_diff)
+hist(m.cpc_diff,
+     xlab="Difference between cost per click",
+     main="Histogram of difference in cost per click before and after",
+     col="dark blue")
+```
+
+\
+\
+
+# Question 6
+
+------------------------------------------------------------------------
+
+Consider the dataset containing six values: $$ 1, 3, 4, 5, 6, 8, 11, 15$$
+
+Run to code cell below to store the data in the vector `x`.
+
+```{r}
+x <- c(1, 3, 4, 5, 6, 8, 11, 15)
+```
+
+## Question 6a:
+
+------------------------------------------------------------------------
+
+Compute the mean of the data.
+
+### Solution to 6a:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+mean(x)
+```
+
+\
+\
+
+## Question 6b:
+
+------------------------------------------------------------------------
+
+Assuming the dataset is from a sample, compute the standard deviation.
+
+### Solution to 6b:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+sd(x)
+```
+
+\
+\
+
+## Question 6c:
+
+------------------------------------------------------------------------
+
+What is the median value of the dataset?
+
+### Solution to 6c:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+median(x)
+```
+
+\
+\
+
+## Question 6d:
+
+------------------------------------------------------------------------
+
+Use R to generate assign new dataset $y$ that results from taking the square root of each value in the original dataset above. We can enter the R command below to create such an object. After creating $y$ with the command below, answer the questions below.
+
+### Question 6d.i:
+
+------------------------------------------------------------------------
+
+```{r}
+y <- sqrt(x)
+```
+
+Compute the mean of $y$.
+
+#### Solution to 6d.i:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+mean(y)
+```
+
+\
+\
+
+### Question 6d.ii:
+
+------------------------------------------------------------------------
+
+Assuming the dataset $y$ is from a sample, compute the standard deviation.
+
+#### Solution to 6d.ii:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+sd(y)
+```
+
+\
+\
+
+### Question 6d.iii:
+
+------------------------------------------------------------------------
+
+What is the median value of the new dataset?
+
+#### Solution to 6d.iii:
+
+------------------------------------------------------------------------
+
+Enter R code in the cell below. Nothing to explain or interpret.
+
+```{r}
+median(y)
+```
+
+\
+\
+
+## Question 6e:
+
+------------------------------------------------------------------------
+
+Is the mean of the new dataset equal to the square root of the original mean?
+
+### Solution to 6e:
+
+------------------------------------------------------------------------
+
+Based on output from previous code cells, write a complete sentence to answer the question.
+
+```{r}
+x.sqrt.mean <- sqrt(mean(x))
+x.sqrt.mean
+```
+
+The mean of the new dataset is not equal to the square root of the original mean. The mean of y is 2.429455 while the square root of the mean of x is 2.573908.
+
+## Question 6f:
+
+------------------------------------------------------------------------
+
+Is the median of the new dataset equal to the square root of the original median? Show or explain why this is or is not so.
+
+### Solution to 6f:
+
+------------------------------------------------------------------------
+
+Based on output from previous code cells, write a complete sentence to answer the question.
+
+```{r}
+x.sqrt.median <- sqrt(median(x))
+x.sqrt.median
+```
+
+The median of the new dataset is not exactly equal to the square root of the original mean, but it is close. The median of y is 2.342779 while the square root of the median of x is 2.345208.

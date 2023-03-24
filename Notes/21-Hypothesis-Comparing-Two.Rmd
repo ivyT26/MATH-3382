@@ -1,0 +1,498 @@
+---
+title: '21: Hypothesis Test for Comparing Two Populations'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Summary of Hypothesis Tests
+
+------------------------------------------------------------------------
+
+1.  State the hypotheses and identify (from the claim) if it is a one or two-tail test.
+
+2.  Compute the [**test statistic**]{style="color: blue;"}.
+
+    -   The test statistic measures how many standard errors the observed statistic(s) is/are from the null claim.
+    -   The farther the observed sample is from the null claim, the more significant the test result will be.
+
+3.  Using the null distribution, compute the [**P-value**]{style="color: blue;"}.
+
+    -   The P-value is the probability of getting a sample with a test statistic as or more extreme than the observed sample assuming $H_0$ is true.
+    -   It is the area in the tails(s) beyond the test statistic.
+    -   The more "extreme" the observed sample, the smaller the P-value.
+
+4.  Based on the [**significance level**]{style="color: blue;"}, $\alpha$, make a decision to reject or not reject the null hypothesis
+
+    -   If P-value $\leq \alpha$, we reject $H_0$.
+    -   If P-value $> \alpha$, we do not reject $H_0$.
+
+5.  Summarize the results in practical terms, **in the context of the problem**.
+
+    -   If we reject $H_0$, this means there is enough evidence to support the claim in $H_a$.
+    -   If we do not reject $H_0$, this means there is not evidence to support the claim in $H_a$. The test is inconclusive.
+
+# Stating Hypotheses
+
+------------------------------------------------------------------------
+
+## Question 1
+
+------------------------------------------------------------------------
+
+State whether each set of hypotheses is valid for a statistical test.
+If not, explain why not.
+If so, would you use a one-tail or two-tail test.
+
+a.  $H_0: \mu = 50$ and $H_a: \mu > 50$.
+
+b.  $H_0: p_a - p_b <0$ and $H_a: p_a - p_b=0$.
+
+c.  $H_0: \mu_1 - \mu_2 \ne 0$ and $H_a: \mu_1 -\mu_2 =0$.
+
+d.  $H_0: p_a = p_b$ and $H_a: p_a \ne p_b$.
+
+e.  $H_0: \bar{x} = 5$ and $H_a: \bar{x} \ne 5$.
+
+f.  $H_0: p = 0.25$ and $H_a: p>0.5$.
+
+g.  $H_0: p = 0.25$ and $H_a: p>0.25$.
+
+h.  $H_0: \mu = 10$ and $H_a: \mu \ne 10$.
+
+### Solution to Question 1
+
+------------------------------------------------------------------------
+
+a.  yes, use one tail test
+
+b.  no, null hypothesis should claim that there is no difference between the samples being compared.
+    the alternative hypothesis should state there is a difference.
+    inequality should be used in alternative hypothesis, equality should be tied to null hypothesis.
+
+c.  no, null hypothesis should claim there is no difference between two samples
+
+d.  Yes, use two tail test
+
+e.  no, claims should be about a population parameter
+
+f.  no, null and alternative hypothesis should be comparing the same values
+
+g.  yes, one tail test
+
+h.  yes, two tail test
+
+## Question 2
+
+------------------------------------------------------------------------
+
+Reflect on the previous question, and list some key points to keep in mind when stating hypotheses.
+
+### Solution to Question 2
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+# Hypothesis Test For a Difference in Two Means
+
+------------------------------------------------------------------------
+
+## Defining a Test Statistic
+
+------------------------------------------------------------------------
+
+Let $X_1, X_2, \ldots , X_{n_1} \sim N(\mu_1, \sigma_1^2)$ and $Y_1, Y_2, \ldots , Y_{n_2} \sim N(\mu_2, \sigma_2^2)$ be a random samples from two independent normal populations with sample means and standard deviations $\bar{X}$, $S_1$ and $\bar{Y}$, $S_2$, respectively.
+To test for a difference between the two means we form the test statistic:
+
+$${\large \color{blue}{t = \frac{\bar{X}-\bar{Y}}{\sqrt{\frac{S_1^2}{n_1}+ \frac{S_2^2}{n_2}}}}}.$$
+
+test statistic general format: (observed - claimed)/SE
+
+for example above: t = ((X bar - Y bar) - 0)/SE
+
+## Computing the P-value:
+
+------------------------------------------------------------------------
+
+-   Use a $t$-distribution with degrees of freedom computed by Welch's approximation.
+-   Use the command `t.test(Variable1 ~ HowGroupsSplit, data = Dataset_name, alt = "greater")`.
+    -   Use `"greater"` for right-tail test.
+    -   Use `"less"` for left-tail test.
+    -   Use `"two.sided"` for a two-tail test.
+    -   If you do not indicate any `alt` option, the default is a two-tail test.
+-   If doing the calculation by hand, we can use $df = n_{\rm min} -1$, where $n_{\rm min}$ is the smaller of the two sample sizes.
+
+## Question 3
+
+------------------------------------------------------------------------
+
+A researcher suggests that male nurses earn more than female nurses.
+A survey of 16 male nurses and 20 female nurses reports these data.
+The mean salary for the 20 females is $\$23,\!750$ with a standard deviation of $\$250$.
+The mean salary for the 16 males is $\$23,\!900$ with a standard deviation of $\$300$.
+Is there enough evidence to support the claim that female nurses earn less than male nurses?
+Use a significance level of $\alpha=0.05$.
+
+### Solution to Question 3
+
+------------------------------------------------------------------------
+
+a.  State the hypotheses.
+
+H0: $\mu_{male \ salary} - \mu_{female \ salary} = 0$
+
+Ha: $\mu_{male \ salary} - \mu_{female \ salary} > 0$\
+\
+
+b.  Compute the test statistic and P-value by hand using formulas (and not using `t.test`).
+
+```{r}
+f.mean.sal <- 23750
+m.mean.sal <- 23900
+f.sd <- 250
+m.sd <- 300
+se <- sqrt((m.sd**2/16) + (f.sd**2/20))
+
+t <- (m.mean.sal - f.mean.sal) / se
+t
+p.val <- 1 - pt(t,16-1)
+p.val
+```
+
+c.  Make a decision and summarize the results in the context of this example.
+
+Since the p value 0.065 \> 0.05, it is not statistically significant and we cannot reject our null hypothesis.
+the test is therefore inconclusive.
+
+we cannot be sure if male nurses earn more than female nurses.\
+
+\
+
+# Hypothesis Test For a Difference in Two Proportions
+
+------------------------------------------------------------------------
+
+## Defining a Test Statistic
+
+------------------------------------------------------------------------
+
+Let $X_1 \sim \mbox{Binom}(n_1, p_1)$ and $X_2 \sim \mbox{Binom}(n_2, p_2)$ be two independent random variables.
+To test for the difference in two proportions we form the test statistic:
+
+$${\large \color{blue}{z= \frac{\hat{p}_1-\hat{p}_2}{\sqrt{\hat{p}_p(1-\hat{p}_p) \left( \frac{1}{n_1}+\frac{1}{n_2} \right) }}}}.$$
+
+where $\color{blue}{\hat{p}_p = (X_1+X_2)/(n_1+n_2)}$ is [the pooled proportion]{style="color: blue;"}.
+
+We don't know what p1 and p2 are, we can only assume they are the same.
+
+We want to use the same value for p1 and p2 since we claim p1-p2=0.
+
+We will group both samples together $(\hat{p}_p)$.
+We will assume this is our proportion for p1 and p2.
+
+Have to use a normal distribution to approximate the binomial distribution for this case.
+
+## Computing the the P-value
+
+------------------------------------------------------------------------
+
+-   Use a normal distribution:
+    -   For a left tail test, P-value = `pnorm(z, 0, 1)`
+    -   For a right tail test, P-value = `1 - pnorm(z, 0, 1)`
+    -   For a two tail test, P-value = `2 * pnorm(-1*abs(z), 0 , 1)`
+-   In R, enter the command `prop.test(c(X1, X2), c(n1, n2), alt = "enter.option")`
+
+## Question 4
+
+------------------------------------------------------------------------
+
+It is believed that a sweetener called xylitol helps prevent ear infections.
+In a randomized experiment $n_1 = 165$ children took a placebo and $68$ of them got ear infections.
+Another $n_2 = 159$ children took xylitol and $46$ of them got ear infections.
+We believe that the proportion of ear infections in the placebo group will be greater than the xylitol group.
+Use $\alpha=0.01$.
+
+### Solution to Question 4
+
+------------------------------------------------------------------------
+
+a.  State the hypotheses.
+
+H0: $p_{xylitol}=p_{placebo}$
+
+Ha: $p_{placebo} > p_{xylitol}$\
+\
+
+b.  Compute the test value and P-value by hand.
+
+```{r}
+n1 <- 165
+n2 <- 159
+p1.hat <- 68/n1 #placebo
+p2.hat <- 46/n2 #xylitol
+p.pooled <-(68+46)/(n1+n2)
+
+z <- (p1.hat-p2.hat)/sqrt(p.pooled*(1-p.pooled)*((1/n1)+(1/n2)))
+z
+p.val <- 1 - pnorm(z, 0, 1)
+p.val
+
+#using prop test w/o cc
+prop.test(c(68,46),c(165,159),alt="greater",correct=FALSE)
+```
+
+c.  Enter R code to calculate the test statistic and P-value.
+
+\
+\
+
+d.  Make a decision and summarize the results in the context of this problem.
+
+Since the p value 0.0103 \> 0.01, it is not statistically significant.
+The test is inconclusive.\
+
+\
+
+# Continuity Correction for Proportions
+
+------------------------------------------------------------------------
+
+-   Binomial distributions are discrete, but the CLT approximation uses a normal distribution which is continuous.
+-   We can improve the approximation using a [**continuity correction**]{style="color: blue;"} that we saw earlier this semester.
+-   Add or subtract $0.5$ from each "success" count so the [**difference in proportions becomes closer to 0**]{style="color: blue;"}, and thus gives a larger P-value.
+-   If using the `prop.test` command, add the option `correct = TRUE`.
+
+## Question 5
+
+------------------------------------------------------------------------
+
+It is believed that a sweetener called xylitol helps prevent ear infections.
+In a randomized experiment $n_1 = 165$ children took a placebo and $68$ of them got ear infections.
+Another $n_2 = 159$ children took xylitol and $46$ of them got ear infections.
+We believe that the xylitol will reduce the incidence of ear infections when compared to no treatment.
+Use $\alpha=0.01$.
+
+### Solution to Question 5
+
+------------------------------------------------------------------------
+
+a.  State the hypotheses (same as [Question 4]).
+
+\
+\
+
+b.  Compute the test value and P-value by hand.
+
+\
+\
+
+c.  Enter R code to calculate the test statistic and P-value.
+
+```{r}
+#applying continuity correction
+n1 <- 165
+n2 <- 159
+p1.hat.cc <- (68-0.5)/n1 #placebo
+p2.hat.cc <- (46+0.5)/n2 #xylitol
+p.pooled <-(68+46)/(n1+n2)
+
+z.cc <- (p1.hat.cc-p2.hat.cc)/sqrt(p.pooled*(1-p.pooled)*((1/n1)+(1/n2)))
+z.cc
+p.val <- 1 - pnorm(z.cc, 0, 1)
+p.val
+
+#using prop test (with cc)
+prop.test(c(68,46),c(165,159), alt="greater")
+```
+
+d.  Compare your P-value with the P-value you found in [Question 4]. Does this change your conclusion?
+
+No, but it did make the p value even more statistically insignificant.\
+
+\
+
+## Question 6
+
+------------------------------------------------------------------------
+
+The dataset `NCBirths2004` in the `resampledata` library contains 1009 observations with information about children (and birth parent) born in North Carolina in 2004.
+The following variables we will need to answer this question:
+
+-   `Weight` is the weight in grams of the newborn.
+-   `Tobacco` indicates whether the birth parent is a smoker or not.
+
+Researchers want to determine whether mean weight of all babies born North Carolina in 2004 to nonsmoking parents is different from the mean of all babies born from parents that are smokers?
+
+### Solution to Question 6
+
+------------------------------------------------------------------------
+
+```{r}
+# load required packages
+library(resampledata)
+```
+
+a.  Set up the hypotheses.
+
+\
+\
+
+b.  Using R calculate the test statistic and P-value.
+
+\
+\
+
+c.  Summarize the test results in the context of this example.
+
+\
+\
+
+# Test Your Own Questions
+
+------------------------------------------------------------------------
+
+## Question 7
+
+------------------------------------------------------------------------
+
+The dataset `NCBirths2004` has the following variables:
+
+-   `MothersAge`: Categorical variable (under 15, 15-19, 20-24, 25-29, 30-34, 35-39, 40-44, 45-49).
+-   `Tobacco`: Categorical (Yes or No)
+-   `Alcohol`: Categorical (Yes or No)
+-   `Gender`: Categorical (Male or Female) - Gender of assigned at birth to baby.
+-   `Weight`: Numerical (in grams)
+-   `Gestation`: Numerical (in weeks)
+
+```{r}
+summary(NCBirths2004)
+```
+
+### Question 7a
+
+------------------------------------------------------------------------
+
+Write one possible claim that could be tested by a hypothesis test for a difference in two means.
+Then write the corresponding hypotheses and R code you would use to calculate the P-value of the observed samples.
+
+#### Solution to Question 7a
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 7b
+
+------------------------------------------------------------------------
+
+Write one possible claim that could be tested by a hypothesis test for a difference in two proportions.
+Then write the corresponding hypotheses and R code you would use to calculate the P-value of the observed samples.
+
+#### Solution to Question 7b
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 7c
+
+------------------------------------------------------------------------
+
+Write one possible claim that could be tested by a hypothesis test for a in a single mean.
+Then write the corresponding hypotheses and R code you would use to calculate the P-value of the observed sample.
+
+#### Solution to Question 7c
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+### Question 7d
+
+------------------------------------------------------------------------
+
+Write one possible claim that could be tested by a hypothesis test for a single proportion.
+Then write the corresponding hypotheses and R code you would use to calculate the P-value of the observed sample.
+
+#### Solution to Question 7d
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+# Hypothesis Tests For Mean Difference in Matched Pairs
+
+------------------------------------------------------------------------
+
+## Question 8
+
+------------------------------------------------------------------------
+
+A study[^1] tested whether wearing wetsuits influences swimming velocity.
+Twelve competitive swimmers swam 1500 meters at maximum speed twice each.
+Once wearing a wetsuit and once wearing a regular bathing suit.
+The order of the trials was randomized.
+Each time, the maximum velocity in meters/sec of the swimmer was recorded.
+
+[^1]: de Lucas, Balidan, Neiva, Grecco, and Denadai.
+    "The effects of wetsuits on physiological and biomechanical indices during swimming'', *Journal of Science and Medicine in Sport.*
+
+de Lucas, Balidan, Neiva, Grecco, and Denadai.
+"The effects of wetsuits on physiological and biomechanical indices during swimming", *Journal of Science and Medicine in Sport*.
+
+| Swimmer    | 1      | 2      | 3      | 4      | 5      | 6      | 7      | 8      | 9      | 10     | 11     | 12     |
+|------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| Wetsuit    | $1.57$ | $1.47$ | $1.42$ | $1.35$ | $1.22$ | $1.75$ | $1.64$ | $1.57$ | $1.56$ | $1.53$ | $1.49$ | $1.51$ |
+| No Wetsuit | $1.49$ | $1.37$ | $1.35$ | $1.27$ | $1.12$ | $1.64$ | $1.59$ | $1.52$ | $1.50$ | $1.45$ | $1.44$ | $1.41$ |
+| Difference | $0.08$ | $0.10$ | $0.07$ | $0.08$ | $0.10$ | $0.11$ | $0.05$ | $0.05$ | $0.06$ | $0.08$ | $0.05$ | $0.10$ |
+
+```{r}
+wetsuit <- c(1.57, 1.47, 1.42, 1.35, 1.22, 1.75, 1.64, 1.57, 1.56, 1.53, 1.49, 1.51)
+none <- c(1.49, 1.37, 1.35, 1.27, 1.12, 1.64, 1.59, 1.52, 1.50, 1.45, 1.44, 1.41)
+diff <- wetsuit - none
+```
+
+### Solution to Question 8
+
+------------------------------------------------------------------------
+
+a.  Set up the hypothesis for the test both in words and using appropriate notation.
+
+H0: $\mu_{diff} = 0$
+
+Ha: $\mu_{diff} > 0$\
+- assume we want to test that the wetsuit makes the swimmer swim faster than a normal swimsuit\
+
+b.  What do you think would be an appropriate test statistic we can use to gauge the significance of the sample?
+
+$t = \frac{\bar{x}_{diff} - 0}{\frac{s_{diff}}{\sqrt{n}}}$\
+\
+
+c.  Calculate the P-value of the observed sample.
+
+```{r}
+x.bar <- mean(diff)
+s.diff <- sd(diff)
+n <- 12
+t <- x.bar/(s.diff/sqrt(n))
+1 - pt(t, n-1)
+```
+
+d.  What would the conclusion be at a 5% significance level? Summarize the result in the context of this problem.
+
+\
+\

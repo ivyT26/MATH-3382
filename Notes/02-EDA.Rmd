@@ -1,0 +1,639 @@
+---
+title: '02: Exploring Data with R and R Studio'
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r, include=FALSE}
+# include=FALSE means code will not display in html
+# eval=FALSE is a global option for blank worksheet
+knitr::opts_chunk$set(eval=FALSE)
+```
+
+# An Overview of Exploratory Data Analysis
+
+------------------------------------------------------------------------
+
+[**Exploratory data analysis**]{style="color: blue;"}, or EDA for short, can be thought of as a cycle:
+
+-   Generate questions about your data.
+-   Search for answers by visualizing, transforming, and modeling your data.
+-   Use what you learn to refine your questions and/or generate new questions.
+
+The main goal of EDA is to develop an understanding of your data.
+When you ask a question, the question focuses your attention on a specific part of your dataset and helps you decide which graphs, models, or transformations to make.
+
+# Preliminaries: Loading Packages in R
+
+------------------------------------------------------------------------
+
+```{r, message=FALSE, eval=TRUE}
+library(dplyr)
+```
+
+# Some Useful Functions for Summarizing Data
+
+------------------------------------------------------------------------
+
+Here are some commands for creating commonly used tables and graphics.
+
+-   `help(package = "dplyr")` displays a glossary of all (most?) functions and data in the package dplyr.
+-   `data()` will list all datasets currently loaded in your R session (across all packages).
+-   `summary(df)` gives numerical summary of all variables in data frame with generic name `df`.
+-   `glimpse(df)` gives a glimpse of the data frame with name `df`.
+-   `head(df)` view first 6 rows in data frame.
+-   `tail(df)` view last 6 rows in data frame.
+-   `view(df)` to view the full data frame in a separate tab.
+-   `table(x)` creates a frequency table for categorical variable `x`.
+-   `table(x, y)` creates a contingency table for two categorical variables `x` and `y`
+-   `prop.table(x)` creates a joint distribution table for **table** `x` relative to grand total.
+    -   `prop.table(x, 1)` conditional distribution table so sum across each row of table `x` equals 1.
+    -   `prop.table(x, 2)` conditional distribution table so sum across each column of table `x` equals 1.
+-   `barplot(x)` creates a bar chart of data in table `x`.
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+The package `dplyr` contains many datasets, one of which is `storms`.
+How many observations are in `storms`?
+How many variables?
+Which variables are numerical and which are categorical?
+Enter R code in the blank cell below and then type your answer in the space below.
+
+### Solution to Question 1:
+
+------------------------------------------------------------------------
+
+```{r}
+glimpse(storms)
+```
+
+```{r, set-options}
+options(width=100)
+summary(storms)
+```
+
+# Displaying Categorical Variables: Bar Plots
+
+------------------------------------------------------------------------
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+Let's explore the following question:
+
+> Which storm types occurred most frequently over the period from 1975 to 2015?
+
+a.  Create a frequency table to identify how many storms there are in each `status`.
+
+### Solution to Question 2a:
+
+------------------------------------------------------------------------
+
+```{r}
+table(storms$status)
+summary(storms$status) #when using table, it does not convert the original data to a categorical form, need to use factor; it does display it correctly as it wasa categoricla variable
+```
+
+b.  Create a bar graph to visually present the table.
+
+    *Curious about how to make your barplot prettier? Enter try running `?barplot` to view the help documentation for the barplot function.*
+
+### Solution to Question 2b:
+
+------------------------------------------------------------------------
+
+```{r}
+# plot(storms$status) #storms not factors
+x <- table(storms$status)
+barplot(x)
+
+# storms$status <- factor(storms$status) #this does the same thing as above but modifies the original data
+# plot(storms$status)
+```
+
+# Displaying Numerical Variables
+
+------------------------------------------------------------------------
+
+The variable `status` in the dataset `storms` we consider a **categorical variable**, so we can **count** how many or what **proportion** of the observations fall into each classification.
+
+-   There is not a natural notion for the **average value** of the categorical variable `status`.
+-   The type of analysis and visualizations we can use depend on what type of data we have.
+-   We will revisit categorical data shortly.
+-   For now we turn our attention to summarizing and presenting **numerical variables**.
+
+## Histograms with `hist()`
+
+------------------------------------------------------------------------
+
+A [**histogram**]{style="color: blue;"} is special bar chart we use to display the distribution of values for a numerical variable.
+
+-   Values of the numerical variable are measured on the horizontal axis.
+-   The height of each bar gives the total number of observations in the dataset (called the [**frequency**]{style="color: blue;"}) in the specified [**bin range**]{style="color: blue;"}.
+-   There are no gaps between bars. Empty space means no values are in that bin range.
+-   The R function `hist(x, [options])` creates a histogram.
+-   There are lots of ways to customize options for your plots. Run `?hist` for more info.
+-   Like using colors, [here's a guide to colors in R](https://bookdown.org/hneth/ds4psy/D-3-apx-colors-basics.html).
+
+```{r  fig1, fig.height = 3, fig.width = 5, eval=TRUE}
+hist(storms$wind, 
+     breaks = 15, #10-20 breaks is the sweet spot
+     main = "Distribution of Windspeed from 1975-2020",
+     xlab="Wind speed (in knots)",
+     xlim = c(0, 160), 
+     ylim = c(0,2500), 
+     col = "steelblue")
+#the number of breaks in the histogram can alter the shape and observation can vary
+```
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+How would you describe the shape of the distribution of wind speed shown in the histogram above?
+
+### Solution to Question 3:
+
+------------------------------------------------------------------------
+
+\
+The shape is skewed to the right (more data on the left, tail on right).
+There is more data that describes data with wind speed below 50mph than ones that are greater than 50mph.\
+
+Based on the graph, it seems that as the wind speed gets bigger, there are less storms with that much wind speed.\
+
+\
+\
+\
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+Create a histogram to display the variable `month`.
+What does the shape of that graph tell you?
+
+```{r}
+hist(storms$month,
+     col = "red")
+```
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+Graph is skewed left.
+
+Most storms seem like they occur later in the year.\
+
+\
+\
+\
+\
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+Create a histogram to display the variable `long`.
+What does the shape of that graph tell you?
+
+### Solution to Question 5:
+
+------------------------------------------------------------------------
+
+```{r}
+hist(storms$long, col="green")
+```
+
+The graph is pretty symmetric.
+It seems like storms can occur anywhere.\
+
+\
+\
+\
+\
+\
+
+## The Shape of Data
+
+------------------------------------------------------------------------
+
+```{r fig2, fig.height = 3, fig.width = 5, eval=TRUE}
+par(mfrow = c(1, 3))  # Create a 1 x 3 array of plots
+
+# The next 3 plots created will be arranged in one row
+
+hist(storms$wind, xlab = "wind speed (in knots)",   # x-axis label
+     ylab = "Frequency",  # y-axis label
+#     main = "Distribution of Storm Wind Speed 1975-2020",  # main label
+     col = "steelblue")  # change color of bars
+
+hist(storms$month, 
+     breaks = 12, 
+     xlab="Month",
+     xlim = c(1, 12), 
+     ylim = c(0,4500), 
+     col = "coral1",
+#     main = "Distribution of Storms by Month",
+     xaxt='n')
+axis(1, at=seq(1, 12, 1), pos=0)
+
+hist(storms$long, 
+     breaks = 15, 
+     xlab="Degrees of Longitude",
+     xlim = c(-120, 0), 
+     ylim = c(0,1000), 
+     col = "aquamarine4",
+#     main = "Distribution of Storms by Longitude",
+     xaxt='n')
+axis(1, at=seq(-120, 0, 10), pos=0)
+
+par(mfrow = c(1, 1))  # reset so one plot per figure
+```
+
+-   The distribution of wind speeds is [**skewed right**]{style="color: blue;"}.
+-   The distribution of months is [**skewed left**]{style="color: blue;"}.
+-   The distribution of longitude is approximately [**symmetric**]{style="color: blue;"}.
+
+## Measurements of Center
+
+------------------------------------------------------------------------
+
+Typical measurements of center are:
+
+-   The [**mean**]{style="color: blue;"} is the average.
+    -   Use the command `mean(x)` .
+    -   We use $\color{blue}{\mathbf{\bar{x}}}$ (pronounced x-bar) to denote a [**sample**]{style="color: blue;"} mean.
+    -   We use $\color{blue}{\mathbf{\mu}}$ (Greek letter mu) to denote a [**population**]{style="color: blue;"} mean.
+-   The [**median**]{style="color: blue;"} is the $50^{\mbox{th}}$ percentile. 50% of the values in the data set are less than the median.
+    -   Use the command `median(x)` .
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+Compute the mean wind speed of all storms and the median wind speed of all storms.
+Interpret in practical terms what each tells us.
+
+### Solution to Question 6:
+
+------------------------------------------------------------------------
+
+```{r}
+#skewed right: outliers on the right; mean is greater than the median
+mean(storms$wind)
+median(storms$wind)
+```
+
+\
+The data is skewed right.
+The median is less than the mean tells us that there are large outliers on the right side and most of the data is in the lower half.\
+
+\
+\
+\
+\
+
+## Question 7:
+
+------------------------------------------------------------------------
+
+Why do you think the mean wind speed is greater than the median wind speed of all storms?
+
+### Solution to Question 7:
+
+------------------------------------------------------------------------
+
+There is more data points for wind speed on the lower half of the range, so the median is less than the mean.
+The mean is larger because of the outliers.\
+
+\
+\
+\
+\
+\
+
+### Relation of Shape to Measurements of Center
+
+------------------------------------------------------------------------
+
+![Symmetric Distributions (see footnote to view image)[^1]](../Images/02-symmetric.png){width="600"}
+
+[^1]: The image above will not display for you by default.
+    To see the image, go to [symmetric histograms](https://drive.google.com/file/d/1aq-Kkt5VZswMNaNfsXHGEGhgKhW-LCwM/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+[^2]: The image above will not display for you by default.
+    To see the image, go to [symmetric histograms](https://drive.google.com/file/d/1aq-Kkt5VZswMNaNfsXHGEGhgKhW-LCwM/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+![Skewed Distributions (see footnote to view image)[^3]](../Images/02-skewed.png){width="600"}
+
+[^3]: The image above will not display for you by default.
+    To see the image, go to [skewed histograms](https://drive.google.com/file/d/1PJ0EbuzffZFJmdMj1PvqeF3GdXuilZSI/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+[^4]: The image above will not display for you by default.
+    To see the image, go to [skewed histograms](https://drive.google.com/file/d/1PJ0EbuzffZFJmdMj1PvqeF3GdXuilZSI/view?usp=sharing).
+    To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+-   If the shape of the histogram is [**symmetric**]{style="color: blue;"}, then the [**mean is equal to the median**]{style="color: blue;"}.
+-   If the shape of a histogram is [**skewed to the left**]{style="color: red;"}, the [**mean is less than the median**]{style="color: red;"}.
+-   If the shape of a histogram is [**skewed to the right**]{style="color: green;"}, the [**mean is greater than the median**]{style="color: green;"}.
+
+# Filtering and Subsetting Data
+
+------------------------------------------------------------------------
+
+We have seen that the most frequent month is August, followed by July as the second most frequent month.
+How can we compare the strength of storms that occur in July to August?
+
+Here are different methods for filtering out a subset of all observations based on some additional condition(s).
+
+-   Using the `filter` function in `dplyr`, we can filter out just the July observations
+
+```{r}
+july <- filter(storms, month == "7")  # filter requires dplyr package
+aug <- filter(storms, month == "8")
+sept <- filter(storms, month == "9")
+```
+
+```{r, set-options)}
+options(width=50)
+summary(july)
+```
+
+-   Using the `subset` function in base R, we can perform the same operation:
+
+```{r}
+# keeps all variables, same as filter above
+july <- subset(storms, month == "7")
+
+# keeps only wind speed variable for july saves as data frame
+july.wind <- subset(storms, select = wind, month == "7")
+
+# Option drop=TRUE drops header and treated as vector
+july.wind.vec <- subset(storms, select = wind, month == "7", drop = T) 
+```
+
+-   Using **Logical Statements**.
+    -   `storms[storms$month == "7", ]` extracts just the rows that have a `month` value equal to 7.
+    -   `july.logic[ , c("wind")]` keeps just the wind speed column from `july.logic`.
+    -   We could do this in one step with `july.logic <- storms[storms$month == "7", c("wind")]`.
+    -   This method requires more proficiency, which is why the functions `filter` and `subset` are nice!
+
+```{r}
+# pull of rows from storm that
+july.logic <- storms[storms$month == "7", ]
+
+july.logic.wind <- july.logic[ , c("wind")]
+```
+
+## Question 8:
+
+------------------------------------------------------------------------
+
+Compute the mean and median wind speed of all storms in July.
+Compare the values of the mean and median.
+What does this tell us about the shape of the data?
+
+### Solution to Question 8:
+
+------------------------------------------------------------------------
+
+```{r}
+mean(july$wind)
+median(july$wind)
+```
+
+The shape of the data is fairly balanced/distributed evenly.
+The shape of the data is a normal distribution.\
+
+\
+\
+\
+\
+\
+
+## Question 9:
+
+------------------------------------------------------------------------
+
+In which month are the storms more severe?
+What statistics did you use to draw your conclusion?
+
+### Solution to Question 9:
+
+------------------------------------------------------------------------
+
+```{r}
+#if you want to account for outliers
+mean(july$wind)
+mean(aug$wind)
+mean(sept$wind)
+
+#if you don't want to account for outliers
+median(july$wind)
+median(aug$wind)
+median(sept$wind)
+
+max(july$wind)
+max(aug$wind)
+max(sept$wind)
+```
+
+```{r}
+boxplot(july$wind, aug$wind, sept$wind,
+        names = c("july", "august", "september"))
+```
+
+## Measurements of Spread
+
+------------------------------------------------------------------------
+
+Typical measurements of spread are:
+
+-   The [**range**]{style="color: blue;"} $= \mbox{max} - \mbox{min}$.
+-   The [**standard deviation**]{style="color: blue;"} approximately measures the average distance of each value from the mean value.
+    -   For a sample, $\displaystyle s = \sqrt{\dfrac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}}$.
+        -   square the difference between each point and the mean so that the sign of values do not sway one way
+    -   The command `sd(var\_name)` computes in R.
+    -   We use $\color{blue}{\mathbf{s}}$ to denote a [**sample**]{style="color: blue;"} standard deviation.
+    -   We use $\color{red}{\mathbf{\sigma}}$ (Greek letter sigma) to denote a [**population**]{style="color: red;"} standard deviation.
+
+![Comparing Standard Deviations of Distributions (see footnote to view image)[^5]](../Images/02-compare-sd.png){width="600"}
+
+[^5]: The image above will not display for you by default.
+    To see the image, go to [standard deviation source image](https://drive.google.com/file/d/1xwLcfjv6fVJBTZl3B8QNMIpvMVZiqGf4/view?usp=sharing) To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+[^6]: The image above will not display for you by default.
+    To see the image, go to [standard deviation source image](https://drive.google.com/file/d/1xwLcfjv6fVJBTZl3B8QNMIpvMVZiqGf4/view?usp=sharing) To display the image in your file, download the image file linked above and save the file in a folder named `Images` that is located one directory level back from the directory where you have saved the current file.
+
+## Question 10:
+
+------------------------------------------------------------------------
+
+Which of the histograms (i)-(vi) has the largest range?
+The smallest range?
+
+### Solution to Question 10:
+
+------------------------------------------------------------------------
+
+\
+The histograms with the largest range are c, d, e, f.
+The histograms with the smallest range are a and b.\
+
+\
+
+## Question 11:
+
+------------------------------------------------------------------------
+
+Which of the histograms (i)-(vi) has the largest standard deviation?
+The smallest standard deviation?
+
+### Solution to Question 11:
+
+------------------------------------------------------------------------
+
+The histogram with the largest standard deviation is f.
+The smallest would be a.
+
+## Quantiles
+
+------------------------------------------------------------------------
+
+-   The $25^{\mbox{th}}$ percentile [**first quartile**]{style="color: blue;"} is denoted $\color{blue}{\mathbf{Q_1}}$. Use `quantile(x, probs=0.25)`.
+-   The $75^{\mbox{th}}$ percentile [**third quartile**]{style="color: blue;"} is denoted $\color{blue}{\mathbf{Q_3}}$. Use `quantile(x, probs = 0.75)`.
+-   The [**Interquartile Range (IQR)**]{style="color: blue;"}$\color{blue}{=Q_3-Q_1}$. Use `IQR(x)`
+-   The [**five number summary**]{style="color: blue;"} can also provide a good description of the spread of the values since we know 25% of the values in a dataset fall between each consecutive pair of values. $$\color{blue}{(\mbox{min}, Q_1 , \mbox{median}, Q_3, \mbox{max} )}$$
+-   Use `summary(x)`to compute in R. Note `x` can be a vector or a data frame.
+
+## Question 12:
+
+------------------------------------------------------------------------
+
+Give the five number summary for the wind speed of all storms in July.
+
+### Solution to Question 12:
+
+------------------------------------------------------------------------
+
+```{r}
+summary(july$wind)
+#can also use fivenum function
+fivenum(july$wind)
+sd(july$wind)
+```
+
+(10, 30, 40, 50, 140)\
+\
+
+## Boxplots and Five Number Summaries
+
+------------------------------------------------------------------------
+
+The five number summary for August wind speeds is $(10, 30, 45, 65, 150)$.
+Below is a [**boxplot**]{style="color: blue;"} for this data.
+
+```{r fig3, fig.height = 3, fig.width = 5, eval=TRUE}
+aug <- subset(storms, month == "8")
+summary(aug$wind)
+boxplot(aug$wind, 
+        main = "August Wind Speeds", 
+        xlab = "Wind Speed (in knots)",
+        horizontal = TRUE)
+```
+
+## Question 13:
+
+------------------------------------------------------------------------
+
+Create a boxplot to illustrate the distribution of wind speeds of July storms.
+
+### Solution to Question 13:
+
+------------------------------------------------------------------------
+
+```{r}
+boxplot(july$wind,
+        horizontal=TRUE)
+```
+
+\
+\
+
+## Question 14:
+
+------------------------------------------------------------------------
+
+Create a side by side box plot to compare the distribution of wind speeds between July and August.
+
+### Solution to Question 14:
+
+------------------------------------------------------------------------
+
+```{r}
+boxplot(july$wind, aug$wind,
+        names=c("july", "august"),
+        horizontal=TRUE)
+```
+
+\
+\
+
+## How to Create and Interpret Boxplots
+
+------------------------------------------------------------------------
+
+To create a boxplot:
+
+-   Find the values of $Q_1$, median, and $Q_3$.
+-   Draw a box with bottom edges at $Q_1$ and $Q_2$ and line inside the box for the median.
+-   Identify the upper and lower fence:
+    -   Upper fence $=Q_3 + 1.5(\mbox{IQR})$.
+    -   Lower fence $=Q_1 - 1.5(\mbox{IQR})$.
+-   Extend whiskers from the lower edge to the smallest observation greater than the lower fence, and from the upper edge to the largest value that is less than the upper fence.
+-   The observations that are less than the lower fence or greater than the upper fence are considered [**outliers**]{style="color: blue;"}. These values are marked by individual points.
+
+# Appendix: Assignment of Objects
+
+------------------------------------------------------------------------
+
+To store a data structure in the computer's memory we must assign it a name.
+
+Data structures can be stored using the assignment operator `<-` or `=`.
+
+Some comments:
+
+-   In general, both `<-` and `=` *can* be used for assignment.
+-   `<-` and `=` can be used identically most of the time, but not always.
+-   It's safer and more conventional to use `<-` for assignment.
+-   **Pressing the "Alt" and "-" keys simultaneously on a PC** or Linux machine **(Option and - on a Mac)** will **insert `<-` into the R** console and script files.
+
+In the following code, we compute the mean of a vector.
+
+In the following code, we compute the mean of a vector.
+**Why can't we see the result after running it**?
+
+```{r}
+w <- storms$wind  # wind is now stored in w
+xbar.w <- mean(w)  # compute mean wind speed and assign to xbar.w
+```
+
+-   Once an object has been assigned a name, it can be printed by executing the name of the object or using the `print` function or just entering the object name.
+
+```{r}
+xbar.w  # print the mean wind speed to screen
+print(xbar.w)  # print a different way
+```
+
+-   **Sometimes you want to see the result of a code cell, and sometimes you will not.**

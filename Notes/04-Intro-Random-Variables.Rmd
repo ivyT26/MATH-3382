@@ -1,0 +1,327 @@
+---
+title: '04: Introduction to Random Variables'
+author: 'Adam Spiegler, University of Colorado Denver'
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r, include=FALSE}
+# include=FALSE means code will not display in html
+# eval=FALSE is a global option for blank worksheet
+knitr::opts_chunk$set(eval=FALSE)
+```
+
+# Random Variables
+
+------------------------------------------------------------------------
+
+Suppose a company knows that 1% of the lithium batteries they manufacture are defective.
+The manufacturer sends a shipment of 10 batteries to one of their clients.
+How likely is it that none of the batteries are defective?
+How can we connect the data to the concepts of sample spaces and events to answer this question?
+This link can be made using [**random variables**]{style="color: blue;"}:
+
+A [**random variable**]{style="color: blue;"} is a mapping
+
+$$ X: \Omega \to \mathbb{R} $$
+
+that assigns a real number $X(\omega)$ to each outcome $\omega \in \Omega$.
+
+## Example:
+
+------------------------------------------------------------------------
+
+For example, the random variable $X$ could map an outcome in which 10 batteries are selected at random to a number corresponding to how many batteries in the sample are not defective, denoted $G$ for good.
+For instance if $\omega = DDGGGGGGGG$, then $X(DDGGGGGGGG)=8$.
+We can calculate the probability that $X=10$ (none are defective) using independence of events: $$ P(X=10) = P(G)P(G) \cdots P(G) = (P(G))^{10} = (0.99)^{10} \approx 0.9044.$$
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+A student takes a 3 question quiz.
+Each of the 3 questions is multiple choice with 4 possible answer choices.
+Let the random variable $X$ be the number of correct guesses out of the 3 questions.
+
+### Question 1 Part a:
+
+------------------------------------------------------------------------
+
+What is the sample space $\Omega$?
+
+#### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+Sample Space (assuming each choice is independent):
+
+CCC
+
+CCW
+
+CWC
+
+WCC\
+WWC
+
+WCW
+
+CWW
+
+WWW\
+
+8 total outcomes, 2 choices for each question, 3 questions total\
+\
+\
+\
+
+### Question 1 Part b:
+
+------------------------------------------------------------------------
+
+Compute $P(X=0)$, how likely is it that the student gets none of the questions correct?
+
+#### Solution to Question 1b:
+
+------------------------------------------------------------------------
+
+\
+Assuming for each question, there is only 1 right answer.
+So there is a 25% of getting a correct answer and 75% of getting a wrong answer for one question.
+
+The possible outcomes for getting no correct answers is 1, which is WWW.
+
+The probability of getting a wrong answer for each question is:
+
+(0.75) \* (0.75) \* (0.75) \* 1
+
+```{r}
+0.75^3
+```
+
+P(X = 0) = 1/8 assumes that the events are equally likely to happen (but in this case it is not)
+
+### Question 1 Part c:
+
+------------------------------------------------------------------------
+
+Fill in the empty entries in table below
+
+#### Solution to Question 1c:
+
+------------------------------------------------------------------------
+
+\
+
+| $x$      | 0        | 1        | 2        | 3        |
+|----------|----------|----------|----------|----------|
+| $P(X=x)$ | 0.421875 | 0.421875 | 0.140625 | 0.015625 |
+
+```{r}
+0.25^3 #all correct answers
+3 * (0.25 * 0.75**2) #one correct answer
+3 * (0.25**2 * 0.75) #two correct answers
+0.75^3 #no correct answers
+```
+
+### Question 1 Part d:
+
+------------------------------------------------------------------------
+
+Compute $P(X \leq 1)$ and interpret the practical meaning of this value.
+
+#### Solution to Question 1d:
+
+------------------------------------------------------------------------
+
+\
+P(X = 0) + P(X = 1) = 0.84
+
+```{r}
+0.421875 + 0.421875
+```
+
+# Distributions for Discrete Random Variables
+
+------------------------------------------------------------------------
+
+-   If $X$ is a [**discrete**]{style="color: blue;"} random variable, we define the probability function or [**probability distribution**]{style="color: blue;"} or [**probability mass function (pmf)**]{style="color: blue;"} for $X$ by
+
+$$\color{blue}{p(x) = P(X=x)}.$$
+
+-   If $X$ is a random variable, we define the [**cumulative distribution function (cdf)**]{style="color: blue;"} as the function
+
+$$\color{blue}{F(x)=P(X \leq x) = \sum_{k=\rm{min \ value}}^x p(k) }.$$
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+**On a separate piece of paper,** sketch the **pmf** and **cdf** for the random variable $X$ (number of correct guesses on the 3 question quiz) in Question 1.
+Be sure to label the tickmarks on the vertical axes with an appropriate scale.
+
+![Blank Axes for pmf](https://lh5.googleusercontent.com/vbxPA1pFqeuCN8dEYJU9a-DiiJ3C5vS15Cfs5Yv3LM9IRVp0TWo-haiVUKBtciYp6co=w2400){width="300"}             ![Blank Axes for cdf](https://lh6.googleusercontent.com/XlipSscMkNVAR6RSWiwtste1VfcklAtQPAxJgdWfYESkkaPHui2brC9aiaZRJHfYqGk=w2400){width="300"}
+
+### Solution to Question 2:
+
+------------------------------------------------------------------------
+
+\
+Sketch your graph on a separate piece of paper.\
+
+```{r}
+n <- 3  # set number of trials n
+p <- 0.25  # prob of success in a trial
+x <- 0:n  # vector from 0 to n=3
+
+par(mfrow=c(1, 2))
+plot(x, dbinom(x, size = n, prob = p), main = "Graph of pmf")
+plot(x, pbinom(x, size = n, prob = p), type="s", main = "Graph of cdf")
+par(mfrow=c(1, 1))
+```
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+Let $X$ is a discrete random variable with pmf and cdf denoted $p(x)$ and $F(x)$, respectively.
+Determine if each statement is True or False.
+
+a.  $0 \leq p(x) \leq 1$ for all $x$.
+b.  $0 \leq F(x) \leq 1$ for all $x$.
+c.  $\displaystyle \sum_{\rm{all}\  x} p(x) = 1$.
+d.  $\displaystyle \sum_{\rm{all}\  x} F(x) = 1$.
+e.  $\displaystyle \lim_{x \to \infty} p(x) = 1$.
+f.  $\displaystyle \lim_{x \to \infty} F(x) = 1$.
+g.  The pmf must be a nondecreasing function.
+h.  The cdf must be a nondecreasing function.
+
+### Solution to Question 3:
+
+------------------------------------------------------------------------
+
+List the properties (a)-(h) that are indeed TRUE.
+
+a\.
+True\
+b.
+True
+
+c\.
+True: sum of probabilities all possible outcomes add up to 1 
+
+d\.
+False (see above example) 
+
+e\.
+False (see above example) 
+
+f\.
+True: see part b as supplement reasoning 
+
+g\.
+False (see example above) 
+
+h\.
+True\
+
+# Expected Value and Variance
+
+------------------------------------------------------------------------
+
+-   The average or [**expected value**]{style="color: blue;"} for a discrete random variable $X$ is denote $E(X)$ or $\mu$ and computed using the formula
+
+$$ E(X) = \mu =  \sum_x \left( x \cdot p(x) \right) = \sum_x \left( x \cdot P(X=x) \right). $$
+
+example from problem about batteries:
+
+E(X) = 0(0.42) + 1(0.42) + 2(0.14) + 3(0.015)
+
+-   The [**variance**]{style="color: blue;"} for a discrete random variable $X$ is one common way to measure how spread out (in relation to the expected value) are the values of $X$. The variance is denoted $\mbox{Var}(X)$ or $\sigma^2$ and computed using the formula
+
+$$ \mbox{Var}(X) = \sigma^2 =  \sum_x \left( (x-\mu)^2 \cdot p(x) \right) = \sum_x \left( (x-\mu)^2 \cdot P(X=x) \right). $$
+
+-   The [**standard deviation**]{style="color: blue;"} for a discrete random variable $X$ is the square root of the variance and is denoted by $\sigma$. It more or less measures the average of the distances for each value of $X$ from the mean $\mu$.
+
+$$ \mbox{SD}(X) = \sigma =  \sqrt{\mbox{Var}(X)}. $$
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+Using properties of the pmf, $p(x)$, show that
+
+$$\mbox{Var}(X) = E(X^2)  - \mu^2.$$ \### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+**Finish the proof below!**
+
+$$\begin{array}{rcll}
+\mbox{Var}(X) &=&  \sum_x \left( (x-\mu)^2 \cdot p(x) \right) & \mbox{(by definition)}\\
+ &=& \sum_x \left( (x^2 -2 \mu x + \mu^2) \cdot p(x) \right) & \mbox{(distributing)}\\
+ &=& \sum_x \left( x^2 \cdot p(x) -2 \mu x  \cdot p(x)  + \mu^2  \cdot p(x)  \right) & \mbox{(distributing again)}\\
+ &=& \sum_x \left( x^2 \cdot p(x) \right) - \sum_x \left(2 \mu x  \cdot p(x) \right)  + \sum_x \left( \mu^2  \cdot p(x)  \right) & \mbox{(properties of summation)}\\
+ &=& \sum_x \left( x^2 \cdot p(x) \right) - 2\mu\sum_x \left(x  \cdot p(x) \right)  + \mu^2\sum_x \left(p(x)  \right)  & \mbox{(factor)} \\
+ &=& \sum_x \left( x^2 \cdot p(x) \right) - 2\mu\sum_x \left(x  \cdot p(x) \right)  + \mu^2(1) & \mbox{(property of pmf)} \\
+ &=& \sum_x \left( x^2 \cdot p(x) \right) - 2\mu \cdot \mu  + \mu^2(1) & \mbox{(definition of E(X))} \\
+ &=& E(X^2) - 2\mu^2  + \mu^2 & \mbox{(definition of E(X^2))} \\
+ &=& E(X^2) - \mu^2 & \mbox{(combine like terms)} \\
+\end{array}$$
+
+\
+\
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+A charity is running a raffle as a fundraiser.
+They offer one grand prize of \$500, two second prizes of \$$100$ each, and ten third prizes of \$20 each.
+They plan to sell 1,000 tickets each at a price of \$2.
+Let $X$ denote the amount of money won by a lottery ticket
+
+### Question 5 Part a:
+
+------------------------------------------------------------------------
+
+Fill in the values of $x$ and $p(x)$ in the table below.
+
+#### Solution to Question 5a:
+
+------------------------------------------------------------------------
+
+**Fill in the blanks to complete the table.**
+
+| $x$    | 0        | 20      | 100    | 500    |
+|--------|----------|---------|--------|--------|
+| $p(x)$ | 987/1000 | 10/1000 | 2/1000 | 1/1000 |
+
+\
+1) find pmf table
+
+2)  calculate E(X)\
+
+### Question 5 Part b:
+
+------------------------------------------------------------------------
+
+Calculate $E(X)$ and $\mbox{Var}(X)$.
+
+#### Solution to Question 5b:
+
+------------------------------------------------------------------------
+
+\
+$E(X) = 0(0.987) + 20(0.01) + 100(0.002) + 500(0.001) = 0.9$
+
+-this says, if you bought 1000 tickets, you would get 90 cents on average.\
+
+$$
+Var(X) = E(X^2) - (E(X))^2 = ((0)^2)(0.987) + (20)^2(0.01) + (100)^2(0.002) + (500)^2(0.001) - (0.90)^2 = 273.19
+$$\
+\
+\

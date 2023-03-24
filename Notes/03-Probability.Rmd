@@ -1,0 +1,500 @@
+---
+title: '03: Introduction to Probability'
+author: 'Adam Spiegler, University of Colorado Denver'
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r, include=FALSE}
+# include=FALSE means code will not display in html
+# eval=FALSE is a global option for blank worksheet
+knitr::opts_chunk$set(eval=FALSE)
+```
+
+# Introduction
+
+------------------------------------------------------------------------
+
+A **statistical experiment or observation** is any random activity that results in a definite outcome.
+
+-   The [**sample space**]{style="color: blue;"} $\Omega$ is the set of all possible outcomes of an experiment.
+-   An [**outcome**]{style="color: blue;"} $\omega$, is a result from an experiment or observation.
+-   An [**event**]{style="color: blue;"}, $A$, is a collection of one or more outcomes from an experiment or observation.
+
+## Question 1
+
+------------------------------------------------------------------------
+
+In the 1970s, research[^1] by Alfred Sommer on vitamin A and night blindness suggested that vitamin A also reduced childhood death rates.
+Children were randomly assigned to two groups, one group took a vitamin A pill every day, and children in the other group were given a **placebo** (a pill that had no vitamin A).
+Below is a [**two-way table**]{style="color: blue;"} displaying the results of Sommer's research.
+
+[^1]: [www.laskerfoundation.org/rprimers/sommer/saving1.htm](www.laskerfoundation.org/rprimers/sommer/saving1.htm) and *Introduction to the Practice of Statistics*, 4th ed, by David Moore, George.
+    McCabe
+
+![Two-Way Table of Vitamin A Study](https://lh5.googleusercontent.com/LQpBI0fgmumM0KAeNabaBPpOe6uXDSWrfhfN9LygJLkCCs-H1kKp1GCbv6_KHWPjNqM=w2400){width="423"}
+
+-   a two way table describes the relation between 2 categorical variables
+
+-   the explanatory variable is the treatment: in this study, it is taking vitamin A or not
+
+-   the response variable is the survival, in this study it is whether the child lived or died
+
+### Question 1 Part a:
+
+------------------------------------------------------------------------
+
+What is the probability that a randomly selected child in the study:
+
+i.  Died?
+ii. Received the treatment, vitamin A?
+iii. Received vitamin A and died?
+iv. Received vitamin A or died?
+v.  Died given that they received vitamin A?
+
+#### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+Complete the code cell below to compute each of the probabilities (i)-(v).\
+
+\
+
+**Replace each ?? with an appropriate fraction.**
+
+```{r}
+# probability that a randomly selected child in the study:
+part.i <- 231/25200  # died 
+part.ii <- 12991/25200  # Received the treatment, vitamin A
+part.iii <- 101/25200  # Received vitamin A and died
+part.iv <- (12991+130)/25200  # Received vitamin A or died
+part.v <- 101/12991  # Died given that they received vitamin A
+
+# print results to screen
+cat("answer to part i is", part.i,
+      "\nanswer to part ii is", part.ii,
+      "\nanswer to part iii is", part.iii,
+      "\nanswer to part iv is", part.iv,
+      "\nanswer to part v is", part.v)
+```
+
+\
+\
+
+Summarize results below
+
+i.  The probability that a randomly selected child in the study died is $P(D)=$
+
+ii. The probability that a randomly selected child in the study received the treatment, vitamin A, is $P(A)=??$
+
+iii. The probability that a randomly selected child in the study received vitamin A and died is $P(A \cap D)=??$
+
+iv. The probability that a randomly selected child in the study received vitamin A or died is $P(A \cup D)=??$
+
+v.  The probability that a randomly selected child in the study died given that they received vitamin A is $P(D \ | \ A)=??$
+
+\
+
+### Question 1 Part b:
+
+------------------------------------------------------------------------
+
+Based on the data from this experiment, do you believe researchers can claim vitamin A decreases child mortality rates?
+Which probabilities from part a did you use to draw this conclusion?
+
+#### Solution to Question 1b:
+
+------------------------------------------------------------------------
+
+```{r}
+130/12209
+```
+
+P(died given no vitamin a) = 0.011
+
+P(died given vitamin a) = 0.0077
+
+# Simple and Compound Probabilities
+
+------------------------------------------------------------------------
+
+Let $A$ and $B$ denote two events in sample space $\Omega$, then
+
+-   $\color{blue}{P(A)}$ is the probability that event $A$ occurs.
+-   $\color{blue}{P(A^C) = P(\bar{A}) = P(A')}$ is the probability that **event** $A$ does NOT occur.
+    -   The notation $\color{blue}{A^C}$, $\color{blue}{\bar{A}}$, or $\color{blue}{A'}$ are used to denote the [**complement**]{style="color: blue;"} of $A$.
+-   $\color{blue}{P(A \cap B)}$ is the probability that events $A$ **and** $B$ both occur.
+-   $\color{blue}{P(A \cup B)}$ is the probability that either event $A$ **or** event $B$ occurs.
+-   $\color{blue}{P(B \ | \ A )}$ is the [**conditional probability**]{style="color: blue;"} that event $B$ occurs [**given that**]{style="color: blue;"} event $A$ occurs.
+-   $\color{blue}{P(A - B)}$ is the probability that event A occurs and event B does not occur.
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+Match one of the Venn diagrams labelled (i)-(vi) in the table below to one of the set operations below.
+Note that two of the Venn Diagrams do not match any of the set operations.
+
+\
+
+| diagram (i)                                                                                                                                   | diagram (ii)                                                                                                                                   | diagram (iii)                                                                                                                                   |
+|-----------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Venn Diagram (i)](https://lh5.googleusercontent.com/TUbLZRe21eo_5FSUTrfVDuP26E8Aq4xPNWwqjGwQF3akpsVK8EhXeFoKprNW00FDR7I=w2400){width="200"} | ![Venn Diagram (ii)](https://lh3.googleusercontent.com/hkkqAI9gm52KyvRx_pHNcbipeZL1q4xi_6ii46yp5c1yfBdPMODf0jrdUlYJUX81nrk=w3600){width="200"} | ![Venn Diagram (iii)](https://lh4.googleusercontent.com/qEmIplM6M83g7rAC6Ynmy2d_hxVR7PGltdmKhQ7r0ZveLPKOUemEpCo-JM1_Mcr7Dss=w2400){width="200"} |
+
+| diagram (iv)                                                                                                                                   | diagram (v)                                                                                                                                   | diagram (vi)                                                                                                                                   |
+|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Venn Diagram (iv)](https://lh6.googleusercontent.com/uxlcEFjv7wndArEu4Hz-oDgRihd3Xv1Q5RssinEL2vP0rvvVfpOaQN6a84s3qmlzu_8=w2400){width="200"} | ![Venn Diagram (v)](https://lh6.googleusercontent.com/4PO_EM9925B6Te3ym35GO0qu4gi-4_97-YF2XjfKCY78RS4ZHwN8gZLGj3Td_-4Gc90=w2400){width="200"} | ![Venn Diagram (vi)](https://lh4.googleusercontent.com/_7vPNG8VSuDeTskHwRrwqJHtqdjDm6mtTktK4PXAZQcWKjCD24oGLyI-RB5_wSa3bUU=w2400){width="200"} |
+
+### Solution to Question 2:
+
+------------------------------------------------------------------------
+
+| $A^C$      | $A \cup B$ | $A \cap B$ | $A-B$       |
+|------------|------------|------------|-------------|
+| Diagram vi | Diagram i  | Diagram ii | Diagram iii |
+
+\
+\
+\
+
+# Probability Rules
+
+------------------------------------------------------------------------
+
+We can generalize the calculations from the previous case study on vitamin A and childhood morbidity to obtain the following results:
+
+Let $A$ and $B$ denote two events in sample space $\Omega$, then
+
+-   [**Additive rule**]{style="color: blue;"}: $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+-   [**Bayes' Theorem**]{style="color: blue;"}: $\displaystyle P(B | A) = \frac{P(A \cap B)}{P(A)}$
+-   [**Multiplicative rule**]{style="color: blue;"}: $P(A \cap B) = P(A) \cdot P(B | A)$
+-   [**Complement rule**]{style="color: blue;"}: $P(A^C) = 1 - P(A)$
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+When a customer purchases a new car, they are presented with a menu of options such as heated steering wheel, parking assistant, satellite radio, etc.
+The two most popular options on a certain type of new car are a sunroof (denoted $S$) and heated seats (denoted by $H$).
+Answer the following questions if we know that
+
+$$ P(S) = 0.6, \quad P(H) = 0.45,\mbox{ and} \quad P(H | S ) = 0.65. $$
+
+### Question 3 Part a:
+
+------------------------------------------------------------------------
+
+Interpret the practical meaning of $P(H | S ) = 0.65$.
+
+#### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+This describes the chance of getting a car with a heated seat given that the car has a sunroof.
+The chance of getting a car like this is 65%.\
+
+\
+\
+If a person chose a car with a sunroof, there is a 65% chance that they also got heated seats.\
+
+\
+
+### Question 3 Part b:
+
+------------------------------------------------------------------------
+
+Compute $P(H^C)$ and interpret the meaning.
+
+#### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+1 - P(H) = 1 - 0.45 = 0.55\
+
+This describes the chance that a chosen car does not have heated seats.
+The chance of not having a heated seat car is 55%.\
+
+\
+55% of the cars do not have heated seats.\
+
+### Question 3 Part c:
+
+------------------------------------------------------------------------
+
+Compute $P(S \cap H)$ and interpret the meaning.
+
+#### Solution to Question 3c:
+
+------------------------------------------------------------------------
+
+= P(S) \* P(H \| S)
+
+= 0.6 \* 0.65
+
+= 0.39
+
+This describes the chance that the chosen car will have a sunroof and heated seats.
+The chance of getting both features is 39%.\
+
+```{r}
+0.6*0.65
+```
+
+### Question 3 Part d:
+
+------------------------------------------------------------------------
+
+Compute $P(S | H)$ and interpret the meaning.
+
+#### Solution to Question 3d:
+
+------------------------------------------------------------------------
+
+Using Bayes theorem\
+P(S \| H) = P(S and H) / P(H)
+
+= 0.39 / 0.45
+
+= 0.867
+
+```{r}
+0.39 / 0.45
+```
+
+# Independent Events
+
+------------------------------------------------------------------------
+
+Often in statistics we want to investigate questions such as:
+
+-   Is a newly developed vaccine effective?
+-   Do certain sentencing laws have an effect on crime rates?
+-   Did increasing the minimum wage for fast food workers effect fast food prices?
+-   **Does the occurrence of one event** $A$ (getting a sunroof) **effect the likelihood that another event** $B$ (heated seats) **occurs**?
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+In the car option example in question , we know that $P(S) = 0.6$, $P(H) = 0.45$, and $P(H | S ) = 0.65$.
+Based on this information, **if a customer has purchased the sunroof option, are they more, less, or equally likely to get the heated seats option?** Explain how you determined your answer.
+
+### Solution to Question 4:
+
+------------------------------------------------------------------------
+
+It seems that customers are more likely to get the heated seats if they purchased a car with a sunroof.
+The probability of getting a heated seat given a sunroof is 65%, and the probability of not getting a heated seat given a sunroof is 35%\
+\
+\
+\
+
+## Definition of Independent Events
+
+Two events $A$ and $B$ are [**independent**]{style="color: blue;"} if the occurrence of one has no effect on the occurrence of the other:
+
+$$ P(B) = P(B \ | \ A) \quad \mbox{or} \quad P(A) = P(A \ | \ B).$$
+
+**Special case:** If events $A$ and $B$ are independent events then we have $P(A \cap B) = P(A)P(B)$.
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+A person flips a fair coin and stops once they get at least one head and one tail.
+What is the probability that it takes exactly four flips to get at least one head and one tail.
+
+### Solution to Question 5:
+
+------------------------------------------------------------------------
+
+Outcomes in at most 4 flips:
+
+HHHT
+
+HHT(H/T)
+
+HT(H/T)(H/T)
+
+TTTH
+
+TTH(H/T)
+
+TH(H/T)(H/T)
+
+Outcomes in exactly 4 flips:
+
+HHHT
+
+TTTH
+
+P(TTTH) + P(HHHT) = 1/16 + 1/16 = 1/8\
+when things are independent, can break up and probabilities into :
+
+P(T)P(T)P(T)P(T)\
+\
+This is a disjoint event, events that cannot occur at the same time: P(A) + P(B)
+
+Those that occur at the same time: P(A) + P(B) - P(intersection of A and B)\
+
+# Disjoint Events
+
+------------------------------------------------------------------------
+
+Two events $A$ and $B$ are [**disjoint**]{style="color: blue;"} (or [**mutually exclusive**]{style="color: blue;"}) if they cannot occur at the same time, and therefore $P(A \cap B) = 0$.
+
+**Special case:** If events $A$ and $B$ are disjoint then we have $P(A \cup B) = P(A)+P(B)$.
+
+# Probability Distributions
+
+------------------------------------------------------------------------
+
+A function $P$ that assigns a real number $P(A)$ to each event $A$ is a [**probability distribution**]{style="color: blue;"} or a [**probability measure**]{style="color: blue;"} if it satisfies the following three axioms:
+
+-   $P(A) \geq$ 0 for all $A$.
+
+-   $P(\mbox{full sample space})=P(\Omega) = 1$.
+
+-   If $A$ and $B$ are disjoint, then $$ P \left( A \cup B \right) = P(A) + P(B).$$
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+Complete the axioms in the definition above be replacing each ??
+with an appropriate value or expression.
+
+### Solution to Question 6:
+
+------------------------------------------------------------------------
+
+\
+\
+Replace each ??
+in the axioms above.\
+
+\
+
+# OPTIONAL: Counting
+
+------------------------------------------------------------------------
+
+## Question 7:
+
+------------------------------------------------------------------------
+
+5 people have volunteered to work on a committee.
+The committee will consist of a total of three people.
+How many different committees of 3 people can be formed from the 5 volunteers?
+
+### Solution to Question 7:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+\
+
+## Different Ways of Choosing $k$ Items Out of $n$ Items
+
+------------------------------------------------------------------------
+
+We often need to count the number of ways of choosing $k$ items out of $n$ possible items.
+You may recall this is often called [**n choose k**]{style="color: blue;"} and is denoted as
+
+$$ \left( \begin{array}{c} n \\ k \end{array}\right) = \frac{n!}{k!(n-k)!}.$$
+
+-   In R we can use the function `nchoosek(n, k)` which is in the `pracma` library.
+
+```{r, message=FALSE}
+library(pracma)
+```
+
+```{r}
+# Calculate 6 choose 4
+nchoosek(6, 4)
+```
+
+## Bonus Question 8:
+
+------------------------------------------------------------------------
+
+Suppose $n$ people are in a room.
+What is the probability that there is at least one pair of people that have the same birthday?
+
+*Hint: Let* $A$ be the event there is no match.
+Calculate $P(A)$, and then find $P(A^C)$.
+
+# OPTIONAL: Bayes' Theorem
+
+------------------------------------------------------------------------
+
+## Partitions of Sample Spaces
+
+------------------------------------------------------------------------
+
+A [**partition**]{style="color: blue;"} of a space $\Omega$ is a collection of disjoint sets such that $\displaystyle \bigcup_{i=1}^{\infty} A_i = \Omega$.
+
+## Bonus Question 9:
+
+------------------------------------------------------------------------
+
+Fill in the blank to complete theorem below and explain (in words, pictures, or equations) how you determined your answer.
+
+![Total Probability Venn Diagram](https://lh5.googleusercontent.com/ayOHh6EOjqG84K8VVfx_DHI6OsSRBxQKzf0ACciT__CgQPJh3FWq-vwc0oVB_RP_e8A=w2400){width="400"}
+
+Let $A_1$, $A_2$, $\ldots , A_k$ be a partition of $\Omega$.
+Then for any event $B$, $$ P(B) = \sum_{i=1}^k ?? $$.
+
+## Statement of Bayes' Theorem
+
+------------------------------------------------------------------------
+
+Let $A_1$, $A_2$, $\ldots , A_k$ be a partition of $\Omega$ such that $P(A_i)>0$ for each $i$.
+If $B$ is any event with $P(B)>0$, then for each $i=1, \ldots k$, we have Then for any event $B$,
+
+$$ P(A_i \mid B) = \frac{P(A_i \cap B) }{P(B)} = \frac{P(B \mid A_i) P(A_i)}{\sum_{j=1}^k P(B \mid A_j)P(A_j)}.$$
+
+## Bonus Question 10:
+
+------------------------------------------------------------------------
+
+Suppose that 30% of computers run Mac, 50% use PC, and 20% use Linux.
+A computer virus is created by hackers, and suppose that 65% of Mac, 82% of PC, and 50% of Linux computers get the virus.
+
+### Bonus Question 10 Part a:
+
+------------------------------------------------------------------------
+
+What is the probability that a randomly selected computer has the virus?
+
+#### Solution to Question 10a:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+\
+
+### Bonus Question 10 Part b:
+
+------------------------------------------------------------------------
+
+What is the probability that a randomly selected computer is PC given that the computer is infected by the virus?
+
+#### Solution to Question 10b:
+
+------------------------------------------------------------------------
+
+\
+\
+\
+\
+\

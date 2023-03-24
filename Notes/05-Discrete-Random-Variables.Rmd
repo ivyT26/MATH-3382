@@ -1,0 +1,582 @@
+---
+title: '05: Discrete Random Variables'
+author: "Adam Spiegler, University of Colorado Denver"
+date: '`r Sys.Date()`'
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+# Introduction
+
+------------------------------------------------------------------------
+
+Suppose a company knows that 1% of the lithium batteries they manufacture are defective.
+The manufacturer sends a shipment of 10 batteries to one of their clients.
+Let the random variable $X$ denote the number of good (not defective) batteries in the shipment.
+How likely is it that exactly two of the batteries are defective?
+
+## Question 1:
+
+------------------------------------------------------------------------
+
+What is the probability of getting the outcome $GGGGGGGGDD$?
+Note $G$ and $D$ denote good and defective batteries, respectively.
+
+### Solution to 1:
+
+------------------------------------------------------------------------
+
+0.01 are defective
+
+(0.99)\^8 \* (0.01)\*2
+
+```{r}
+#probability of one combination of 8 good batteries and 2 bad batteries are defective
+(0.99)**8 * (0.01)**2
+```
+
+## Question 2:
+
+------------------------------------------------------------------------
+
+How many outcomes are in the event exactly 2 out of 10 batteries are defective?
+
+### Solution to 2:
+
+------------------------------------------------------------------------
+
+All possible outcomes of 8 good batteries and 2 defective ones:
+
+n choose k: combinatorics, check counting section in worksheet 3
+
+getting all the permutations:
+
+$$
+10! \ / \ (8! \ * \ 2!)
+$$
+
+```{r}
+library(pracma)
+nchoosek(10, 2)
+```
+
+## Question 3:
+
+------------------------------------------------------------------------
+
+Calculate the probability that exactly 2 are defective.
+
+### Solution to 3:
+
+------------------------------------------------------------------------
+
+P(X = 8) = 45(9.227447e-05)
+
+```{r}
+45 * 9.227447e-05
+```
+
+## Question 4:
+
+------------------------------------------------------------------------
+
+Generalize the result in the previous example.
+If you repeat $n$ trials which are independent from one another, and each has the same probability of success, $p$, what is the probability of getting exactly $s$ successes out of $n$ trials?
+
+### Solution to 4:
+
+------------------------------------------------------------------------
+
+$$f(s) = P(X=s) = \left( \begin{array}{c} 
+n \\ s
+\end{array} \right) p^{s} (1-p)^{n-s}$$
+
+\
+\
+If we have n batteries shipped and probability that a battery is good is p:
+
+P(X = s) = probability that exactly s batteries out of n are good.
+
+P(X = s) = number of outcomes with s successes \* probability that we have one outcome with s successes\
+
+## Question 5:
+
+------------------------------------------------------------------------
+
+How many good batteries would you expect to receive if you had a shipment of 100 batteries (where it is known that $1$% of all batteries are defective)?
+If you received a shipment of 200 batteries?
+A shipment of 10 batteries?
+
+### Solution to 5:
+
+------------------------------------------------------------------------
+
+defective batteries = 0.01
+
+n = 100, expected value = 99
+
+n = 200, expected value = 198
+
+n = 10, expected value = 9.9\
+
+$E(X) = np = sum(p(x)*x)$\
+\
+The formula E(X) = np only works when it is a binomial distribution
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+Write a general formula for the expected number of successes when $n$ trials are repeated with probability of success $p$ in each trial.
+
+### Solution to 6:
+
+------------------------------------------------------------------------
+
+\
+E(X) = np\
+\
+\
+
+# Trials with Two Possible Outcomes
+
+------------------------------------------------------------------------
+
+## Bernoulli Trials
+
+------------------------------------------------------------------------
+
+A [**Bernoulli trial**]{style="color: blue;"} is an experiment that has [**exactly two possible outcomes**]{style="color: blue;"}:
+
+-   The probability that the outcome of a trial is a [success]{style="color: blue;"} ($\color{blue}{X=1}$) is denoted $\color{blue}{p}$.
+-   Otherwise, the probability of a [failure]{style="color: red;"} ($\color{red}{X=0}$) is $\color{red}{q=1-p}$.
+-   $X$ has a [**Bernoulli Distribution**]{style="color: blue;"} with probability mass function
+
+$$f(x) = \left\{ \begin{array}{ll}
+p^x(1-p)^{1-x} & \mbox{for } x \in \left\{ 0, 1 \right \} \\
+0 , & \mbox{otherwise}
+\end{array} \right.$$
+
+## The Binomial Distribution
+
+------------------------------------------------------------------------
+
+Let random variable $X$ be the number of successes out of $n$ trials, where [**each trial is identical and independent**]{style="color: blue;"}.
+
+-   $X$ has a [**Binomial Distribution**]{style="color: blue;"}, written $X \sim \mbox{Binomial}(n,p)$.
+-   The probability mass function is
+
+$$f(x) = \left\{ \begin{array}{ll}
+\left( \begin{array}{c} n\\ x \end{array} \right) p^x(1-p)^{n-x} & \mbox{for } x =0,1,2, \ldots , n \\
+0 & \mbox{otherwise} 
+\end{array} \right. $$
+
+**LaTeX Notes:**
+
+-   The `array` environment is started with `\begin{array}`
+-   Then we indicate how many columns by how each each is aligned.
+    -   `{ll}` means two columns aligned to the left.
+    -   `{lrc}` would be three columns the first aligned left, then right, then the last is centered,
+    -   We use the `&` symbol to indicate a column break.
+    -   We use `\\` to indicate a row break.
+-   If we want a big curly brace on the left of the array, enter `\left\{` before beginning the array.
+-   We do not want a brace on the other side of the array, so we right `\right.` to close off the left brace without using any symbol on the right.
+-   We use `\mbox{otherwise}` to type the text *otherwise* inside the equation.
+
+### Expected Value and Variance of Binomial Distributions
+
+------------------------------------------------------------------------
+
+-   The **expected value** can be calculated with the shortcut $\color{blue}{E(X) = np}$.
+-   The **variance** can be calculated with the shortcut $\color{blue}{\mbox{Var}(X) = npq}$.
+
+### Working with Binomial Distributions in R
+
+------------------------------------------------------------------------
+
+In R, the we can use the functions:
+
+-   `dbinom(x, n, p)` calculates the probability of [exactly $x$ success]{style="color: blue;"} out $n$ trials, $\color{blue}{P(X=x)}$.
+-   `pbinom(x, n, p)` calculates the probability of [at most $x$ success]{style="color: red;"} out $n$ trials, $\color{red}{P(X \leq x)}$.
+-   `rbinom(m, n, p)` randomly sample $m$ values from $X \sim \mbox{Binom}(\mbox{size}, p)$ (with replacement).
+-   `qbinom(q, n, p)` compute the qth quantile from $X \sim \mbox{Binom}(n, p)$.
+
+```{r}
+par(mfrow=c(1,2))  # plot in a 1 by 2 array
+x <- 0:40  # vector of values 1, 2, ..., 20
+
+# plot pmf n=40 and p = 0.25
+plot(x, dbinom(x, size=40, prob=0.25), 
+     type='p')  # point plot
+
+# plot cdf n=40 and p = 0.25
+plot(x ,pbinom(x, size=40, prob=0.25),
+     type='s',  # stairs plot
+     main='X ~ Binom(40, 0.25)',
+     ylab='Probability',
+     xlab ='At most x Successes',
+     lwd=3)
+
+par(mfrow=c(1,1)) # return to single plot
+```
+
+## Question 7:
+
+------------------------------------------------------------------------
+
+Consider the lithium battery example from [Question 1:] .
+Write a command in R that computes the probability of each event.
+
+### Question 7a:
+
+------------------------------------------------------------------------
+
+Exactly 7 batteries are good.
+
+#### Solution to Question 7a:
+
+------------------------------------------------------------------------
+
+Feel free to insert a code cell or not!
+
+```{r}
+dbinom(7,10,0.99)
+```
+
+### Question 7b:
+
+------------------------------------------------------------------------
+
+At most 8 batteries are good.
+
+#### Solution to Question 7b:
+
+------------------------------------------------------------------------
+
+Feel free to insert a code cell or not!
+
+```{r}
+pbinom(8, 10, 0.99)
+```
+
+\
+\
+\
+
+### Question 7c:
+
+------------------------------------------------------------------------
+
+At most 4 batteries are defective.
+
+At least 6 batteries are good.
+$P(X \geq 6) = P(X \leq 5)$
+
+#### Solution to Question 7c:
+
+------------------------------------------------------------------------
+
+Feel free to insert a code cell or not!
+
+```{r}
+pbinom(4, 10, 0.01) #at most 4 batteries are defective
+1-pbinom(5, 10, 0.99) #1 - at most 5 batteries are good = at least 6 batteries are good
+```
+
+# $n$ Equally Likely Outcomes
+
+------------------------------------------------------------------------
+
+## Question 8:
+
+------------------------------------------------------------------------
+
+Let $X$ be the value of the result of rolling a fair six-sided die.
+
+### Question 8a:
+
+------------------------------------------------------------------------
+
+Write out the probability mass function $f(x)$.
+
+#### Solution to Question 8a:
+
+------------------------------------------------------------------------
+
+\
+\
+
+$$f(x) = \left\{ \begin{array}{ll} 
+\frac{1}{6} & x = 1, 2, 3, 4, 5, 6 \\
+0 & \mbox{otherwise} 
+\end{array} \right.$$
+
+\
+6 outcomes each equally likely.\
+
+\
+
+### Question 8b:
+
+------------------------------------------------------------------------
+
+What is the expected value of rolling a fair-six sided die?
+
+#### Solution to Question 8a:
+
+------------------------------------------------------------------------
+
+$$
+E(X) = \frac{1}{6}(1+2+3+4+5+6)
+= 7/2
+$$\
+\
+\
+\
+\
+
+## Uniform Distributions
+
+------------------------------------------------------------------------
+
+Let $X$ be a discrete random variable with $k$ different outcomes that each have the same likelihood of occurring.
+
+-   $X$ has a [**uniform distribution**]{style="color: blue;"} on $\left\{ 1, 2, 3, \ldots , k \right\}$
+-   The probability mass function is $$ f(x) = \left\{ \begin{array}{ll} \frac{1}{k} \ \ & \mbox{for } x = 1, 2, \ldots,  k\\
+    0 \ \ & \mbox{otherwise} \end{array} \right. .$$
+
+```{r}
+par(mfrow=c(1,2))  # plot in a 1 by 2 array
+
+x.min <- 1
+x.max <- 6
+x <- x.min:x.max  # vector of integers  x.min,  ..., x.max
+p.x <- rep(1/(x.max - x.min+1), length(x) ) 
+c.x <- p.x * (x)
+
+plot(x, p.x, 
+     type='p',  # point plot
+     main='PMF')  
+
+plot(x, c.x, 
+     type='s',  # stairs plot
+     main='CDF') 
+
+par(mfrow=c(1,1)) # return to single plot
+```
+
+### Expected Value and Variance of Uniform Distributions
+
+------------------------------------------------------------------------
+
+-   The expected value is $E(X) = \frac{k+1}{2}$.
+-   The variance is $\mbox{Var}(X) = \frac{k^2-1}{12}$.
+
+## Question 9:
+
+------------------------------------------------------------------------
+
+A sports marketer for the Denver Nuggets randomly calls people in the Denver area until she encounters someone who attended a Nuggets' game.
+What is the probability the market encounters $7$ people who did not attend a game before the first success when it is known that 10% of the population attended a game last season?
+
+### Solution to Question 9:
+
+------------------------------------------------------------------------
+
+\
+outcome: NNNNNNNY
+
+$P(N)^7 * P(Y)^1$\
+\
+(0.9)^7^ \* (0.1)^1^\
+
+```{r}
+0.9**7 * 0.1
+```
+
+# Geometric Distributions: Number of Failures Before First Success
+
+------------------------------------------------------------------------
+
+If we repeat a Bernoulli trial that has probability of success $p$ for each trial, we can [count the number of failures, $X$, that occur before the first success.]{style="color: blue;"}
+
+## Formula and Plots of Geometric Distributions
+
+------------------------------------------------------------------------
+
+-   $X$ has a [**Geometric Distribution**]{style="color: blue;"}, written $X \sim \mbox{Geom}(p)$.
+-   The probability mass function is
+
+$$f(x) = q^xp \quad \mbox{for } x \in \left\{ 0, 1, \ldots \right\}$$.
+
+```{r}
+par(mfrow=c(1,2))  # plot in a 1 by 2 array
+
+x <- 0:10 
+
+plot(x, dgeom(x, prob=0.75), 
+     type='p',  # point plot
+     main='PMF')  
+
+plot(x, pgeom(x, prob=0.75),
+     type='s',  # stairs plot
+     main='CDF') 
+
+par(mfrow=c(1,1)) # return to single plot
+```
+
+### Expected Value and Variance of Geometric Distributions
+
+------------------------------------------------------------------------
+
+-   The expected value is $\mu=E(X) = \frac{q}{p}$.
+-   The variance is $\sigma^2 = \mbox{Var}(X) = \frac{q}{p^2}$.
+
+### R Functions for Geometric Functions
+
+------------------------------------------------------------------------
+
+In R, the we can use the functions:
+
+-   `dgeom(x, p)` calculates the probability of [exactly $x$ failures]{style="color: blue;"} before first success.
+-   `pgeom(x, p)` calculates the probability of [at most $x$ failures]{style="color: red;"} before first success.
+-   `rgeom(n, p)` randomly pick $n$ values from $X \sim \mbox{Geom}(p)$ (with replacement).
+-   `qgeom(q, p)` compute the qth quantile from $X \sim \mbox{Geom}(p)$.
+-   There is no fixed number of trials $n$.
+
+# Number of Times an Event Occurs in a Fixed Time Period
+
+------------------------------------------------------------------------
+
+## Poisson Distribution
+
+------------------------------------------------------------------------
+
+The [**Poisson distribution**]{style="color: blue;"} applies when the average frequency of occurrences in a given time period is known, and each occurrence is independent the others.
+Let $X$ denote [the number of occurrences in the given time period]{style="color: blue;"}.
+
+-   $X \sim \mbox{Poisson}(\lambda)$, where $\lambda$ denotes the mean number of occurrences in the given time.
+-   The probability mass function is
+
+$$f(x) = e^{-\lambda} \frac{\lambda^x}{x!} \quad \mbox{for } x \in \lbrace 0, 1, 2, \ldots \rbrace .$$
+
+```{r}
+par(mfrow=c(1,2))  # plot in a 1 by 2 array
+
+x <- 0:15  # creates vector of possible occurrences
+lam <- 5  # on average 5 occurrence per time period
+
+plot(x, dpois(x, lam), 
+     type='p',  # point plot
+     main='PMF')  
+
+plot(x, ppois(x, lam),
+     type='s',  # stairs plot
+     main='CDF') 
+
+par(mfrow=c(1,1)) # return to single plot
+```
+
+### Expected Value and Variance of Poisson Distributions
+
+------------------------------------------------------------------------
+
+-   The expected value is $\mu = E(X) = \lambda$.
+-   The variance is $\sigma^2 = \mbox{Var}(X) = \lambda$ (same as the expected value).
+
+### R Functions for Geometric Functions
+
+------------------------------------------------------------------------
+
+In R, the we can use the functions:
+
+In R, the we can use the functions:
+
+-   `dpois(x, lambda)` calculates the probability of [exactly $x$ occurrences]{style="color: blue;"} in the given time.
+-   `ppois(x, lambda)` calculates the probability of [at most $x$ occurrences]{style="color: red;"} in the given time.
+-   `rpois(n, lambda)` randomly pick $n$ values from $X \sim \mbox{Poisson}(\lambda)$ (with replacement).
+-   `qpois(q, lambda)` compute the qth quantile from $X \sim \mbox{Poisson}(\lambda)$.
+
+## Question 10:
+
+------------------------------------------------------------------------
+
+If there are twelve cars crossing a bridge per minute on average, find the probability of having seventeen or more cars crossing the bridge in a particular minute.
+
+### Solution to Question 10:
+
+------------------------------------------------------------------------
+
+Feel free to insert a code cell or not!
+
+```{r}
+ppois(17, 12) #x >= 17, lamda = 12 cars per minute avg
+```
+
+# Practice Problems
+
+------------------------------------------------------------------------
+
+For each situation, identify which distribution best describes the distribution of the random variable.
+Then use a probability distribution function to calculate the probability.
+
+## Practice Problem 1:
+
+------------------------------------------------------------------------
+
+A online retailer sells an average of 5 big screen TV's on a given day.
+What is the probability they sell 9 TV's in a day?
+
+### Solution to Practice Problem 1:
+
+------------------------------------------------------------------------
+
+\
+\
+
+Feel free to insert a code cell or not!
+
+\
+\
+
+## Practice Problem 2:
+
+------------------------------------------------------------------------
+
+It is known that 3% of airbags manufactured by a certain car company are defective.
+What is the probability that the first defective air bag occurs when the fifth item is inspected?
+
+### Solution to Practice Problem 2:
+
+------------------------------------------------------------------------
+
+\
+\
+
+Feel free to insert a code cell or not!
+
+\
+\
+
+## Practice Problem 3:
+
+------------------------------------------------------------------------
+
+Recently, a nurse commented that when a patient calls the medical advice line claiming to have the flu, the chance that he or she truly has the flu (and not just a nasty cold) is only about 4%.
+Of the next 25 patients calling in claiming to have the flu, what is the probability that exactly 4 patients will have the flu?
+
+### Solution to Practice Problem 3:
+
+------------------------------------------------------------------------
+
+\
+\
+
+Feel free to insert a code cell or not!
+
+\
+\

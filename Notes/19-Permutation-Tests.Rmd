@@ -1,0 +1,768 @@
+---
+title: '19: Permutation Test'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# The Unscrupulous Diner's Dilemma
+
+------------------------------------------------------------------------
+
+The unscrupulous diner's dilemma[^1] is a problem faced frequently in social settings.
+When a group of diners jointly enjoys a meal at a restaurant, often an unspoken agreement exists to divide the check equally.
+A selfish diner could thereby enjoy exceptional dinners at bargain prices...This dilemma typifies a class of serious social problems from environmental protection and resource conservation to eliciting charity donations and slowing arms races.
+
+[^1]: <http://www.uvm.edu/~pdodds/files/papers/others/1994/glance1994a.pdf>
+
+Researchers wanted to test whether people order more food and beverages when they know the bill is going to split evenly, or do they order the same amount regardless of whether they are splitting the bill or paying individually.
+
+## Step 1: State the Hypotheses
+
+------------------------------------------------------------------------
+
+-   $H_0$: There is no difference in how much people order regardless of how the bill is split. $\color{blue}{\mu_{\rm even} - \mu_{\rm control}=0}.$
+-   $H_a$: People order more when the bill is split evenly as opposed to when each person pays for what they order. $\color{blue}{\mu_{\rm even} - \mu_{\rm control}>0}.$
+
+## Step 2: Collect Sample Data and Define a Test Statistic
+
+------------------------------------------------------------------------
+
+-   8 people volunteered to take part in the study.
+    -   4 people were randomly assigned to sit at a table where they were told the bill would be evenly split between the 4 people.
+    -   4 people were randomly assigned to sit at a table where they were told each person would pay only for what they order themselves.
+-   The results of the study are given in the tables below:
+
+| Even Split Group                         | Pay for what you order (control) Group    |
+|------------------------------------------|-------------------------------------------|
+| $\$15.00$, $\$8.00$, $\$8.75$, $\$13.17$ | $\$8.50$ , $\$7.90$ , $\$10.85$, $\$7.43$ |
+| $\bar{x}_{\rm even} = \$11.23$           | $\bar{x}_{\rm control} = \$8.67$          |
+
+-   **We can use the difference in the two sample means as a test statistic:**
+
+$$\color{red}{T= \bar{x}_{\rm even} - \bar{x}_{\rm control} = 2.56}$$
+
+## Step 3: How Extreme Is the Observed Difference?
+
+------------------------------------------------------------------------
+
+### P-values
+
+------------------------------------------------------------------------
+
+The [**P-value**]{style="color: blue;"} is the **probability that you would get a random sample with a test statistic as or more extreme as the observed test statistic [if the null hypothesis were true]{style="color: red;"}**.
+
+-   The smaller the $P$-value is, the less likely the sample is, and there is evidence that contradicts $H_0$ and supports $H_a$.
+-   [**Thus, the smaller the** $P$-value, the more statistically significant the result is.]{style="color: blue;"}
+
+[**How can we calculate the** $P$-value if we do not know the underlying probability distribution for $T = \mu_{\rm{even}} - \mu_{\rm{control}}$?]{style="color: red;"}
+
+The bigger the difference, the smaller the p value and the more significant it is.
+
+P-value = P($\bar{X}_{even} - \bar{X}_{control}\geq2.56 \ | \ H_0 \ true$)
+
+## Question 1
+
+------------------------------------------------------------------------
+
+If people order the same amount of food no matter how the bill is split (assuming $H_0$ is true), then the eight values were just randomly split into two groups of four people, and the actually method of paying has no effect.
+It could just as well have turned out that:
+
+| Even Split Group                                                | Pay for what you order (control) Group                            |
+|-----------------------------------------------------------------|-------------------------------------------------------------------|
+| $\mathbf{\color{blue}{\$7.43}}$ , $\$8.00$, $\$8.75$, $\$13.17$ | $\$8.50$ , $\$7.90$ , $\$10.85$, $\mathbf{\color{blue}{\$15.00}}$ |
+| $\bar{x}_{\rm even} = \$9.34$                                   | $\bar{x}_{\rm control} = \$10.56$                                 |
+
+### Question 1a
+
+------------------------------------------------------------------------
+
+What would be the test statistic for the two samples above?
+
+#### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+\
+T = $\bar{X}_{even} - \bar{X}_{control}$\
+\
+
+Assume that $H_0$ is true.
+It does not make a difference in how people order if they split the bill or paid for their own meal.
+$H_0 = \mu_{even} - \mu_{control}$ = 0
+
+P-value = P($\bar{X}_{even} - \bar{X}_{control}\geq2.56 \ | \ H_0 \ true$)
+
+```{r}
+even <- 9.34
+control <- 10.56
+(T <- even - control)
+```
+
+### Question 1b:
+
+------------------------------------------------------------------------
+
+How many different ways can we divide the eight participants into two groups of four?
+
+#### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+pick combinations (order does not matter)
+
+n choose k = 8 choose 4 = 70 combinations of splitting 8 people into 2 groups of 4
+
+\
+\
+\
+
+# Two-Sample Permutation Tests
+
+------------------------------------------------------------------------
+
+To perform a [**two-sample permutation test**]{style="color: blue;"} on data collected from two samples size $m$ and $n$:
+
+1.  Pool the $m+n$ values together.
+2.  Draw a [**permutation resample** (or resample for short)]{style="color: blue;"} of size $m$ **without replacement**.
+3.  Use the remaining $n$ observations for the other sample.
+4.  Calculate the difference in means or another statistic that compares samples.
+5.  Repeat the resampling process many, many times.
+
+[**The P-value is the proportion of times the random statistics are as or more extreme than the observed difference.**]{style="color: blue;"}
+
+![Permutation resamples of the Unscrupulous Diners Dilemma Data](https://drive.google.com/uc?export=view&id=127qdWZUzg283jH7nmaJJicL48d7hczjL)
+
+## Question 2
+
+------------------------------------------------------------------------
+
+Using the table above, compute the P-value of the test statistic $T= \bar{x}_{\rm even} - \bar{x}_{\rm control} = 2.56$
+
+### Solution to Question 2
+
+------------------------------------------------------------------------
+
+number of samples as or more extreme than observed test statistic / all possible resamples
+
+7/70 = 0.1\
+\
+\
+
+## Question 3
+
+------------------------------------------------------------------------
+
+The dataset `Beerwings` data in the `resampledata` library contains observations from a sample of 30 people at a bar in which three variables were collect: `Gender`, `Beer` and `Hotwings`.
+
+```{r}
+library(resampledata)
+summary(Beerwings)
+```
+
+**A researcher wants to perform a hypothesis test to determine whether males eat more hot wings than women.**
+
+### Question 3a
+
+------------------------------------------------------------------------
+
+The function `tapply(matrix, index, function)` has three inputs:
+
+-   The `matrix` is the data you want to summarize.
+-   The `index` is a categorical feature that will split the data into two or more different classes or factors.
+-   The `function` is some function that you want to apply to the data.
+
+Interpret the output from the code cell below.
+
+```{r}
+tapply(Beerwings$Hotwings, Beerwings$Gender, mean)
+```
+
+#### Solution to Question 3a
+
+------------------------------------------------------------------------
+
+On average males eat more wings than females.\
+
+\
+
+### Question 3b
+
+------------------------------------------------------------------------
+
+Complete the code cell below to use the `tapply` function to compute the standard deviation of the number of hotwings eaten separately for those that identified as male and those that identified as female.
+
+#### Solution to Question 3b
+
+------------------------------------------------------------------------
+
+```{r}
+# Use the tapply function to answer this question
+tapply(Beerwings$Hotwings, Beerwings$Gender, sd)
+```
+
+### Question 3c
+
+------------------------------------------------------------------------
+
+Write out the null and alternative hypotheses using appropriate notation.
+
+#### Solution to Question 3c
+
+------------------------------------------------------------------------
+
+-   $H_0: \mu_{f} - \mu_{m} = 0$
+
+-   $H_a: \mu_{f} - \mu_{m} < 0$
+
+\
+$H_0$ = Males and females eat the same amount of wings
+
+$H_a$ = Males eat more wings than females\
+\
+
+### Question 3d
+
+------------------------------------------------------------------------
+
+What can we use as the test statistic?
+What is the value of the observed test statistic?
+
+#### Solution to Question 3d
+
+------------------------------------------------------------------------
+
+```{r}
+(observed <- 9.33 -14.53)
+```
+
+How extreme is this?
+Gender has nothing to do with how many wings.
+
+$P(T \leq -5.2 \ | \ \mu_{f}-\mu_{m} = 0)$
+
+### Question 3e
+
+------------------------------------------------------------------------
+
+If we want to repeat the previous process (from [Question 2]), we assume gender has no effect, and group all 30 people together.
+Then we compare the observed difference in sample means to the difference in sample means in all possible resamples.
+**How many different ways can we split the 30 people into two groups each of size 15?**
+
+#### Solution to Question 3e
+
+------------------------------------------------------------------------
+
+```{r}
+choose(30, 15)
+```
+
+```{r}
+View(Beerwings)
+```
+
+# Constructing a Permutation Distribution
+
+------------------------------------------------------------------------
+
+## Step 1: Create a Resamples to Generate a New Samples for Females and Males
+
+------------------------------------------------------------------------
+
+```{r}
+set.seed(3021)  # so we get consistent results
+index <- sample(30, size = 15, replace = FALSE)  # these are the 15 people chosen for resample of females
+index #index is a list of IDs chosen
+
+f.resample <- Beerwings$Hotwings[index]  # These are the hotwings of the 15 people now in female sample
+m.resample <- Beerwings$Hotwings[-index]  # These are the hotwings of the 15 people now in male sample
+# the negative before index gets the ids of people that are not in index, then Beerwings$Hotwings[-index] gets the hotwing numbers for all those ids
+f.resample
+m.resample
+```
+
+## Step 2: Calculate the Test Statistic for the Resamples
+
+------------------------------------------------------------------------
+
+```{r}
+new.stat <- mean(f.resample) - mean(m.resample)
+new.stat
+
+#for this first result sample, it is positive, which shows that females ate more wings than males
+```
+
+## Step 3: Repeat this Many, Many, Many Times to Construct a Permutation Distribution
+
+------------------------------------------------------------------------
+
+-   In practice, it takes a lot of time and energy (and money) to generate all possible resamples (without any duplicate resamples). Instead we'll generate a lot of resamples.
+-   We'll use $N=10^5-1$ as the default number of resamples.
+    -   We may not generate the original sample as one such resample.
+    -   We want to be sure that we do include the original sample when we calculate the P-value.
+    -   We include the original sample as an additional sample, giving a total of $10^5$ resamples.
+-   We will use a `for` loop.
+-   The resulting distribution of test statistics of the permutation resamples is called a [**Permutation Distribution**]{style="color: blue;"}.
+
+## Step 4: Compute the P-value
+
+------------------------------------------------------------------------
+
+-   The $P$-value is the fraction of times the random statistic is as or more extreme than the observed test statistic.
+-   We calculate the P-value after running the `for` loop.
+    -   We want to be sure we manually include the original sample when calculating the P-value.
+
+## Question 4
+
+------------------------------------------------------------------------
+
+Complete the code below to create a permutation distribution for the difference in sample means for the hotwings example from [Question 3].
+
+### Solution to Question 4
+
+------------------------------------------------------------------------
+
+```{r}
+# We save the observed test statistic
+observed <- 9.33 - 14.53
+
+# First we create a vector of the pooled hotwing totals
+# We ignore gender and group all observations together 
+hotwings <- Beerwings$Hotwings
+
+
+# Save all 99,999 permutation resamples statistics
+# to the array named result
+N <- 10^5 - 1
+result <- numeric(N)
+
+# Index contains the location (in the array)
+# of the 15 random values selected for sample 1
+# the other 15 non-selected locations are in -index
+for (i in 1:N)
+{
+  index <- sample(length(hotwings), size = 15, replace = FALSE) #you want to get index values/IDs (integer numbers) so you can choose values in the hotwings vector
+  #get IDs to choose which people should be in the female category
+  result[i] <- mean(hotwings[index]) - mean(hotwings[-index]) #use IDs as indicies to obtain the # of hotwings eaten
+}
+
+# Permutation Distribution with 
+# Observed difference in red
+
+hist(result, xlab = "xbar1-xbar2",
+     main = "Permutation Distribution")
+abline(v = observed, col = "red")
+```
+
+If Ha is predicting something \< 0, left tail test
+
+If Ha is predicting something \> 0, right tail test
+
+If Ha is predicting something !=
+0, two tail test
+
+## Question 5
+
+------------------------------------------------------------------------
+
+How likely is it to get random samples with a difference in means as or more extreme than the observed test?
+We can calculate the P-value of the observed statistic using the code below.
+Explain what the code below is doing in practical terms.
+
+```{r}
+p.value <- sum(result <= observed)/N
+p.value
+
+#N = 99,999 (from code above)
+#sum(result <= observed) counts the number of values in the result vector that are as or less extreme than the observed value
+#(result <= observed) gives a vector of 0 and 1 denoting if the value satifies the condition or not
+```
+
+### Solution to Question 5
+
+------------------------------------------------------------------------
+
+Interpret the line of code above.
+
+\
+\
+\
+
+## Question 6
+
+------------------------------------------------------------------------
+
+The calculation from [Question 5] used the $N=10^5-1=99,\!999$ permutation resamples, but recall we want to be sure to include the original, observed sample when computing the P-value.
+
+```{r}
+p.value <- (sum(result <= observed) + 1) / (N + 1)
+p.value
+
+#it is possible that when the distribution was generated randomly that the one observed sample was not included, so make sure to include the original sample that did occur
+```
+
+### Solution to Question 6
+
+------------------------------------------------------------------------
+
+Interpret the line of code above.
+
+\
+\
+\
+
+## Question 7
+
+------------------------------------------------------------------------
+
+Interpret the practical meaning of the P-value to a person who is not very familiar with statistics.
+
+### Solution to Question 7
+
+------------------------------------------------------------------------
+
+\
+\
+\
+
+# Permutation Tests With Other Statistics
+
+------------------------------------------------------------------------
+
+## Question 8
+
+------------------------------------------------------------------------
+
+Using the dataset `FlightDelays` from the `resampledata` library, perform a permutation test to see if the variance of the flight lengths in May is different from the variance of the flight lengths in June?
+
+### Question 8a
+
+------------------------------------------------------------------------
+
+Write out the null and alternative hypotheses using appropriate notation.
+
+#### Solution to Question 8a
+
+------------------------------------------------------------------------
+
+-   $H_0$: There is no difference between the variance of flight lengths in May and in June
+
+    -   $\sigma^2_{May} - \sigma^2_{June} = 0$
+
+-   $H_a$: There is a difference between the variance of flight lengths in May and June
+
+    -   $\sigma^2_{May} - \sigma^2_{June} \ne 0$
+
+    \
+    \
+    \
+
+### Question 8b
+
+------------------------------------------------------------------------
+
+What can we use as the test statistic?
+What is the value of the observed test statistic?
+
+### Solution to Question 8b
+
+------------------------------------------------------------------------
+
+```{r}
+# compute observed test statistic
+#test statistic to use is the difference between the variance of the flight lengths in May and June
+library(resampledata)
+(vals <- tapply(FlightDelays$FlightLength, FlightDelays$Month, var))
+(diff_variance <- vals["May"] - vals["June"])
+
+(lengths <- tapply(FlightDelays$FlightLength, FlightDelays$Month, length))
+
+```
+
+### Question 8c
+
+------------------------------------------------------------------------
+
+Create a permutation distribution for the difference in sample variances.
+
+#### Solution to Question 8c
+
+------------------------------------------------------------------------
+
+Complete the code cell below.
+
+```{r}
+# Create pooled array of all flight lengths
+flight.time <- FlightDelays$FlightLength
+
+# Save resamples to array result
+N <- 10^5 - 1
+result <- numeric(N)
+
+# Create permutation distribution
+for (i in 1:N)
+{
+  index <- sample(length(flight.time), size = 1999, replace = FALSE)
+  result[i] <- var(flight.time[index]) - var(flight.time[-index])
+}
+
+# Display permutation distribution and observed sample diff
+hist(result, xlab = "diff in sample variances",
+     main = "Permutation Distribution")
+abline(v = c(-diff_variance, diff_variance), col = c("blue", "red"))
+```
+
+### Question 8d
+
+------------------------------------------------------------------------
+
+Calculate the P-value of the observed test statistic and interpret its meaning in practical terms.
+
+#### Solution to Question 8d
+
+------------------------------------------------------------------------
+
+```{r}
+# compute the P-value
+(right.tail <- (sum(result >= 123.927)+1)/(N+1))
+(left.tail <- (sum(result <= -123.927)+1)/(N+1))
+
+(p_val <- right.tail+left.tail)
+(sum(result <= -diff_variance | result >= diff_variance) + 1)/(N+1)
+```
+
+\
+\
+\
+
+## Question 9
+
+------------------------------------------------------------------------
+
+Is the proportion of times the flights in May were delayed more than 20 minutes different from the proportion of times the flights in June were delayed more than 20 minutes?
+
+### Question 9a
+
+------------------------------------------------------------------------
+
+Write out the null and alternative hypotheses using appropriate notation.
+
+#### Solution to Question 9a
+
+------------------------------------------------------------------------
+
+-   $H_0$:
+
+    $p_m - p_j = 0$
+
+-   $H_a$:
+
+    $p_m - p_j \ne 0$
+
+\
+\
+\
+
+### Question 9b
+
+------------------------------------------------------------------------
+
+What can we use as the test statistic?
+What is the value of the observed test statistic?
+
+### Solution to Question 9b
+
+------------------------------------------------------------------------
+
+```{r}
+# pooled vector of yes and no based on delayed more than 20 minutes
+delay <- FlightDelays$Delay
+
+# Vector of yes and no for delays over 20 minutes in May
+delay.may <- subset(FlightDelays, select = Delay,
+                    Month == "May", drop = T)
+
+# Vector of yes and no for delays over 20 minutes in June
+delay.june <- subset(FlightDelays, select = Delay,
+                    Month == "June", drop = T)
+
+# Enter a formula to compute the observed test statistic
+obs.diff.prop <- mean(delay.may > 20) - mean(delay.june > 20)
+obs.diff.prop
+```
+
+### Question 9c
+
+------------------------------------------------------------------------
+
+Create a permutation distribution for the difference in sample proportions.
+
+#### Solution to Question 9c
+
+------------------------------------------------------------------------
+
+Complete the code cell below.
+
+```{r}
+N <- 10^5 - 1
+result <- numeric(N)
+
+for (i in 1:N)
+{
+  index <- sample(length(delay.may) + length(delay.june), size = length(delay.may), replace = FALSE)
+  may.resample <- delay[index]
+  june.resample <- delay[-index]
+  result[i] <- mean(may.resample>20) - mean(june.resample>20)
+}
+
+hist(result, xlab = "phat1-phat2",
+     main = "Permutation Distribution")
+abline(v = c(obs.diff.prop, -obs.diff.prop), col = c("red","blue"))
+```
+
+### Question 9d
+
+------------------------------------------------------------------------
+
+Calculate the P-value of the observed test statistic and interpret its meaning in practical terms.
+
+#### Solution to Question 9d
+
+------------------------------------------------------------------------
+
+```{r}
+# compute the P-value
+(sum(abs(result) >= abs(obs.diff.prop))+1)/(N+1)
+```
+
+\
+\
+\
+
+## Question 10
+
+In the 2008 Olympics there was a lot of controversy over new swimsuits that possibly provided an unfair advantage to swimmers which led to new international rules regarding swimsuit materials and coverage.
+Can a swimsuit really make a swimmer faster?
+
+### Question 10a
+
+------------------------------------------------------------------------
+
+If researchers are testing to see whether the wetsuit makes people swim faster, set up hypotheses for this test.
+Write out the null and alternative hypotheses using appropriate notation.
+
+#### Solution to Question 10a
+
+------------------------------------------------------------------------
+
+-   $H_0$: $\mu_{wetsuit - none} = 0$
+
+-   $H_a$: $\mu_{wetsuit - none} > 0$
+
+\
+Matched pair: Take the difference between the two vectors, then take the average of that difference.\
+
+\
+
+### Question 10b
+
+------------------------------------------------------------------------
+
+What can we use as the test statistic?
+What is the value of the observed test statistic?
+
+### Solution to Question 10b
+
+------------------------------------------------------------------------
+
+```{r}
+# Vectors containing the times of each swimmer. Ordering is critical
+wetsuit <- c(1.57, 1.47, 1.42, 1.35, 1.22, 1.75, 1.64, 1.57, 1.56, 1.53, 1.49, 1.51)
+none <- c(1.49, 1.37, 1.35, 1.27, 1.12, 1.64, 1.59, 1.52, 1.50, 1.45, 1.44, 1.41)
+
+# Create a vector of the 12 paired differences
+Diff <- wetsuit - none
+
+# Calculate the observed test statistic
+obs.match <- mean(Diff) 
+obs.match
+```
+
+### Question 10c
+
+------------------------------------------------------------------------
+
+Create a permutation distribution for the mean of the matched-pair differences.
+
+#### Solution to Question 10c
+
+------------------------------------------------------------------------
+
+Complete the code cell below.
+
+```{r}
+N <- 10^5-1
+result <-numeric(N)
+
+# For each pair, randomly assign the difference to be positive or negative.
+# Then calculate the new mean of the paired differences
+for (i in 1:N)
+{
+  Sign <-sample(c(-1,1), size = length(Diff), replace = TRUE) # random pick -1 or 1, 12 different times (1, -1, 1,1, -1 ...) (randomize the signs for each difference)
+  Diff2 <- Sign*Diff #multiply the signs by the vector of differences
+  result[i] <- mean(Diff2)
+}
+
+# Create a histogram of the permutation distribution
+# And add a vertical line at the observed test statistic
+hist(result,  xlab = "xbar-diff",
+     main = "Permutation Distribution")
+abline(v = obs.match, col = "blue")
+```
+
+### Question 10d
+
+------------------------------------------------------------------------
+
+Calculate the P-value of the observed test statistic and interpret its meaning in practical terms.
+
+#### Solution to Question 10d
+
+------------------------------------------------------------------------
+
+```{r}
+# compute the P-value
+(sum(result >= obs.match)+1)/(N+1)
+```
+
+\
+\
+\
+
+## Question 11
+
+------------------------------------------------------------------------
+
+Is there a difference in the price of groceries sold by Target and Walmart?
+The dataset `Groceries` contains a sample of grocery items and their prices advertised on their respective websites on a specific day.
+
+a.  Set up hypotheses for this test.
+
+b.  What is the observed test statistic?
+
+c.  Create a permutation distribution for the difference in sample means.
+
+d.  Calculate the P-value.
+
+e.  Interpret the meaning of the P-value.
+
+### Solution to Question 11
+
+------------------------------------------------------------------------
+
+\
+\
+\

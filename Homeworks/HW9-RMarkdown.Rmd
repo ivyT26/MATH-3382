@@ -1,0 +1,293 @@
+---
+title: "MATH 3382: Homework 9 - Not Collected (but is on Exam 2)"
+author: "Enter your name"
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions: This Work is Not Being Collected
+
+------------------------------------------------------------------------
+
+-   Though your work is not being collected, most of the concepts on this homework assignment will be covered on Exam 2.
+
+    -   The material that is not on exam 2 is indicated as optional.
+
+-   It is very important to get practice and feedback on this material before the exam.
+
+    -   Solutions will be posted.
+    -   Compare your work to the solutions.
+    -   If you have any questions, feel free to let me know!
+
+# Question 1
+
+------------------------------------------------------------------------
+
+Errors in medical prescriptions occur and a study[^1] examined whether electronic prescribing may help reduce errors.
+Two groups of doctors used written prescriptions and had similar error rates before the study.
+One group switched to e-prescriptions while the other continued to use written prescriptions, and error rates were measured one year later.
+
+[^1]: Kaushal, R., et al., "Electronic Prescribing Improves Medical Safety in Community-Based Office Practices," *Journal of General Internal Medicine*, June 2010
+
+| Type       | Error | No Error | Total |
+|------------|-------|----------|-------|
+| Electronic | 254   | 3594     | 3848  |
+| Written    | 1478  | 2370     | 3848  |
+
+## Question 1a
+
+------------------------------------------------------------------------
+
+Find a 95% confidence interval for the difference in the proportion of errors between the two groups using the Wald confidence interval for the difference between two proportions.
+
+### Solution to Question 1a
+
+------------------------------------------------------------------------
+
+**Complete the R code block below to compute the cutoffs for a 95% Wald Confidence Interval.**
+
+```{r}
+# Calculate the sample proportion for each separately
+elec.p <- ??
+write.p <- ??
+
+# Approximate the SE using Wald Conf Int
+wald.se <- ??
+
+# Compute the z-alpha-over-2 value for 95% Conf Int
+z.star <- ??
+  
+# Compute the Margin of Error  
+moe <- z.star * ??
+
+# Compute upper and lower cutoffs for Conf Int
+lower.q1 <- ??
+upper.q1 <- ??
+
+# Print answers to the screen
+lower.q1
+upper.q1
+```
+
+## Question 1b
+
+------------------------------------------------------------------------
+
+Find a 95% confidence interval for the difference in the proportion of errors between the two groups using the `prop.test` function.
+
+### Solution to Question 1b
+
+------------------------------------------------------------------------
+
+**Complete the R code block below to compute the cutoffs for a 95% Wald Confidence Interval.**
+
+```{r}
+prop.test(??)$conf.int
+```
+
+## Question 1c
+
+------------------------------------------------------------------------
+
+Are your solutions from [Question 1b] and [Question 1c] equal?
+
+### Solution to Question 1c
+
+------------------------------------------------------------------------
+
+-   If your answers are equal, explain why.
+-   If your answers are not equal, explain why not and state which of the two solutions is more accurate.
+
+## Question 1d
+
+------------------------------------------------------------------------
+
+Interpret the meaning of your interval from [Question 1b] in practical terms.
+Can we claim that there is a difference in the proportion of errors made?
+
+### Solution to Question 1d
+
+------------------------------------------------------------------------
+
+# Question 2
+
+------------------------------------------------------------------------
+
+State whether each set of hypotheses is valid for a statistical test.
+If not, explain why not.
+If so, would you use a one-tail or two-tail test.
+
+a.  $H_0: \mu = 50$ and $H_a: \mu > 50$.
+
+b.  $H_0: p_a - p_b <0$ and $H_a: p_a - p_b=0$.
+
+c.  $H_0: \mu\_1 - \mu\_2 \ne 0$ and $H_a: \mu_1 -\mu_2 =0$.
+
+d.  $H_0: p_a = p_b$ and $H_a: p_a \ne p_b$.
+
+e.  $H_0: \bar{x} = 5$ and $H_a: \bar{x} \ne 5$.
+
+f.  $H_0: p = 0.25$ and $H_a: p>0.5$.
+
+g.  $H_0: p = 0.25$ and $H_a: p>0.25$.
+
+h.  $H_0: \mu = 10$ and $H_a: \mu \ne 10$.
+
+## Solution to Question 2
+
+------------------------------------------------------------------------
+
+a.  
+
+b.  
+
+c.  
+
+d.  
+
+e.  
+
+f.  
+
+g.  
+
+h.  
+
+\
+\
+
+# Question 3
+
+------------------------------------------------------------------------
+
+A casino wants to see if a six-sided die is fair.
+They perform an experiment in which they roll the die 600 times and count the number of times the result is divisible by 3 (in other words they count the number of times a 3 or a 6 is rolled).
+
+a.  Is this a one or two-sided test?
+    Explain your answer in a complete sentence.
+
+b.  Set up the hypotheses for this test both in words and in terms the parameter $p$ which denotes the theoretical probability for getting a roll of the die giving a number that is divisible by 3.
+
+c.  Out of 600 rolls, they find that 180 result in a number that is divisible by 3 being rolled.
+    What is the observed test statistic?
+    Use appropriate notation for your answer.
+
+d.  [Optional not on exam 2: What is the nulll distribution for this example?]{style="color: blue;"}
+
+e.  [Optional not on exam 2:Calculate the $P$-value of the observed test statistic using the null distribution you identified in the previous part.]{style="color: blue;"}
+
+f.  [Optional not on exam 2: Interpret the practical meaning of the $P$-value. For example write out a complete sentence that explains what the $P$-value is measuring.]{style="color: blue;"}
+
+## Solution to Question 3
+
+------------------------------------------------------------------------
+
+a.  
+
+b.  
+
+c.  
+
+d.  [Optional not on exam 2]{style="color: blue;"}
+
+e.  [Optional not on exam 2]{style="color: blue;"}
+
+f.  [Optional not on exam 2]{style="color: blue;"}
+
+# Question 4
+
+------------------------------------------------------------------------
+
+In a hypothesis testing $H_0$: $\mu_1-\mu_2=0$ versus $H_a$: $\mu_1 - \mu_2 > 0$, which of the following test statistics would have the smallest $P$-value?
+
+a.  $\bar{x}_1-\bar{x}_2 = -0.25$
+
+b.  $\bar{x}_1-\bar{x}_2 = -2.5$
+
+c.  $\bar{x}_1-\bar{x}_2 = 1.5$
+
+d.  $\bar{x}_1-\bar{x}_2 = 0.15$
+
+## Solution to Question 4
+
+------------------------------------------------------------------------
+
+**Support your answer with a one or two sentence explanation.**
+
+\
+\
+\
+
+# Question 5
+
+------------------------------------------------------------------------
+
+In a hypothesis testing $H_0$: $p_1-p_2=0$ versus $H_a$: $p_1 - p_2 \ne 0$, which of the following test statistics is the most statistically significant?
+
+a.  $\hat{p}_1-\hat{p}_2 = -0.25$
+
+b.  $\hat{p}_1-\hat{p}_2 = -0.05$
+
+c.  $\hat{p}_1-\hat{p}_2 = 0.005$
+
+d.  $\hat{p}_1-\hat{p}_2 = 0.15$
+
+## Solution to Question 5
+
+------------------------------------------------------------------------
+
+**Support your answer with a one or two sentence explanation.**
+
+\
+\
+\
+
+# Question 6
+
+------------------------------------------------------------------------
+
+Suppose you do an experiment as follows.
+Five volunteers wish to quit smoking cigarettes.
+They are randomly split into two groups.
+Two people are placed into a reward group.
+If after six months they have successfully quit, they receive $\$100$.
+The other three people make a $\$50$ deposit.
+If after six months they have successfully quit, they receive $\$150$.
+If they have not quit smoking after six months, they lose their $\$50$ deposit.
+The results of the experiment are given below.
+$S$ denotes they successfully quit.
+$N$ denotes they were not successful.
+
+| Group       | Result                |
+|-------------|-----------------------|
+| Reward Only | $S_1$ , $F_1$         |
+| Deposit     | $S_2$ , $F_2$ , $F_3$ |
+
+a.  If researchers want to test to see if the proportion of people that quit is higher when they are rewarded as opposed to when they are penalized by losing a deposit, set up the hypotheses for this test.
+    State your hypotheses in words, and using appropriate notation.
+
+b.  Compute the observed test statistic.
+    That is, find the difference in the proportion of people in each sample that successfully quit smoking after six months.
+
+c.  [Optional not on exam 2: How many total permutation resamples are possible? In other words, out of a total of 5 people, how many ways can we select two people to be in the reward only group?]{style="color: blue;"}
+
+d.  [Optional not on exam 2: Write out (by hand) all possible permutations resamples and calculate the difference in sample proportions for each resample.]{style="color: blue;"}
+
+e.  [Optional not on exam 2: Based on your previous work, what is the $P$-value of the observed test statistic?]{style="color: blue;"}
+
+## Solution to Question 6
+
+------------------------------------------------------------------------
+
+a.  
+
+b.  
+
+c.  [Optional not on exam 2]{style="color: blue;"}
+
+d.  [Optional not on exam 2]{style="color: blue;"}
+
+e.  [Optional not on exam 2]{style="color: blue;"}

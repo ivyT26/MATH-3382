@@ -1,0 +1,1176 @@
+---
+title: "MATH 3382: Homework 4 - Due Sep. 27 at 2PM"
+author: "Ivy Truong"
+output: html_document
+date: "`r Sys.Date()`"
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+# Instructions:
+
+------------------------------------------------------------------------
+
+**Submit your work electronically as an R Markdown file extension `.Rmd`.**
+
+Upload your file into the Homework 4 assignment in Canvas before **2 PM on Tues, September 27**.
+
+**You must provide supporting work for your all of your answers.**
+
+-   [That work might be inserting some R code cells.]{style="color: blue;"}
+
+    -   **Feel free to insert as much R code as you like.**
+    -   You must interpret or explain how the output of a code cell is being utilized to solve the problem.
+    -   **Code with incomplete or missing explanations of why the output is useful may not receive full credit.**
+
+-   [It might involve doing some algebra and/or calculus (integrating, differentiating, etc).]{style="color: blue;"}
+
+    -   **Be sure to type/write out the steps of your work so I can see how you arrived at your answer.**
+    -   **If typing takes too long no problem.** You can write out the support work on paper and hand that in before class.
+
+-   [Probably it a little bit of both on most problems, but you decide how you want to solve the problems!]{style="color: blue;"}
+
+## Important Academic Policies:
+
+------------------------------------------------------------------------
+
+-   **Be your own work.** Though you may collaborate with others, everyone is responsible for writing up the work in their own way using their own methods. Plagiarism of any form is not tolerated.
+-   **Be complete.** You must provide all work and/or explanations needed to find the solution. Answers with insufficient or incomplete supporting work may lose credit.
+-   **Adhere to the Code of Academic Honesty.**
+-   **Be clearly written (and legible if written).** Your solution to a problem must be clear, written in complete sentences. You may lose credit for work that is unclear or hard to follow.
+
+### [Let me know if you need help, and **GOOD LUCK!!!**]{style="color: blue;"}
+
+------------------------------------------------------------------------
+
+# Question 1:
+
+------------------------------------------------------------------------
+
+Suppose the reaction temperature $X$ (in  ${}^{\circ}$C) in a chemical process has a uniform distribution with minimum value $-5^{\circ}$C and maximum value $8^{\circ}$C.
+
+## Question 1a:
+
+------------------------------------------------------------------------
+
+Replace the ??
+in the LaTeX code below to complete the formula for the probability density function of $X$.
+
+### Solution to Question 1a:
+
+------------------------------------------------------------------------
+
+**Replace the ?? in the LaTeX code below with an appropriate expression or value.**
+
+\
+
+$$f(x) = \left\{ \begin{array}{ll}
+\frac{1}{13} & -5 \leq x \leq 8 \\
+0 & \mbox{otherwise}
+\end{array} \right. $$
+
+Temperature is a continuous random variable.
+The problem states this is a uniform distribution.
+The formula pdf of a continuous uniform distribution is $\frac{1}{b-a}$.
+For this problem, it is $\frac{1}{8-(-5)} = \frac{1}{13}$.\
+
+## Question 1b:
+
+------------------------------------------------------------------------
+
+Compute $P(1 < X < 3)$.
+Be sure to provide supporting work that shows how you found your answer.
+
+### Solution to Question 1b:
+
+------------------------------------------------------------------------
+
+P(1 \< X \< 3) = 1 - (P(X \< 1) + P(X \> 3)) or P(X \< 3) - P(X \< 1)
+
+P(X \< 3) = F(3) - F(-5)
+
+P(X \< 1) = F(1) - F(-5)
+
+P(1 \< X \< 3) = F(3) - F(-5) - (F(1) - F(-5)) =\> F(3) - F(-5) - F(1) + F(-5) = F(3) - F(1)
+
+To get the probability, we need to find the area under the curve.
+Take the integral of the pdf to get the cdf.
+
+The cdf formula of a continuous uniform distribution is: $\frac{x-a}{b-a}$
+
+To get P(1 \< X \< 3), F(3) - F(1)
+
+```{r}
+#P(1 < X < 3) = P(X < 3) - P(X < 1)
+cdf3 <- (3 - (-5)) / (8-(-5))
+cdf1 <- (1 - (-5)) / (8-(-5))
+prob1_3 <- cdf3 - cdf1
+prob1_3
+```
+
+The probability that X is greater than 1 and less than 3 is 0.1538462.\
+
+## Question 1c:
+
+------------------------------------------------------------------------
+
+Compute $E(X)$ and $\mbox{Var}(X)$.
+Be sure to provide supporting work that shows how you found your answer.
+
+### Solution to Question 1c:
+
+------------------------------------------------------------------------
+
+E(X) = $\frac{a+b}{2}$
+
+Var(X) = $\frac{(b-a)^2}{12}$
+
+```{r}
+ex <- ((-5) + 8) / 2
+variance <- ((8-(-5))^2) / 12
+ex
+variance
+```
+
+The expected value of X is 1.5.
+The variance of X is 14.08333.
+
+## Question 1d:
+
+------------------------------------------------------------------------
+
+Give a formula for the cdf of $X$, $F(X)$.
+Be sure to provide supporting work that shows how you found your answer.
+
+### Solution to Question 1d:
+
+------------------------------------------------------------------------
+
+To get the cdf, we need to take the integral of the pdf.
+
+$\int_{a}^x \frac{1}{b-a} dt$ =\> $\frac{1}{b-a} * t \ |_{a}^x$ =\>$\frac{x}{b-a} - \frac{a}{b-a}$ =\> $\frac{x-a}{b-a}$
+
+F(X) = $\frac{x-a}{b-a}$
+
+We also know the range of the formula given the pdf is $-5 \leq x \leq 8$
+
+F(X) = $\frac{x-(-5)}{8-(-5)}$
+
+The cdf formula of X, F(X) is $\frac{x+5}{13}$.\
+
+# Question 2:
+
+------------------------------------------------------------------------
+
+The plasma cholesterol level (mg/dL) for patients with no prior evidence of heart disease who experience chest pain is normally distributed with mean 200 and standard deviation 35.
+Consider randomly selecting an individual of this type.
+
+## Question 2a:
+
+------------------------------------------------------------------------
+
+What is the $z$-score of a plasma cholesterol level that is 120 mg/dL?
+Show your work, and then **interpret the practical meaning of your answer.**
+
+### Solution to Question 2a:
+
+------------------------------------------------------------------------
+
+$z = \frac{x-\mu}{\sigma}$
+
+$z = \frac{120-200}{35}$
+
+```{r}
+z <- (120 - 200) / 35
+z
+```
+
+The z score is -2.285714.
+This means that a person with a cholesterol level that is 120mg/dL are -2.285714 standard deviations away from the mean.
+In general, this person's cholesterol level is below the mean cholesterol level by 80 mg/dL.
+
+## Question 2b:
+
+------------------------------------------------------------------------
+
+If the $z$-score of a person's plasma cholesterol level that is $2.3$, then what is their plasma cholesterol level (in mg/dL)?
+Provide your supporting work to justify your answer.
+
+### Solution to Question 2b:
+
+------------------------------------------------------------------------
+
+$2.3 = \frac{x-200}{35}$\
+
+```{r}
+x <- (2.3 * 35) + 200
+x
+```
+
+The person's plasma cholesterol level is 280.5 mg/dL if their z score is 2.3.
+
+## Question 2c:
+
+------------------------------------------------------------------------
+
+What is the probability that the plasma cholesterol level is at most 120 mg/dL?
+Provide supporting work below (which may involve using R code).
+
+### Solution to Question 2c:
+
+------------------------------------------------------------------------
+
+P(X \< 120) = Cholesterol level of at most 120 mg/dL
+
+```{r}
+pnorm(120, 200, 35)
+```
+
+The probability that a person has a plasma cholesterol level of at most 120 mg/dL is 0.01113549.
+
+## Question 2d:
+
+------------------------------------------------------------------------
+
+What is the probability that the plasma cholesterol level is between 250 and 350 mg/dL?
+Provide supporting work below (which may involve using R code).
+
+### Solution to Question 2d:
+
+------------------------------------------------------------------------
+
+P(250 \< X \< 350) = P(X \< 350) - P(X \< 250)
+
+```{r}
+lessthan250 <- pnorm(250, 200, 35)
+lessthan350 <- pnorm(350, 200, 35)
+between250_350 <- lessthan350 - lessthan250
+between250_350
+```
+
+The probability that the plasma cholesterol level is between 250 and 350 mg/dL is 0.07655462.
+
+## Question 2e:
+
+------------------------------------------------------------------------
+
+What is the probability that the plasma cholesterol level differs from the mean by at least $1.5$ standard deviations (cholesterol level is either above or below the mean by $1.5$ standard deviations)?
+Provide supporting work below (which may involve using R code).
+
+### Solution to Question 2e:
+
+------------------------------------------------------------------------
+
+P(-1.5 \< Z \< 1.5) = P(Z \< 1.5) - P(Z \< -1.5)
+
+```{r}
+zlessneg1.5 <- pnorm(-1.5, 0, 1)
+# zlessneg1.5
+zless1.5 <- pnorm(1.5, 0, 1)
+# zless1.5
+betweenneg1.5_1.5 <- zless1.5 - zlessneg1.5
+betweenneg1.5_1.5
+```
+
+The probability that the plasma cholesterol level differs from the mean by at least 1.5 standard deviations is 0.8663856.
+
+# Question 3:
+
+------------------------------------------------------------------------
+
+In studies of anticancer drugs it was found that if mice are injected with cancer cells, the survival time can be modeled with the exponential distribution.
+Without treatment the expected survival time was 9 hours.
+
+## Question 3a:
+
+------------------------------------------------------------------------
+
+What is the probability that a randomly selected mouse will survive at least 7 hours?
+Provide supporting work.
+
+### Solution to Question 3a:
+
+------------------------------------------------------------------------
+
+P(X \> 7)
+
+We know that E(X) = 9 hours
+
+$\lambda = \frac{1}{\mu} = \frac{1}{9}$
+
+Pdf formula for exponential distribution in this problem: $f(x) = \frac{1}{9} e^{-\frac{1}{9} x}$
+
+To get probability, take integral of pdf to get cdf.
+
+$\int_7^{\infty} \frac{1}{9} e^{-\frac{1}{9}x} => -e^{-\frac{1}{9}x} \ |_7^\infty$\
+
+$\lim_{N \to \infty} \left(-e^{-N/9} + e^{-7/9}\right) => 0 + e^\frac{-7}{9}$
+
+```{r}
+1 - pexp(7, 1/9) #1 - P(X < 7)
+exp(-7/9)
+```
+
+The probability that the selected mouse will survive at least 7 hours is 0.4594258.
+
+## Question 3b:
+
+------------------------------------------------------------------------
+
+What is the probability that a randomly selected mouse will survive at most 11 hours?
+Provide supporting work.
+
+### Solution to Question 3b:
+
+------------------------------------------------------------------------
+
+Probability of surviving at most 11 hours = $-e^{-\frac{1}{9}x} \ |_0^{11} = -e^{-\frac{11}{9}} - (-e^0)$\
+
+```{r}
+pexp(11, 1/9) #P(X < 11)
+-exp(-11/9) + 1
+```
+
+The probability of a mouse surviving at most 11 hours is 0.7054252.
+
+## Question 3c:
+
+------------------------------------------------------------------------
+
+What is the probability that a randomly selected mouse will survive between 8 and 12 hours?
+Provide supporting work.
+
+### Solution to Question 3c:
+
+------------------------------------------------------------------------
+
+Probability of surviving between 8 and 12 hours: $-e^{-\frac{1}{9}x} \ |_8^{12} = -e^{-\frac{12}{9}} - (-e^{-\frac{8}{9}})$\
+\
+
+```{r}
+pexp(12, 1/9) - pexp(8, 1/9) #P(X < 12) - P(X < 8) = P(8 < X  < 12)
+-exp(-12/9) + exp(-8/9)
+```
+
+The probability of surviving between 8 and 12 hours is 0.1475152.
+
+## Question 3d:
+
+------------------------------------------------------------------------
+
+Find $E(X)$ and $\mbox{Var}(X)$.
+Provide supporting work which simply be applying a "shortcut" formula.
+
+### Solution to Question 3d:
+
+------------------------------------------------------------------------
+
+\
+E(X) = $\frac{1}{\lambda}$
+
+Var(X) = $\frac{1}{\lambda^2}$
+
+```{r}
+ex <- 9 #1/(1/9)
+variance <- ex**2
+ex
+variance
+# 1/((1/9)**2)
+```
+
+The expected value of X is 9.
+The variance of X is 81.
+
+## Question 3e:
+
+------------------------------------------------------------------------
+
+Using the value of $\sigma = \mbox{SD}(X)= \sqrt{\mbox{Var}(X)}$ from the previous part, what is the probability that the survival time of a mouse exceeds the mean survival time by more than 2 standard deviations?
+Provide supporting work.
+
+### Solution to Question 3e:
+
+------------------------------------------------------------------------
+
+\
+SD = 9
+
+P(Z \> 2): probability that the survival time exceeds the mean by more than 2 standard deviations
+
+if Z = 2, and the mean is, 9, then two standard deviations away from the mean is: mean + 2SD = 9 + 2\*9 = 27
+
+P(X \> 27): probability that the survival time exceeds 27 hours
+
+```{r}
+1 - pexp(27, 1/9) #1 - P(X < 27)
+exp(-27/9)
+```
+
+The probability that the survival time of a mouse exceeds the mean survival time by more than 2 standard deviations is 0.04978707.
+
+# Question 4:
+
+------------------------------------------------------------------------
+
+Let $X$ be the birth weight, in grams, of a randomly selected full-term baby.
+An article[^1] suggests that $X$ is normally distributed with mean 3500 grams and standard deviation 600 grams.
+
+[^1]: "Fetal Growth Parameters and Birth Weight: Their Relationship to Neonatal Body Composition'" (Ultrasound in Obstetrics and Gynecology, 2009: 441--446)
+
+## Question 4a:
+
+------------------------------------------------------------------------
+
+What is $P(2500 < X < 4200)$?
+Provide supporting work.
+
+### Solution to Question 4a:
+
+------------------------------------------------------------------------
+
+Normal distribution: use pnorm
+
+```{r}
+#P(2500 < X < 4200) = P(X < 4200) - P(X < 2500)
+pnorm(4200, 3500, 600) - pnorm(2500, 3500, 600)
+```
+
+The probability of a newborn being greater than 2500g and less than 4200g is 0.8305371.
+
+## Question 4b:
+
+------------------------------------------------------------------------
+
+What is the probability that the weight of such a newborn is less than 4200 g?
+Provide supporting work.
+
+### Solution to Question 4b:
+
+------------------------------------------------------------------------
+
+```{r}
+pnorm(4200, 3500, 600)
+```
+
+The probability that the weight of a newborn is less than 4200g is 0.8783275.
+
+## Question 4c:
+
+------------------------------------------------------------------------
+
+What is the probability that the weight of such a newborn exceeds 5000 g (roughly 11 lb)?
+Provide supporting work.
+
+### Solution to Question 4c:
+
+------------------------------------------------------------------------
+
+```{r}
+1 - pnorm(5000, 3500, 600) #1 - P(X < 5000)
+```
+
+The probability of a newborn exceeding 5000g is 0.006209665.
+
+## Question 4d:
+
+------------------------------------------------------------------------
+
+Give value corresponding to the 95th percentile for birth weight.
+Provide supporting work.
+
+### Solution to Question 4d:
+
+------------------------------------------------------------------------
+
+```{r}
+qnorm(0.95, 3500, 600) #calculates P(weight < X) = 0.95
+```
+
+The birth weight in the 95th percentile is 4486.912.
+
+# Question 5:
+
+------------------------------------------------------------------------
+
+A large but sparsely populated county has two small hospitals, one at the south end of the county and the other at the north end.
+The south hospital's emergency room has 4 beds, whereas the north hospital's emergency room has only 3 beds.
+Let $X$ denote the number of south beds occupied at a particular time on a given day, and let $Y$ denote the number of north beds occupied at the same time on the same day.
+**Suppose that these two random variables are independent**, and that the marginal pdf's of $X$ and $Y$ are
+
+$$ f_X(x) = \left\{ \begin{array}{ll} 
+0.1, & x=0 \\ 
+0.2, & x=1 \\ 
+0.3, & x=2 \\ 
+0.2, & x=3 \\ 
+0.2, & x=4\\
+0 & \mbox{otherwise} \end{array} \right.
+\quad \mbox{and} \quad
+f_Y(y) = \left\{ \begin{array}{ll} 
+0.1, & y=0 \\ 
+0.3, & y=1 \\ 
+0.4, & y=2 \\ 
+0.2, & y=3\\  
+0 & \mbox{otherwise} 
+\end{array} \right. $$
+
+## Question 5a:
+
+------------------------------------------------------------------------
+
+Display the joint pdf of $X$ and $Y$ in a joint probability table below.
+
+### Solution to Question 5a:
+
+------------------------------------------------------------------------
+
+Replace each ??
+with an appropriate value.
+
+| $p(x,y)$ | $Y=0$ | $Y=1$ | $Y=2$ | $Y=3$ | Total |
+|----------|-------|-------|-------|-------|-------|
+| $X=0$    | 0.01  | 0.03  | 0.04  | 0.02  | 0.1   |
+| $X=1$    | 0.02  | 0.06  | 0.08  | 0.04  | 0.2   |
+| $X=2$    | 0.03  | 0.09  | 0.12  | 0.06  | 0.3   |
+| $X=3$    | 0.02  | 0.06  | 0.08  | 0.04  | 0.2   |
+| $X=4$    | 0.02  | 0.06  | 0.08  | 0.04  | 0.2   |
+| Total    | 0.1   | 0.3   | 0.4   | 0.2   | 1.0   |
+
+Since discrete random variables X and Y are independent, p(x,y) = p(x) \* p(y)
+
+```{r}
+# X <- list(0.1, 0.2, 0.3, 0.2, 0.2)
+# Y <- list(0.1, 0.3, 0.4, 0.2)
+# for (i in X) {
+#   for (j in Y) {
+#     cat(i,",", j, ":", i * j, "\n")
+#   }
+# }
+```
+
+## Question 5b:
+
+------------------------------------------------------------------------
+
+Compute $P(X \leq 1 \mbox{ and } Y \leq 1)$.
+Show your supporting work below.
+
+### Solution to Question 5b:
+
+------------------------------------------------------------------------
+
+$P(X \leq 1) = P(X = 0) \ and \ P(X = 1)$
+
+$P(Y \leq 1) = P(Y = 0) \ and \ P(Y = 1)$\
+
+P(X = 0 and Y = 0) + P(X = 0 and Y = 1) + P(X = 1 and Y = 0) + P(X = 1 and Y = 1)
+
+```{r}
+0.01 + 0.03 + 0.02 + 0.06
+```
+
+The probability that X is less than equal to 1 and Y is less than equal to 1 is 0.12.
+
+## Question 5c:
+
+------------------------------------------------------------------------
+
+Calculate the probability that the total number of beds occupied at the two hospitals combined is **at most 1**.
+Show your supporting work below.
+
+### Solution to Question 5c:
+
+------------------------------------------------------------------------
+
+Total number of beds occupied at two hospitals is at most 1 means X + Y = 1.
+
+Possibilities:
+
+X = 0, Y = 1; X = 0, Y = 0; X = 1, Y = 0
+
+P(X = 0 and Y = 0) + P(X = 0 and Y = 1) + P(X = 1 and Y = 0)
+
+```{r}
+0.01 + 0.03 + 0.02
+```
+
+The probability that the total number of beds occupied from both hospitals is at most 1 is 0.06.
+
+# Question 6: Joint Discrete
+
+------------------------------------------------------------------------
+
+A market has both an express checkout line and a superexpress checkout line.
+Let $X$ denote the number of customers in line at the express checkout at a particular time of day, and let $S$ denote the number of customers in line at the superexpress checkout at the same time.
+Suppose the joint pdf of $X$ and $S$ is as given in the accompanying table.
+
+| $p(x,s)$ | $S=0$  | $S=1$  | $S=2$  | $S=3$  |
+|----------|--------|--------|--------|--------|
+| $X=0$    | $0.08$ | $0.07$ | $0.04$ | $0.00$ |
+| $X=1$    | $0.06$ | $0.15$ | $0.05$ | $0.04$ |
+| $X=2$    | $0.05$ | $0.04$ | $0.10$ | $0.06$ |
+| $X=3$    | $0.00$ | $0.03$ | $0.04$ | $0.07$ |
+| $X=4$    | $0.00$ | $0.01$ | $0.05$ | $0.06$ |
+
+## Question 6a:
+
+------------------------------------------------------------------------
+
+What is $P(X = S)$, that is, the probability that the numbers of customers in the two lines are identical?
+Provide supporting work below.
+
+### Solution to Question 6a:
+
+------------------------------------------------------------------------
+
+P(X = S) = P(X = 0 and S = 0) + P(X = 1 and S = 1) + P(X = 2 and S = 2) + P(X = 3 and S = 3)
+
+```{r}
+0.08 + 0.15 + 0.1 + 0.07
+```
+
+The probability that the number of customer in the two lines are identical is 0.4.
+
+## Question 6b:
+
+------------------------------------------------------------------------
+
+Let $A$ denote the event that there are at least two more customers in one line than in the other line.
+Calculate $P(A)$.
+Provide supporting work below.
+
+### Solution to Question 6b:
+
+------------------------------------------------------------------------
+
+Cases where there are at least 2 more customers in one line than in the other line
+
+P(A) = P(X = 0, S \>= 2) + P(X = 1, S = 3) + P(X \>= 2, S = 0) + P(X \>= 3, S = 1) + P(X = 4, S = 2)
+
+```{r}
+px0 <- 0.04 + 0.0 #P(X = 0, S = 2 and S = 3)
+px1 <- 0.04 #P(X = 1 and S = 3)
+ps0 <- 0.05 + 0.0 + 0.0 #P(X = 2 and X = 3 and X = 4, S = 0)
+ps1 <- 0.03 + 0.01 #P(X = 3 and X = 4, S = 1)
+ps2 <- 0.05 #P(X = 4, S = 2)
+total <- px0 + px1 + ps0 + ps1 + ps2
+total
+```
+
+The probability that there are at least 2 more customers in one line than in the other line is 0.22.
+
+## Question 6c:
+
+------------------------------------------------------------------------
+
+Determine the marginal pdf of $X$, **and then calculate the expected number of customers in line at the express checkout**.
+Express your formula for $p_X(x)$ as a piecewise function by filling in the ??'
+s marks in the LaTeX code below.
+
+### Solution to Question 6c:
+
+------------------------------------------------------------------------
+
+Replace each ??
+in the LaTeX code below with an appropriate value or expression.
+
+\
+
+$$ p_X(x) = \left\{ \begin{array}{ll} 
+0.19 & x=0 \\ 
+0.3 & x=1 \\ 
+0.25 & x=2 \\ 
+0.14 & x=3 \\ 
+0.12 & x=4\\
+0 & \mbox{otherwise} \end{array} \right.$$
+
+\
+Add the values in each row.
+
+```{r}
+x0 <- 0.08 + 0.07 + 0.04 + 0
+x1 <- 0.06 + 0.15 + 0.05 + 0.04
+x2 <- 0.05 + 0.04 + 0.1 + 0.06
+x3 <- 0 + 0.03 + 0.04 + 0.07
+x4 <- 0 + 0.01 + 0.05 + 0.06
+x0
+x1
+x2
+x3
+x4
+```
+
+**Then calculate the expected number of customers in line at the express checkout below. Provide supporting work.**
+
+\
+$E(X) = \sum x * p(x)$
+
+```{r}
+ex <- (0 * 0.19) + (1 * 0.3) + (2 * 0.25) + (3 * 0.14) + (4 * 0.12)
+ex
+```
+
+The expected number of customers in line at the express checkout is 1.7.
+
+## Question 6d:
+
+------------------------------------------------------------------------
+
+Determine the marginal pdf of $S$.
+Express your formula for $p_S(s)$ as a piecewise function by filling in the ??'
+s marks in the LaTeX code below.
+
+### Solution to Question 6d:
+
+------------------------------------------------------------------------
+
+Replace each ??
+in the LaTeX code below with an appropriate value or expression.
+
+\
+
+$$ p_S(s) = \left\{ \begin{array}{ll} 
+0.19 & s=0 \\ 
+0.3 & s=1 \\ 
+0.28 & s=2 \\ 
+0.23 & s=3 \\ 
+0 & \mbox{otherwise} \end{array} \right.$$
+
+```{r}
+s0 <- 0.08 + 0.06 + 0.05 + 0 + 0
+s1 <- 0.07 + 0.15 + 0.04 + 0.03 + 0.01
+s2 <- 0.04 + 0.05 + 0.1 + 0.04 + 0.05
+s3 <- 0 + 0.04 + 0.06 + 0.07 + 0.06
+s0
+s1
+s2
+s3
+
+# es <- (0 * 0.19) + (1 * 0.3) + (2 * 0.28) + (3 * 0.23)
+# es
+```
+
+## Question 6e:
+
+------------------------------------------------------------------------
+
+By inspection of the probabilities $P(X =4)$, $P(S =0)$, and $P(X = 4 \mbox{ and } S =0)$, are $X$ and $S$ independent random variables?
+Explain your answer using a complete sentence.
+
+### Solution to Question 6e:
+
+------------------------------------------------------------------------
+
+P(X = 4) = 0.12
+
+P(S = 0) = 0.19
+
+P(X = 4 and S = 0) = 0 (from the table)
+
+P(X = 4) \* P(S = 0) = 0.0228
+
+```{r}
+0.12 * 0.19
+```
+
+No, random variables X and S are not independent variables because P(X = 4) \* P(S = 0) is not equal to P(X = 4 and S = 0).
+
+# Question 7:
+
+------------------------------------------------------------------------
+
+Each front tire of a vehicle is supposed to be filled to a pressure of $26$ psi.
+Suppose the actual air pressure in each tire is a random variable, $X$ for the right tire and $Y$ for the left tire, with joint pdf $f(x,y)$ given below.
+
+$$f(x,y) = \left\{ \begin{array}{ll} 
+k(x^2+y^2)  & 20 \leq x \leq 30, \ \ \ 20 \leq y \leq 30\\
+0 & \mbox{otherwise} 
+\end{array} \right. .$$
+
+## Question 7a:
+
+------------------------------------------------------------------------
+
+What is the value of $k$?
+Provide supporting work.
+
+### Solution to Question 7a:
+
+------------------------------------------------------------------------
+
+The area under the curve must equal 1.
+Therefore,
+
+$\int_{20}^{30} \ \int_{20}^{30} kx^2 + ky^2 \ dx \ dy = 1$
+
+$\int_{20}^{30} \ \int_{20}^{30} kx^2 + ky^2 \ dx \ dy = \int_{20}^{30} \frac{1}{3}kx^3 + kxy^2 \ |_{20}^{30} \ dy = \int_{20}^{30} \ (\frac{30^3}{3}k + 30ky^2) - (\frac{20^3}{3}k + 20ky^2) \ dy = \int_{20}^{30} \ (\frac{30^3}{3}k - \frac{20^3}{3}k + 10ky^2) \ dy$\
+
+$\frac{30^3}{3}ky - \frac{20^3}{3}ky + \frac{10}{3}ky^3 \ |_{20}^{30} = (\frac{30^4}{3}k - \frac{20^3*30}{3}k + \frac{10 * 30^3}{3}k) - (\frac{30^3*20}{3}k - \frac{20^4}{3}k + \frac{10*20^3}{3}k)$
+
+$(\frac{30^4}{3}k - \frac{20^3*30}{3}k + \frac{10 * 30^3}{3}k) - (\frac{30^3*20}{3}k - \frac{20^4}{3}k + \frac{10*20^3}{3}k) = 1$
+
+$(\frac{810000}{3}k-\frac{240000}{3}k + \frac{270000}{3}k) - (\frac{540000}{3}k - \frac{160000}{3}k + \frac{80000}{3}k) = 1$
+
+```{r}
+(810000-240000+270000)-(540000-160000+80000)
+```
+
+The value of k is $\frac{3}{380000}$.
+
+## Question 7b:
+
+------------------------------------------------------------------------
+
+What is the probability that both tires are under-filled?
+Provide supporting work.
+
+### Solution to Question 7b:
+
+------------------------------------------------------------------------
+
+P(X \< 26 and Y \< 26)
+
+$\int_{20}^{26} \ \int_{20}^{26} \frac{3}{380000}x^2 + \frac{3}{380000}y^2 \ dx \ dy = \int_{20}^{30} \ \frac{1}{380000}x^3 + \frac{3}{380000}y^2 \ |_{20}^{26} \ dy = \int_{20}^{30} \ (\frac{1}{380000}26^3 + \frac{3}{380000}y^2) - (\frac{1}{380000}20^3 + \frac{3}{380000}y^2) \ |_{20}^{26} \ dy = \int_{20}^{26} \ \frac{26^3}{100} - \frac{20^3}{100} \ dy$\
+\
+$= \frac{26^3}{190000}y - \frac{20^3}{190000}y \ |_{20}^{26} = \frac{26^4}{190000} - \frac{20^4}{190000}$\
+
+```{r}
+((26**4)/380000) - ((20**4)/380000)
+```
+
+The probability that both tires are under-filled is 0.7815158.
+
+## Question 7c:
+
+------------------------------------------------------------------------
+
+Determine the (marginal) distribution of air pressure in the right tire alone.
+Provide supporting work.
+
+### Solution to Question 7c:
+
+------------------------------------------------------------------------
+
+$f_x(x) = \int_{-\infty}^{\infty} f(x, y) \ dy => \int_{20}^{30} \frac{3}{380000}x^2 + \frac{3}{380000}y^2 \ dy$\
+
+$= \frac{3}{380000}x^2y + \frac{1}{380000}y^3 \ |_{20}^{30} = (\frac{3 * 30}{380000}x^2 + \frac{30^3}{380000}) - (\frac{3 * 20}{380000}x^2 + \frac{20^3}{380000}) = \frac{30}{380000}x^2 + \frac{19000}{380000}$\
+\
+
+## Question 7d:
+
+------------------------------------------------------------------------
+
+Are $X$ and $Y$ independent random variables?
+Provide supporting work/explanation.
+
+### Solution to Question 7d:
+
+------------------------------------------------------------------------
+
+Let's use this as an example: P(X \< 26 and Y \< 26), P(X \< 26), P(Y \< 26)
+
+From 7b: P(X \< 26 and Y \< 26) = 0.7815158
+
+If they were independent, then $f(x,y) = f_x(x) \cdot f_y(y)$\
+\
+$f_x(x) = \frac{30}{380000}x^2 + \frac{19000}{380000}$\
+
+$f_y(y) = \frac{19000}{380000} + \frac{30}{380000}y^2$
+
+$P(X < 26) = f_x(26) - f_x(20) = (\frac{30}{380000}26^2 + \frac{19000}{380000}) - (\frac{30}{380000}20^2 + \frac{19000}{380000}) = 0.0217894737$
+
+$P(Y < 26) = f_y(26) - f_y(20) = (\frac{19000}{380000} + \frac{30}{380000}26^2) - (\frac{19000}{380000} + \frac{30}{380000}20^2) = 0.0217894737$
+
+P(X \< 26) \* P(Y \< 26) = 0.0004747812
+
+Since $f(x,y) is \ not \ equal \ to f_x(x) \cdot f_y(y)$, X and Y variables are dependent.
+
+## Question 7e:
+
+------------------------------------------------------------------------
+
+Compute $P(Y \geq 25)$.
+Provide supporting work, and interpret the meaning of your answer to this part in practical terms.
+
+### Solution to Question 7e:
+
+------------------------------------------------------------------------
+
+$P(Y \geq 25) = 1 - P(Y < 25)$\
+
+$P(Y < 25) = f_y(25) - f_y(20) = (\frac{19000}{380000} + \frac{30}{380000}25^2) - (\frac{19000}{380000} + \frac{30}{380000}20^2) = 0.0177631579$\
+
+$P(Y \geq 25) = 1 - 0.0177631579 = 0.9822368421$\
+
+The probability that the tire pressure of the left tire will be at least 25 psi is 0.9822368421.
+
+# Question 8:
+
+------------------------------------------------------------------------
+
+You install an incandescent lightbulb and an LED lightbulb in a lamp.
+Let $X$ be the lifetime of the fluorescent bulb and $Y$ be the lifetime of the LED lightbulb (both measured in ten thousands hours).
+Suppose that $X$ and $Y$ are independent and that each has an exponential distribution with the mean lifetime of $X$ and $Y$ being $\mu_X =2$ and $\mu_Y = 5$ (meaning the average lifetime of each is $20,\!000$ and $50,\!000$ hours).
+
+## Question 8a:
+
+------------------------------------------------------------------------
+
+What are the values of $\lambda_X$ and $\lambda_Y$?
+Provide supporting work.
+
+### Solution to Question 8a:
+
+------------------------------------------------------------------------
+
+Since it is an exponential distribution, we know that $\lambda = \frac{1}{\mu}$
+
+$\lambda_x = \frac{1}{2}$
+
+$\lambda_y = \frac{1}{5}$\
+\
+
+## Question 8b:
+
+------------------------------------------------------------------------
+
+What is the joint pdf $f(x,y)$ of $X$ and $Y$?
+Provide supporting work.
+
+### Solution to Question 8b:
+
+------------------------------------------------------------------------
+
+The problem states that random variables X and Y are independent.
+Therefore,
+
+$f(x,y) = f_x(x) * f_y(y)$
+
+The pdf formula for exponential distribution is: $f(x) = \lambda e^{-\lambda x}$
+
+$f_x(x) = \frac{1}{2}e^{-\frac{1}{2}x}$
+
+$f_y(y) = \frac{1}{5}e^{-\frac{1}{5}y}$
+
+$f_x(x) * f_y(y) = \frac{1}{2}e^{-\frac{1}{2}x} * \frac{1}{5}e^{-\frac{1}{5}y} = \frac{1}{10}e^{-\frac{1}{2}x-\frac{1}{5}y}$\
+
+$f(x,y) = \left\{ \begin{array}{ll} \frac{1}{10}e^{-\frac{1}{2}x-\frac{1}{5}y} & \ x \geq 0, \ \ \ y \geq 0\\ 0 & \ \mbox{otherwise} \end{array} \right. .$\
+\
+
+## Question 8c:
+
+------------------------------------------------------------------------
+
+What is the $P(X \leq 3 \mbox{ and } Y \leq 3)$?
+Provide supporting work, and interpret the meaning of your answer in practical terms.
+
+### Solution to Question 8c:
+
+------------------------------------------------------------------------
+
+Formula for computing probabilities of continuous random variables:
+
+$\int_c^d \ \int_a^b \frac{1}{10}e^{-\frac{1}{2}x-\frac{1}{5}y} \ dx \ dy$
+
+$P(X \leq 3, Y \leq 3) = \int_0^3 \ \int_0^3 \frac{1}{10}e^{-\frac{1}{2}x-\frac{1}{5}y} \ dx \ dy$\
+\
+Solving innermost integral:
+
+$\int_0^3 \ \frac{-1}{5}e^{-\frac{1}{2}x - \frac{1}{5}y} \ |_0^3 \ dy = \frac{-1}{5}e^{\frac{-3}{2}-\frac{1}{5}y} + \frac{1}{5}e^{0-\frac{1}{5}y}$\
+
+Solving outermost integral:
+
+$\int_0^3 \ \frac{-1}{5}e^{\frac{-3}{2}-\frac{1}{5}y} + \frac{1}{5}e^{-\frac{1}{5}y} \ dy = e^{\frac{-3}{2}-\frac{1}{5}y} - e^{-\frac{1}{5}y} \ | _ 0^3 = (e^{\frac{-3}{2}-(\frac{1}{5}*3)} - e^{-\frac{1}{5}*3}) - (e^{\frac{-3}{2}-(\frac{1}{5} * 0)} - e^{-\frac{1}{5} * 0}) = (e^\frac{-21}{10} - e^\frac{-3}{5}) - (e^\frac{-3}{2} - 1)$
+
+```{r}
+(exp(-21/10) - exp(-3/5)) - (exp(-3/2) - exp(0))
+```
+
+The probability that the lifetime of light bulb X is at most 30000 hours and the lifetime of light bulb Y is at most 30000 hours is 0.3505146.
+
+## Question 8d:
+
+------------------------------------------------------------------------
+
+What is the probability that the total lifetime of the two bulbs, $X+Y$, is at most $70,\!000$ hours.
+Provide supporting work.
+
+*Hint: Draw a picture of the region* $A = \left\{ (x, y): x \geq 0, y \geq 0, x + y \leq 7\right\}$ before integrating.
+
+### Solution to Question 8d:
+
+------------------------------------------------------------------------
+
+```{r}
+# par(mfrow=c(1,2))  # plot in a 1 by 2 array
+# 
+# y <- seq(0, 15, length=100)
+# fy <- dexp(y, (1/5) * exp(-1/5))
+# 
+# x<- seq(0, 15, length=100)
+# fx <- dexp(x, (1/2) * exp(-1/2))
+# 
+# 
+# plot(y, fy, 
+#      type="l", 
+#      lty=1, 
+#      col = "blue",
+#      xlab="Lifetime(10,000 hours)",
+#      ylab="Density", 
+#      main="Lightbulb Y Lifetime")
+# 
+# lines(x, fx, col="red")
+# lines(x, 7 - x, col="darkgreen")
+# 
+# par(mfrow=c(1,1)) # return to single plot
+```
+
+$\int_0^{7} \ \int_0^{7-x} \frac{1}{10}e^{-\frac{1}{2}x-\frac{1}{5}y} \ dy \ dx$
+
+In this case, the values are dependent on each other, so y changes with respect to x since x+y must be less than or equal to 7.
+
+$x + y \leq 7 => y \leq 7 - x \ (bound \ for \ y \ value)$
+
+$\int_0^{7} \ \int_0^{7-x} \frac{1}{10}e^{-\frac{1}{2}x-\frac{1}{5}y} \ dy \ dx = \int_0^7 \frac{-1}{2}e^{\frac{-1}{2}x - \frac{1}{5}y} \ |_0^{7-x} \ dx = \int_0^7 (\frac{-1}{2}e^{\frac{-1}{2}x - \frac{1}{5}(7-x)}) - \frac{-1}{2}e^{\frac{-1}{2}x - \frac{1}{5}*0} \ dx =$
+
+$\int_0^7 (\frac{-1}{2}e^{\frac{-1}{2}x - (\frac{7}{5}-\frac{1}{5}x)}) - \frac{-1}{2}e^{\frac{-1}{2}x} \ dx = \int_0^7 (\frac{-1}{2}e^{\frac{-3}{10}x - \frac{7}{5}}) - \frac{-1}{2}e^{\frac{-1}{2}x} \ dx = \frac{5}{3}e^{\frac{-3}{10}x - \frac{7}{5}} - e^{\frac{-1}{2}x} \ |_0^7 = (\frac{5}{3}e^{\frac{-3}{10}*7 - \frac{7}{5}} - e^{\frac{-1}{2}*7}) - (\frac{5}{3}e^{\frac{-3}{10}*0 - \frac{7}{5}} - e^{\frac{-1}{2}*0})$
+
+$(\frac{5}{3}e^{\frac{-35}{10}} - e^{\frac{-7}{2}}) - (\frac{5}{3}e^{-\frac{7}{5}} - e^{0})$
+
+```{r}
+((5/3)*exp(-35/10) - exp(-7/2)) - ((5/3)*exp(-7/5) - 1)
+```
+
+The probability that the light bulb lifetime of both light bulbs at the same time is at most 70,000 hours is 0.6091366.
+
+# Question 9: Discrete Continuous
+
+------------------------------------------------------------------------
+
+The two most common types of errors made by programmers are syntax errors and logic errors.
+Let $X$ denote the number of syntax errors and $Y$ the number of logic errors on the first run of a program.
+Suppose $X$ and $Y$ have the following joint pdf for a particular programming assignment:
+
+| $p(x,y)$ | $X=0$  | $X=1$  | $X=2$  | $X=3$  |
+|----------|--------|--------|--------|--------|
+| $Y=0$    | $0.71$ | $0.03$ | $0.02$ | $0.01$ |
+| $Y=1$    | $0.04$ | $0.06$ | $0.03$ | $0.01$ |
+| $Y=2$    | $0.03$ | $0.03$ | $0.02$ | $0.01$ |
+
+## Question 9a:
+
+------------------------------------------------------------------------
+
+Find the marginal pdf's of $X$ and $Y$.
+Express your formulas for $p_X(x)$ and $p_Y(y)$ as piecewise functions by filling in the ??'
+s marks in the LaTeX code below.
+
+### Solution to Question 9a:
+
+------------------------------------------------------------------------
+
+Replace each ??
+in the LaTeX code below with an appropriate value or expression.
+
+\
+
+$$ p_X(x) = \left\{ \begin{array}{ll} 
+0.78 & x=0 \\ 
+0.12 & x=1 \\ 
+0.07 & x=2 \\ 
+0.03 & x=3 \\ 
+0 & \mbox{otherwise} \end{array} \right.$$
+
+```{r}
+x0 <- 0.71 + 0.04 + 0.03
+x1 <- 0.03 + 0.06 + 0.03
+x2 <- 0.02 + 0.03 + 0.02
+x3 <- 0.01 + 0.01 + 0.01
+x0
+x1
+x2
+x3
+```
+
+Replace each ??
+in the LaTeX code below with an appropriate value or expression.
+
+\
+
+$$ p_Y(y) = \left\{ \begin{array}{ll} 
+0.77 & y=0 \\ 
+0.14 & y=1 \\ 
+0.09 & y=2 \\ 
+0 & \mbox{otherwise} \end{array} \right.$$
+
+```{r}
+y0 <- 0.71 + 0.03 + 0.02 + 0.01
+y1 <- 0.04 + 0.06 + 0.03 + 0.01
+y2 <- 0.03 + 0.03 + 0.02 + 0.01
+y0
+y1
+y2
+```
+
+Are $X$ and $Y$ independent?
+How can you tell?
+
+They are dependent.
+It only takes one combination to prove that p(x,y) is not equal to p(x) \* p(y).
+Let's take X = 0 and Y = 0 as an example.
+
+P(X = 0) = 0.78
+
+P(Y = 0) = 0.77
+
+P(X = 0 and Y = 0) = 0.71
+
+P(X = 0) \* P(Y = 0) = 0.6006
+
+## Question 9b:
+
+------------------------------------------------------------------------
+
+What is the average number of syntax errors in the first run of a program?
+What is the average number of logic errors?
+Answer both questions, and be sure to provide supporting work.
+
+### Solution to Question 9b:
+
+------------------------------------------------------------------------
+
+E(X) = expected number of syntax errors
+
+E(Y) = expected number of logic errors
+
+```{r}
+ex <- (0 * 0.78) + (1 * 0.12) + (2 * 0.07) + (3 * 0.03)
+ey <- (0 * 0.77) + (1 * 0.14) + (2 * 0.09)
+ex
+ey
+```
+
+The average number of syntax errors in the first run of a program is 0.35.
+The average number of logic errors in the first run of a program is 0.32.
+
+## Question 9c:
+
+------------------------------------------------------------------------
+
+Suppose an evaluator assigns points to each program with the formula $Z=100-4X-9Y$.
+What is the expected point score, $Z$, for a randomly selected program?
+Provide supporting work.
+
+### Solution to Question 9c:
+
+------------------------------------------------------------------------
+
+\
+Z = 100 - 4(0.35) - 9(0.32)
+
+```{r}
+z <- 100 - (4 * 0.35) - (9 * 0.32)
+z
+```
+
+The expected point score for a randomly selected program is 95.72.

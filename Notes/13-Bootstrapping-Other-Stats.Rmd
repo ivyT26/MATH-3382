@@ -1,0 +1,307 @@
+---
+title: '13: Bootstrapping Other Statistics'
+author: "Adam Spiegler, University of Colorado Denver"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+# Load required packages first
+
+------------------------------------------------------------------------
+
+```{r message=FALSE}
+library(resampledata)  # to access Verizon and Bangladesh data
+```
+
+# Bootstrapping Other Statistics
+
+------------------------------------------------------------------------
+
+Some statistics, such as means and proportions, we can prove a theory such as the Central Limit Theorem that allows us to theoretically model sampling distributions for those statistics.
+
+-   Not all statistics have a Central Limit Theorem.
+-   The bootstrap procedure may be used with a wide variety of other statistics, such as medians, trimmed means, covariance, and ratios.
+-   [**We can construct a bootstrap distribution to estimate the sampling distribution for any statistic, even if there is no Central Limit Theorem.**]{style="color: blue;"}
+
+## Question 1: Verizon Repair Time
+
+------------------------------------------------------------------------
+
+Verizon is the incumbent local exchange carrier (ILEC) for a large part of the Eastern US. When there is an emergency Verizon is responsible for making repairs for the customers of other telephone companies in the region known as competing local exchange carriers (CLEC's).
+Verizon is subject to fines if the repair times for CLEC customers are substantially worse than the times for Verizon customers.
+The package `resampledata` contains the dataset `Verizon` that has a random sample of repair times (`Time`, in hours) for 1664 ILEC and 23 CLEC customers.
+The variable `Group` is a categorical variable that indicates whether the repair is for a CLEC or ILEC customer.
+
+Below we plot side-by-side boxplots of the sample repair times for the two groups of customers.
+
+```{r}
+plot(Time ~ Group, data = Verizon, 
+     col = "springgreen4",
+     main = "Comparison of Repair Times for ILEC and CLEC",
+     xlab = "Repair Time (in hours)")
+```
+
+Difference in means may be misleading in this data set because the values are extremely small and may be difficult to see the relationship between the data.
+
+Rather than estimate the difference in mean times, suppose we look at the ratio of the means, what is the ratio of the ILEC mean repair time over the CLEC mean repair time?
+**Construct a 95% bootstrap confidence interval for the ratio of the two means.**
+
+### Solution to Question 1
+
+------------------------------------------------------------------------
+
+Replace each `??` with appropriate code to complete the code cell below.
+
+```{r}
+
+# vector of all ILEC repair times in sample
+Time.ILEC <- subset(Verizon, select = Time, Group == "ILEC", drop =T)
+
+# vector of all CLEC repair times in sample
+Time.CLEC <- subset(Verizon, select = Time, Group == "CLEC", drop =T)
+
+N <- 10^5
+boot.ratio <- numeric(N)
+for (i in 1:N)
+{
+  ILEC.sample <- sample(Time.ILEC, length(Time.ILEC), replace = TRUE)  # resample of ILEC times
+  CLEC.sample <- sample(Time.CLEC, length(Time.CLEC), replace = TRUE)  # resample of CLEC times
+  boot.ratio[i] <- mean(ILEC.sample) / mean(CLEC.sample)  # (mean ILEC times)/(mean CLEC times)
+}
+
+lower <- quantile(boot.ratio, probs = 0.025)
+upper <- quantile(boot.ratio, probs = 0.975)
+lower
+upper
+```
+
+$\bar{x} \~ N(\mu_x, \frac{\sigma_x}{\sqrt{n}})$
+
+$\hat{p} \~ N(p, \sqrt\frac{p(1-p)}{n})$
+
+$\bar{x}_1 - \bar{x}_2 \~ N(\mu_{x_1} - \mu_{x_2}, SE(\bar{x}_1 - \bar{x}_2))$
+
+$\hat{p_1} - \hat{p_2}$ has a CLT no CLT: median, trimmed means, variance, ratios of two means
+
+To compare the ratio means:
+
+-   if 1 is inside the interval, then it is plausible the mean variables are equal
+
+-   if 1 is not inside the interval, it is not plausible the mean variables are equal
+
+## Question 2
+
+------------------------------------------------------------------------
+
+Plot the bootstrap distribution for the ratio of sample means (as a histogram) and include vertical that pass through the upper and lower cutoffs for a 95% bootstrap percentile confidence interval as well as the observed ratio of sample means.
+
+### Solution to Question 2
+
+------------------------------------------------------------------------
+
+```{r}
+orig.ratio <- mean(Time.ILEC) / mean(Time.CLEC) # compute the observed ratio of sample means from sample
+
+# Display bootstrap distribution
+hist(boot.ratio, xlab = "Ratio of Mean Repair Times (ILEC / CLEC)",
+      main = "Bootstrap Dist for Ratio of Mean Repair Times")
+
+
+# Add a red line at the observed ratio of sample means
+abline(v = orig.ratio, col = "red", lwd = 2, lty = 2)
+
+# Add blue lines at cutoffs for 95 percentile
+abline(v = lower, col = "blue", lwd = 2, lty = 2)
+abline(v = upper, col = "blue", lwd = 2, lty = 2)
+```
+
+## Question 3
+
+------------------------------------------------------------------------
+
+Is the shape of the sampling distribution for the ratio of means normal?
+Create QQ-Plot to compare the bootstrap distribution to a standard normal distribution.
+
+### Solution to Question 3
+
+------------------------------------------------------------------------
+
+Replace each `??` with appropriate code.
+
+```{r}
+qqnorm(boot.ratio)
+qqline(boot.ratio)
+```
+
+# Bias of Estimators
+
+------------------------------------------------------------------------
+
+-   Let $\theta$ denote a population parameter.
+    We denote an estimator for the parameter with a hat, $\widehat{\theta}$.
+
+-   An estimator $\hat{\theta}$ is [**biased**]{style="color: blue;"} if on average it tends to be too high or too low relative to the true value of $\theta$.
+    The bias of an estimator is
+
+$$\mbox{Bias}\lbrack \hat{\theta} \rbrack = \mbox{E} \lbrack \hat{\theta} \rbrack - \theta.$$
+
+-   The [**bootstrap estimate of bias**]{style="color: blue;"} is
+
+$$
+\mbox{Bias}_{\rm{boot}} \lbrack \hat{\theta}^{\ast} \rbrack =  \mbox{E} \lbrack \hat{\theta}^{\ast} \rbrack - \hat{\theta}.
+$$ - $\mbox{E} \lbrack \hat{\theta}^{\ast} \rbrack$ denotes the center of the bootstrap distribution.
+- $\hat{\theta}$ denotes the sample statistic.
+
+-   An estimator is [**unbiased if the bias is zero**]{style="color: blue;"}.
+
+## Question 4
+
+------------------------------------------------------------------------
+
+Using the output from the previous bootstrap distribution, calculate the bootstrap estimate of bias in the previous Verizon example.
+
+### Solution to Question 4
+
+------------------------------------------------------------------------
+
+Replace each `??` with appropriate code.
+
+```{r}
+# compute sample statistic (statistic calculated for observed sample)
+samp.stat <- orig.ratio #this one is the ratio of means for the original sample
+
+# compute center of bootstrap
+boot.mean <- mean(boot.ratio)
+
+# compute bootstrap estimate of bias
+boot.bias <- boot.mean - samp.stat
+
+# Print results to screen
+samp.stat
+boot.mean
+boot.bias
+```
+
+-   We have $\mbox{E} \lbrack \hat{\theta}^{\ast} \rbrack =$ 0.5095126
+
+-   We have $\hat{\theta} =$ 0.5383252
+
+-   The bias is therefore $\mbox{Bias}_{\rm boot} \lbrack \hat{\theta}^{\ast} \rbrack =$ 0.02881253
+
+\
+\
+
+# Rule of Thumb for Acceptable Bias
+
+------------------------------------------------------------------------
+
+-   We can measure how extreme is the bias of an estimator using the ratio
+
+$$\frac{\mbox{Bias}}{\mbox{SE}} \approx  \frac{\mbox{Bootstrap Bias}}{\mbox{Bootstrap SE}}.$$
+
+-   [**Rule of Thumb:**]{syle="color: blue;"} If the ratio $\frac{\mbox{Bias}}{\mbox{SE}}$ exceeds $\pm 0.02$, then the bias is large enough to have a substantial effect on the accuracy of the estimate.
+
+## Question 5: Comparing Bias on Relative Terms
+
+------------------------------------------------------------------------
+
+In the arsenic example we previously worked with we used a bootstrap distribution to estimate the mean arsenic level (in ppb) present in groundwater in Bangladesh.
+The mean of the original sample is $\bar{x} = 125.320$.
+A mean of a bootstrap distribution is $125.229$.
+Then the bootstrap standard error is $17.9$.
+**Which bias is more extreme, the bias in the arsenic or Verizon example?**
+
+### Solution to Question 5
+
+------------------------------------------------------------------------
+
+-   For the arsenic example we have the ratio Bias/SE = ??
+
+    ```{r}
+    (arsenic.bias.ratio <- (125.320-125.229)/17.9)
+    ```
+
+-   For the Verizon example we have the ratio Bias/SE = ??
+
+    ```{r}
+    (time.bias.ratio <- boot.bias/sd(boot.ratio))
+    ```
+
+# Implementation and Accuracy of Bootstrapping
+
+------------------------------------------------------------------------
+
+## Question 6:
+
+------------------------------------------------------------------------
+
+How many possible bootstrap resamples can be constructed from an original sample that has $n$ values?
+
+### Solution to Question 6:
+
+------------------------------------------------------------------------
+
+For the first choice, we have a total of $n$ different observations we could pick.
+For the second choice (since we sample with replacement), we also have a total of $n$ different observations we could pick.
+In fact, for all $n$ values we pick in a bootstrap resample, we have $n$ different observations we can select.
+
+$$\mbox{total number bootstrap resamples} = n^n.$$
+
+For the previous example in [Question 4:], there are a total of $4^4 = 256$ different bootstrap resamples.
+However, we do not care about the ordering in which the observations were chosen in the sample.
+A sample of $\left\{ 3500, 3600, 3700 \right\}$ is the same as the samples
+
+$$ \left\{ 3600, 3500, 3700 \right\} , \ \left\{ 3500, 3700,  3600 \right\} , \ \left\{ 3700, 3500,  3600 \right\} , \left\{ 3700, 3600, 3500 \right\}  \mbox{, and } \left\{ 3600, 3700, 3500
+\right\}.$$
+
+The 6 samples above are all the same since the contain the same subset of observations.
+Picking up on the pattern above, it can be shown that in fact if our original sample has $n$ observations, we can construct a total of $\displaystyle \left( \begin{array}{c} 2n-1 \\ n \end{array} \right)$ different bootstrap resamples.
+
+-   For $n=3, 4, 5, 6, 7, 8, 9, 10$, we have:
+
+```{r}
+how.many <- numeric(10-2)
+
+for (i in 3:10)
+{
+  how.many[i-2] <- choose(2*i - 1, i)
+}
+
+how.many
+```
+
+| sample size $n$ | Number of bootstrap resamples |
+|-----------------|-------------------------------|
+| 3               | 10                            |
+| 4               | 35                            |
+| 5               | 126                           |
+| 6               | 462                           |
+| 7               | 1716                          |
+| 8               | 6435                          |
+| 9               | 24310                         |
+| 10              | 92378                         |
+| 30              | 5.91e+16                      |
+| 100             | 4.53e+58                      |
+
+**Well that escalated quickly!** If we want to construct a full bootstrap distribution where each bootstrap resample is represented once and not double counted:
+
+-   The code is quite complicated to write.
+-   The code would take a very long time to run when even when samples are not that large.
+-   In the end, it is not worth of this effort and expense.
+-   We get a very good approximation for a bootstrap distribution by picking more than 1,000 (as a rough number) bootstrap resamples.
+-   As a rule of thumb applied in the activities that follow will, we will choose $N=100,\!000$ bootstrap resamples to approximate a bootstrap distribution.
+    -   If the code slows your computer down, you can decrease $N$ to $10,\!000$ to speed up the process.
+
+## Monte Carlo Sampling
+
+------------------------------------------------------------------------
+
+-   We have not been ensuring we generate all possible bootstrap samples while avoiding repeats.\
+-   We have used [**Monte Carlo sampling**]{style="color: blue;"} which gives an estimate of the theoretical bootstrap distribution.
+-   The larger the number of bootstrap samples, the better the estimate.
+    -   **As a rule, N=10,000 or more bootstrap samples is sufficient.**
